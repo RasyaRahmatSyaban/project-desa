@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Bot Sederhana</title>
+    <style>
+        #chat-container {
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .bot-message {
+            background-color: #f0f0f0;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            max-width: 70%;
+        }
+
+        #user-input {
+            width: 80%;
+            max-width: 500px;
+            padding: 10px;
+            margin: 20px auto;
+        }
+
+        #send-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <!-- Pesan akan ditampilkan di sini -->
+    </div>
+    <input type="text" id="user-input" placeholder="Ketik pesan...">
+    <button id="send-button">Kirim</button>
+
+    <script>
+        // Kode chatbot sederhana
+        const chatBot = {
+            responses: [
+                "Hai! Saya adalah chatbot sederhana. Bagaimana saya bisa membantu Anda?",
+                "Saya tidak memahami pertanyaan Anda, silakan jelaskan lebih detail.",
+                "Terima kasih atas pertanyaannya! Saya akan segera membalas."
+            ],
+            name: "Simple Bot",
+            messageNotUnderstood: "Maaf, saya tidak memahami pertanyaan Anda. Mohon jelaskan dengan lebih baik.",
+        };
+
+        function addMessageToChat(message, isUser) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            
+            if (isUser) {
+                messageDiv.className = 'user-message';
+            } else {
+                messageDiv.className = 'bot-message';
+            }
+            
+            messageDiv.textContent = message;
+            chatContainer.appendChild(messageDiv);
+        }
+
+        function handleBotResponse() {
+            const userMessage = document.getElementById('user-input').value.trim();
+            if (!userMessage) return;  // Jika input kosong, bot tidak membalas
+            
+            addMessageToChat(userMessage, true);  // Menambahkan pesan pengguna
+            chatBot.responses[Math.floor(Math.random() * chatBot.responses.length)]
+                ? addMessageToChat(chatBot.responses[Math.floor(Math.random() * chatBot.responses.length)], false)
+                : addMessageToChat(chatBot.messageNotUnderstood, false);
+            
+            document.getElementById('user-input').value = '';
+        }
+
+        function resetChat() {
+            const chatContainer = document.getElementById('chat-container');
+            while (chatContainer.children.length > 0) {
+                chatContainer.removeChild(chatContainer.lastChild);
+            }
+            addMessageToChat(`${chatBot.name}, selamat datang! Bagaimana saya bisa membantu Anda hari ini?`, false);
+        }
+
+        // Event listeners
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleBotResponse();
+            }
+        });
+
+        document.getElementById('send-button').addEventListener('click', function() {
+            handleBotResponse();
+        });
+
+        // Memulai obrolan
+        resetChat();
+    </script>
+</body>
+</html>

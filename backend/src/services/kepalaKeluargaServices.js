@@ -39,7 +39,6 @@ const addKepalaKeluarga = async (nama, nik) => {
     throw new Error("Nama dan NIK kepala keluarga wajib diisi!")
   }
 
-  // Cek apakah NIK sudah ada
   const existing = await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik)
   if (existing) {
     throw new Error("NIK kepala keluarga sudah terdaftar!")
@@ -59,7 +58,6 @@ const updateKepalaKeluarga = async (id, nama, nik) => {
     throw new Error("Data kepala keluarga tidak ditemukan")
   }
 
-  // Cek apakah NIK baru sudah digunakan oleh kepala keluarga lain
   if (nik !== existingById.nik) {
     const existingByNik = await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik)
     if (existingByNik && existingByNik.id !== Number.parseInt(id)) {
@@ -75,6 +73,15 @@ const updateKepalaKeluarga = async (id, nama, nik) => {
     return new KepalaKeluargaDTO(id, nama, nik)
   } catch (error) {
     throw new Error("Gagal memperbarui data kepala keluarga")
+  }
+}
+
+const updateKepalaKeluargaByNik = async (oldNik, nama, newNik) => {
+  try {
+    const updated = await kepalaKeluargaRepo.updateKepalaKeluargaByNik(oldNik, nama, newNik)
+    return updated
+  } catch (error) {
+    throw new Error("Gagal memperbarui data kepala keluarga berdasarkan NIK")
   }
 }
 
@@ -96,5 +103,6 @@ export default {
   getKepalaKeluargaByNik,
   addKepalaKeluarga,
   updateKepalaKeluarga,
+  updateKepalaKeluargaByNik,
   deleteKepalaKeluarga,
 }

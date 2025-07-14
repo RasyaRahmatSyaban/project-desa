@@ -52,7 +52,10 @@ export default function Penduduk() {
     jenisKelamin: "Laki-laki",
     agama: "Islam",
     kepalaKeluarga: false,
+    selectedKK: "",
   });
+  // State untuk daftar kepala keluarga
+  const [kepalaKeluargaList, setKepalaKeluargaList] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -71,7 +74,12 @@ export default function Penduduk() {
     try {
       // Fetch penduduk data
       const pendudukList = await PendudukService.getAllPenduduk();
-      setPendudukData(pendudukList);
+      // Mapping: tambahkan field kepalaKeluarga berdasarkan id_kepalakeluarga
+      const mapped = pendudukList.map((item) => ({
+        ...item,
+        kepalaKeluarga: item.id_kepalakeluarga === null,
+      }));
+      setPendudukData(mapped);
 
       // Fetch stats
       const stats = await PendudukService.getAllStats();
@@ -110,6 +118,42 @@ export default function Penduduk() {
     }
   };
 
+  // Fetch kepala keluarga saat form dibuka
+  const openForm = (editData = null) => {
+    fetchKepalaKeluarga();
+    if (editData) {
+      setFormData({
+        ...editData,
+        kepalaKeluarga: !!editData.kepalaKeluarga,
+        selectedKK: editData.id_kepalakeluarga || "",
+      });
+      setIsEditing(true);
+    } else {
+      setFormData({
+        id: 0,
+        nama: "",
+        nik: "",
+        alamat: "",
+        tanggalLahir: "",
+        jenisKelamin: "Laki-laki",
+        agama: "Islam",
+        kepalaKeluarga: false,
+        selectedKK: "",
+      });
+      setIsEditing(false);
+    }
+    setShowForm(true);
+  };
+
+  const fetchKepalaKeluarga = async () => {
+    try {
+      const list = await PendudukService.getAllKepalaKeluarga();
+      setKepalaKeluargaList(list);
+    } catch (e) {
+      setKepalaKeluargaList([]);
+    }
+  };
+
   // Hitung umur berdasarkan tanggal lahir
   const hitungUmur = (tanggalLahir) => {
     const today = new Date();
@@ -125,29 +169,29 @@ export default function Penduduk() {
   // Handle form input change
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    });
+      // Reset selectedKK jika kepalaKeluarga dicentang
+      ...(name === "kepalaKeluarga" && checked ? { selectedKK: "" } : {}),
+    }));
   };
 
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // Validasi: jika bukan kepala keluarga, selectedKK wajib diisi
+    if (!formData.kepalaKeluarga && !formData.selectedKK) {
+      toast.error("Pilih kepala keluarga terlebih dahulu!");
+      return;
+    }
     try {
       if (isEditing) {
-        // Update existing data
         await PendudukService.updatePenduduk(formData.nik, formData);
       } else {
-        // Add new data
         await PendudukService.addPenduduk(formData);
       }
-
-      // Refresh data
       await fetchData();
-
-      // Reset form
       resetForm();
     } catch (error) {
       console.error("Error saving data:", error);
@@ -168,6 +212,7 @@ export default function Penduduk() {
       jenisKelamin: "Laki-laki",
       agama: "Islam",
       kepalaKeluarga: false,
+      selectedKK: "",
     });
     setIsEditing(false);
     if (closeForm) {
@@ -179,9 +224,7 @@ export default function Penduduk() {
   const handleEdit = (nik) => {
     const dataToEdit = pendudukData.find((item) => item.nik === nik);
     if (dataToEdit) {
-      setFormData({ ...dataToEdit });
-      setIsEditing(true);
-      setShowForm(true);
+      openForm(dataToEdit);
     }
   };
 
@@ -569,6 +612,7 @@ export default function Penduduk() {
                 handleSubmit={handleSubmit}
                 resetForm={resetForm}
                 isEditing={isEditing}
+                kepalaKeluargaList={kepalaKeluargaList}
               />
             )}
 

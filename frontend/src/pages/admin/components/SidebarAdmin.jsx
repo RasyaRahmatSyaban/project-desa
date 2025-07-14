@@ -17,8 +17,20 @@ import {
   FaSignOutAlt,
   FaSearch,
   FaUserTie,
+  FaUserShield,
 } from "react-icons/fa";
 import LogoutAdminDialog from "./LogoutAdminDialog";
+
+function getRoleFromToken() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.role;
+  } catch {
+    return null;
+  }
+}
 
 export default function ModernSidebarAdmin() {
   const [collapsed, setCollapsed] = useState(false);
@@ -50,6 +62,14 @@ export default function ModernSidebarAdmin() {
     { path: "/admin/berita", icon: <FaNewspaper />, label: "Berita" },
     { path: "/admin/pengumuman", icon: <FaBullhorn />, label: "Pengumuman" },
   ];
+  const role = getRoleFromToken();
+  if (role === "superadmin") {
+    menuItems.push({
+      path: "/admin/manajemen-admin",
+      icon: <FaUserShield />,
+      label: "Manajemen Admin",
+    });
+  }
 
   // Filter menu items based on search term
   const filteredMenuItems = menuItems.filter((item) =>

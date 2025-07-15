@@ -1,61 +1,43 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Ketua from "../../assets/KetuaBPD.jpg";
-import Sekertaris from "../../assets/SekertarisBPD.jpg";
-import KasiPelayanan from "../../assets/KasiPelayanan.jpg";
-import KaurKeuangan from "../../assets/kaurkeuangan.jpg";
-import KepDus1 from "../../assets/KepDus1.jpg";
-import KepDus2 from "../../assets/KepDus2.jpg";
-
-const aparatur = [
-  {
-    name: "",
-    tugas: "Ketua BPD",
-    image: Ketua,
-  },
-  {
-    name: "",
-    tugas: "Sekertaris BPD",
-    image: Sekertaris,
-  },
-  {
-    name: "",
-    tugas: "Kasi Pelayanan dan Kesejahteraan",
-    image: KasiPelayanan,
-  },
-  {
-    name: "",
-    tugas: "Kaur Keuangan",
-    image: KaurKeuangan,
-  },
-  {
-    name: "",
-    tugas: "Kepala Dusun 1",
-    image: KepDus1,
-  },
-  {
-    name: "",
-    tugas: "Kepala Dusun 2",
-    image: KepDus2,
-  },
-];
 
 export default function CarouselAparatur() {
+  const [aparatur, setAparatur] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // Auto-play functionality
+  // Fetch data from API
   useEffect(() => {
-    if (isAutoPlaying && !isHovered) {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/aparatur");
+        if (res.data.success) {
+          setAparatur(res.data.data);
+        }
+      } catch (error) {
+        console.error("Gagal memuat data aparatur:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Autoplay
+  useEffect(() => {
+    if (isAutoPlaying && !isHovered && aparatur.length > 0) {
       const interval = setInterval(() => {
         nextSlide();
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [currentIndex, isHovered, isAutoPlaying]);
+  }, [currentIndex, isHovered, isAutoPlaying, aparatur.length]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % aparatur.length);
@@ -69,24 +51,36 @@ export default function CarouselAparatur() {
     setCurrentIndex(index);
   };
 
-  // Calculate visible slides
   const getVisibleSlides = () => {
     const slides = [];
-    const totalSlides = aparatur.length;
+    const total = aparatur.length;
 
-    // Previous slide (or wrap around)
-    const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    const prevIndex = (currentIndex - 1 + total) % total;
+    const nextIndex = (currentIndex + 1) % total;
+
     slides.push({ index: prevIndex, position: "left" });
-
-    // Current slide
     slides.push({ index: currentIndex, position: "center" });
-
-    // Next slide (or wrap around)
-    const nextIndex = (currentIndex + 1) % totalSlides;
     slides.push({ index: nextIndex, position: "right" });
 
     return slides;
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="text-center py-20 text-gray-500 animate-pulse">
+        Memuat data aparatur...
+      </div>
+    );
+  }
+
+  if (aparatur.length === 0) {
+    return (
+      <div className="text-center py-20 text-red-500">
+        Tidak ada data aparatur ditemukan.
+      </div>
+    );
+  }
 
   const visibleSlides = getVisibleSlides();
 
@@ -98,18 +92,16 @@ export default function CarouselAparatur() {
     >
       <div
         className="relative h-[25rem] bg-gray-50 rounded-2xl overflow-hidden"
-        style={{
-          boxShadow: "0 10px 25px rgba(0, 0, 0, 0.05)",
-        }}
+        style={{ boxShadow: "0 10px 25px rgba(0, 0, 0, 0.05)" }}
       >
-        {/* Carousel container */}
+        {/* Slides */}
         <div className="absolute inset-0 flex items-center justify-center">
-          {/* Visible slides */}
           {visibleSlides.map(({ index, position }) => {
             const item = aparatur[index];
+            if (!item) return null;
+
             const isCenter = position === "center";
 
-            // Calculate styles based on position
             let translateX = 0;
             let zIndex = 10;
             let opacity = 1;
@@ -153,11 +145,10 @@ export default function CarouselAparatur() {
                   }}
                 >
                   <img
-                    src={item.image || "/placeholder.svg"}
-                    alt={item.tugas}
+                    src={`/${item.foto}`}
+                    alt={item.jabatan}
                     className="w-full h-full object-cover"
                   />
-
                   {isCenter && (
                     <div
                       className="absolute bottom-0 left-0 right-0 p-4 text-white text-center"
@@ -166,8 +157,8 @@ export default function CarouselAparatur() {
                           "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))",
                       }}
                     >
-                      <p className="font-semibold">{item.tugas}</p>
-                      {item.name && <p className="text-sm">{item.name}</p>}
+                      <p className="font-semibold capitalize">{item.jabatan}</p>
+                      <p className="text-sm">{item.nama}</p>
                     </div>
                   )}
                 </div>
@@ -248,19 +239,19 @@ export default function CarouselAparatur() {
         </button>
       </div>
 
-      {/* Title and description below carousel */}
-      <div className="text-center mt-8">
-        <h2 className="text-2xl font-semibold text-gray-800">
-          {aparatur[currentIndex].tugas}
-        </h2>
-        {aparatur[currentIndex].name && (
-          <p className="text-gray-600 mt-2">{aparatur[currentIndex].name}</p>
-        )}
-        <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
-          Aparatur desa yang bertugas melayani masyarakat dan memastikan
-          pelaksanaan program pembangunan desa berjalan dengan baik.
-        </p>
-      </div>
+      {/* Title & Description */}
+      {aparatur[currentIndex] && (
+        <div className="text-center mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800">
+            {aparatur[currentIndex].jabatan}
+          </h2>
+          <p className="text-gray-600 mt-2">{aparatur[currentIndex].nama}</p>
+          <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
+            Aparatur desa yang bertugas melayani masyarakat dan memastikan
+            pelaksanaan program pembangunan desa berjalan dengan baik.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

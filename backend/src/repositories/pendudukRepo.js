@@ -16,7 +16,7 @@ const getAllPenduduk = async () => {
         kk.nik as nikKepalaKeluarga
       FROM penduduk p 
       LEFT JOIN kepalakeluarga kk ON p.id_kepalakeluarga = kk.id
-      ORDER BY p.id ASC
+      ORDER BY p.id DESC
     `)
     return results
   } catch (error) {

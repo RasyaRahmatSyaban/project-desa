@@ -53,14 +53,14 @@ const addPenduduk = async (
   agama,
   kepalaKeluarga
 ) => {
+  kepalaKeluarga = kepalaKeluarga ? 1 : 0;
   if (
     !nama ||
     !nik ||
     !alamat ||
     !tanggalLahir ||
     !jenisKelamin ||
-    !agama ||
-    !kepalaKeluarga
+    !agama 
   ) {
     throw new Error("Semua data wajib diisi!");
   }
@@ -99,6 +99,7 @@ const updateDataPenduduk = async (
   agama,
   kepalaKeluarga
 ) => {
+  kepalaKeluarga = kepalaKeluarga ? 1 : 0;
   const existingPenduduk = await pendudukRepo.getPendudukByNik(oldNik);
   if (!existingPenduduk) {
     throw new Error("Data dengan NIK tersebut tidak ditemukan");

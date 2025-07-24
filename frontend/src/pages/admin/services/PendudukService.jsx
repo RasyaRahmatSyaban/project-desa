@@ -49,7 +49,20 @@ const PendudukService = {
 
   addPenduduk: async (pendudukData) => {
     try {
-      const response = await api.post("/penduduk", pendudukData);
+      // Kirim payload sesuai backend: isKepalaKeluarga dan id_kepalakeluarga
+      const payload = {
+        nama: pendudukData.nama,
+        nik: pendudukData.nik,
+        alamat: pendudukData.alamat,
+        tanggalLahir: pendudukData.tanggalLahir,
+        jenisKelamin: pendudukData.jenisKelamin,
+        agama: pendudukData.agama,
+        isKepalaKeluarga: !!pendudukData.kepalaKeluarga,
+        id_kepalakeluarga: pendudukData.kepalaKeluarga
+          ? null
+          : pendudukData.selectedKK || null,
+      };
+      const response = await api.post("/penduduk", payload);
       return response.data;
     } catch (error) {
       console.error("Error adding penduduk:", error);
@@ -67,7 +80,10 @@ const PendudukService = {
         tanggalLahir: pendudukData.tanggalLahir,
         jenisKelamin: pendudukData.jenisKelamin,
         agama: pendudukData.agama,
-        kepalaKeluarga: pendudukData.kepalaKeluarga,
+        id_kepalakeluarga: pendudukData.kepalaKeluarga
+          ? null
+          : pendudukData.selectedKK || null,
+        isKepalaKeluarga: !!pendudukData.kepalaKeluarga,
       };
       const response = await api.put("/penduduk/update", updateData);
       return response.data;
@@ -145,6 +161,42 @@ const PendudukService = {
     } catch (error) {
       console.error("Error fetching penduduk by umur:", error);
       return [];
+    }
+  },
+
+  // Tambahkan method untuk fetch daftar kepala keluarga
+  getAllKepalaKeluarga: async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await api.get("/kepalakeluarga", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      return response.data.data || [];
+    } catch (error) {
+      console.error("Error fetching kepala keluarga:", error);
+      return [];
+    }
+  },
+
+  // Hapus kepala keluarga berdasarkan NIK
+  deleteKepalaKeluargaByNik: async (nik) => {
+    try {
+      const token = localStorage.getItem("token");
+      // 1. Fetch kepala keluarga by NIK
+      const res = await api.get(`/kepalakeluarga/nik/${nik}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const kk = res.data.data;
+      if (!kk || !kk.id)
+        throw new Error("Data kepala keluarga tidak ditemukan");
+      // 2. Delete by ID
+      await api.delete(`/kepalakeluarga/${kk.id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      return true;
+    } catch (error) {
+      console.error("Gagal menghapus kepala keluarga:", error);
+      throw error;
     }
   },
 

@@ -25,6 +25,8 @@ import SuratAdmin from "../pages/admin/pages/SuratAdmin";
 import PelayananAdmin from "../pages/admin/pages/PelayananAdmin";
 import SettingAdmin from "../pages/admin/pages/SettingAdmin";
 import AparatAdmin from "../pages/admin/pages/AparatAdmin";
+import AdminManagement from "../pages/admin/pages/AdminManagement";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -44,7 +46,14 @@ const AppRoutes = () => {
         <Route path="/Map" element={<Map />} />
 
         {/* ===================== HALAMAN ADMIN DENGAN LAYOUT ===================== */}
-        <Route path="/admin" element={<DashboardAdmin />}>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <DashboardAdmin />
+            </ProtectedRoute>
+          }
+        >
           <Route path="beranda" element={<BerandaAdmin />} />
           <Route path="aparat" element={<AparatAdmin />} />
           <Route path="berita" element={<BeritaAdmin />} />
@@ -54,6 +63,7 @@ const AppRoutes = () => {
           <Route path="surat" element={<SuratAdmin />} />
           <Route path="pelayanan" element={<PelayananAdmin />} />
           <Route path="setting" element={<SettingAdmin />} />
+          <Route path="manajemen-admin" element={<AdminManagement />} />
         </Route>
 
         {/* ===================== HALAMAN NOT FOUND ===================== */}

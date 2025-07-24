@@ -11,14 +11,24 @@ const loginAdmin = async (email, password) => {
   const pwMatch = await passHelpers.comparePw(password, user.password);
   if (!pwMatch) throw new Error("Password salah!");
 
+  // Update last_login
+  const now = new Date();
+  await userRepositories.updateLastLogin(user.id, now);
+
   // Buat token
-  const token = tokenHelpers.generateToken({ id: user.id, email: user.email });
+  const token = tokenHelpers.generateToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
 
   // Pastikan token dikirim dalam response
   return {
     id: user.id,
     nama: user.nama,
     email: user.email,
+    role: user.role,
+    last_login: now,
     token, // Token harus ada di dalam objek ini
   };
 };
@@ -38,13 +48,46 @@ const updateAdmin = async (nama, email, password) => {
 };
 
 const resetPassword = async (email) => {
-    const newPassword = "Bahontobungku123"; 
-    const hashedPassword = await passHelpers.hashPw(newPassword)
+  const newPassword = "Bahontobungku123";
+  const hashedPassword = await passHelpers.hashPw(newPassword);
 
-    const success = await repo.resetPasswordByEmail(email, hashedPassword);
-    if (!success) throw new Error("Gagal mereset password!");
+  const success = await userRepositories.resetPasswordByEmail(
+    email,
+    hashedPassword
+  );
+  if (!success) throw new Error("Gagal mereset password!");
 
-    return { message: "Password berhasil direset ke default." };
+  return { message: "Password berhasil direset ke default." };
 };
 
-export default { loginAdmin, updateAdmin , resetPassword };
+const registerUser = async (nama, email, password, role = "admin") => {
+  if (!nama || !email || !password) throw new Error("Semua field wajib diisi!");
+  const hashedPw = await passHelpers.hashPw(password);
+  const userId = await userRepositories.addUser(nama, email, hashedPw, role);
+  return new UserDTO(userId, nama, email, null, role, null);
+};
+
+const getAllUsers = async () => {
+  const users = await userRepositories.getAllUsers();
+  return users.map(
+    (u) => new UserDTO(u.id, u.nama, u.email, null, u.role, u.last_login)
+  );
+};
+
+const deleteUser = async (id) => {
+  return await userRepositories.deleteUserById(id);
+};
+
+const transferSuperadmin = async (fromId, toId) => {
+  return await userRepositories.transferSuperadmin(fromId, toId);
+};
+
+export default {
+  loginAdmin,
+  updateAdmin,
+  resetPassword,
+  registerUser,
+  getAllUsers,
+  deleteUser,
+  transferSuperadmin,
+};

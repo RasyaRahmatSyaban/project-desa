@@ -47,6 +47,18 @@ const updateKepalaKeluarga = async (id, nama, nik) => {
   }
 }
 
+// Update kepala keluarga berdasarkan NIK lama (untuk sinkronisasi dengan update penduduk)
+const updateKepalaKeluargaByNik = async (oldNik, nama, newNik) => {
+  try {
+    const [results] = await db
+      .promise()
+      .query("UPDATE kepalakeluarga SET nama = ?, nik = ? WHERE nik = ?", [nama, newNik, oldNik])
+    return results.affectedRows > 0
+  } catch (error) {
+    throw error
+  }
+}
+
 const deleteKepalaKeluarga = async (id) => {
   try {
     const [results] = await db.promise().query("DELETE FROM kepalakeluarga WHERE id = ?", [id])
@@ -62,5 +74,6 @@ export default {
   getKepalaKeluargaByNik,
   addKepalaKeluarga,
   updateKepalaKeluarga,
+  updateKepalaKeluargaByNik,
   deleteKepalaKeluarga,
 }

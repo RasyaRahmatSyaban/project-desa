@@ -5,6 +5,12 @@ import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
+const setBeritaPrefix = (req, res, next) => {
+  req.uploadPrefix = "berita";
+  next();
+};
+
+
 // Endpoint publik
 router.get("/", beritaController.getAllBerita);
 router.get("/:id", beritaController.getBeritaById);
@@ -17,6 +23,7 @@ router.post("/", authAdmin, upload.single("foto"), beritaController.addBerita);
 router.put(
   "/:id",
   authAdmin,
+  setBeritaPrefix,
   upload.single("foto"),
   beritaController.updateBerita
 );

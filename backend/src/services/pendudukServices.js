@@ -1,6 +1,7 @@
 import pendudukRepo from "../repositories/pendudukRepo.js";
 import { PendudukDTO } from "../dto/dto.js";
 import kepalaKeluargaRepo from "../repositories/kepalaKeluargaRepo.js";
+import kepalaKeluargaService from "./kepalaKeluargaServices.js"
 
 const getAllPenduduk = async () => {
   try {
@@ -61,7 +62,7 @@ const addPenduduk = async (
   }
 
   // Cek apakah NIK sudah ada
-  const existingPenduduk = await pendudukRepo.getPendudukByNik(nik);
+  const existingPenduduk = await pendudukRepo.getPendudukByNik(nik)
   if (existingPenduduk) {
     throw new Error("NIK sudah terdaftar!");
   }
@@ -69,7 +70,6 @@ const addPenduduk = async (
   try {
     let kepalaKeluargaId = id_kepalakeluarga;
 
-    // Jika checkbox kepala keluarga dicentang, buat data kepala keluarga baru
     if (isKepalaKeluarga) {
       // Cek apakah NIK sudah ada di tabel kepala keluarga
       const existingKK = await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik);
@@ -356,6 +356,7 @@ export default {
   addPenduduk,
   updateDataPenduduk,
   deleteDataPenduduk,
+  deleteSemuaKeluarga,
   getPendudukByUmur,
   getTotalKepalaKeluarga,
   getTotalLakiLaki,

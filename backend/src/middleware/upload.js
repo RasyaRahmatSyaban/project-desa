@@ -1,15 +1,17 @@
 import multer from "multer";
 import path from "path";
 
-("File upload middleware dijalankan");
-
 // Konfigurasi penyimpanan file
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "D:/PROJECT/DONEEEE/frontend/public/berita");
+    // sesuaikan dengan direktori penyimpanan yang diinginkan
+    cb(null, "D:/PROJECT/DONEEEE/frontend/public");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const prefix = req.uploadPrefix || "file";
+    const uniqueSuffix = Date.now();
+    const originalName = file.originalname.replace(/\s+/g, "_");
+    cb(null, `${prefix}-${uniqueSuffix}-${originalName}`);
   },
 });
 

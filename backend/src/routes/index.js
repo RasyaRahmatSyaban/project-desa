@@ -8,6 +8,7 @@ import danaRoute from "./danaRoute.js";
 import mediaRoute from "./mediaRoute.js";
 import pelayananRoute from "./pelayananRoute.js";
 import kepalaKeluargaRoutes from "./kepalaKeluargaRoute.js";
+import aparaturRoute from "./aparaturRoute.js";
 import * as chatbotController from "../controllers/chatbotController.js";
 
 const router = express.Router();
@@ -22,6 +23,13 @@ router.use("/dana", danaRoute);
 router.use("/media", mediaRoute);
 router.use("/pelayanan", pelayananRoute);
 router.use("/kepalakeluarga", kepalaKeluargaRoutes);
+router.use("/aparatur", aparaturRoute);
 router.post("/chatbot", chatbotController.chatbot);
+router.use("/pengumuman", pengumumanRoutes)
+router.use("/berita", beritaRoutes)
+router.use("/dana", danaRoute)
+router.use("/media", mediaRoute)
+router.use("/pelayanan", pelayananRoute)
+router.use("/kepalakeluarga", kepalaKeluargaRoutes)
 
 export default router;

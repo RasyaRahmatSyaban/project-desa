@@ -101,7 +101,22 @@ const deleteDataPenduduk = async (req, res) => {
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
-};
+}
+
+// const deleteSemuaKeluarga = async (req, res) => {
+//   const { nik } = req.params
+//   try {
+//     const result = await pendudukServices.deleteSemuaKeluarga(nik)
+
+//     if (!result.success) {
+//       return res.status(400).json(result)
+//     }
+
+//     res.json(result)
+//   } catch (error) {
+//     res.status(500).json({ success: false, message: error.message })
+//   }
+// };
 
 const getTotalPenduduk = async (req, res) => {
   try {
@@ -192,6 +207,7 @@ export default {
   addPenduduk,
   updateDataPenduduk,
   deleteDataPenduduk,
+  deleteSemuaKeluarga,
   getPendudukByAgama,
   getPendudukByUmur,
   getTotalKepalaKeluarga,

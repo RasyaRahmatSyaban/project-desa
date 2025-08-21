@@ -1,7 +1,7 @@
 "use client";
 import { FaUserPlus, FaTimes } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import PendudukService from "../../services/PendudukService";
+import PendudukService from "../services/PendudukService";
 
 // Helper untuk format tanggal ke yyyy-MM-dd
 function toDateInputValue(dateStr) {

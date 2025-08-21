@@ -18,8 +18,8 @@ import {
 
 // Ubah import PopupForm untuk mengarah ke file .jsx bukan .tsx
 import PopupForm from "./PopupForm.jsx";
-import PendudukService from "../../services/PendudukService";
-import toast from "../../../../components/Toast.jsx";
+import PendudukService from "../services/PendudukService";
+import toast from "../../../components/Toast.jsx";
 
 export default function Penduduk() {
   // Data penduduk individual

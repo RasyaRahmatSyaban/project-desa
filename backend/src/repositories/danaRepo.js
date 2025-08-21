@@ -5,7 +5,7 @@ const addDanaMasuk = async (tahun, bulan, jumlah, sumber, keterangan) => {
         const [results] = await db
             .promise()
             .query(
-                "INSERT INTO DanaMasuk (tahun, bulan, jumlah, sumber, keterangan) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO danamasuk (tahun, bulan, jumlah, sumber, keterangan) VALUES (?, ?, ?, ?, ?)",
                 [tahun, bulan, jumlah, sumber, keterangan]
             );
         return { id: results.insertId, tahun, bulan, jumlah, sumber, keterangan };
@@ -19,7 +19,7 @@ const addDanaKeluar = async (tahun, bulan, jumlah, kategori, keterangan) => {
         const [results] = await db
             .promise()
             .query(
-                "INSERT INTO DanaKeluar (tahun, bulan, jumlah, kategori, keterangan) VALUES (?, ?, ?, ?, ?)",
+                "INSERT INTO danakeluar (tahun, bulan, jumlah, kategori, keterangan) VALUES (?, ?, ?, ?, ?)",
                 [tahun, bulan, jumlah, kategori, keterangan]
             );
         return { id: results.insertId, tahun, bulan, jumlah, kategori,keterangan };

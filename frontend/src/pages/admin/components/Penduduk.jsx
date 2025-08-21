@@ -591,11 +591,7 @@ export default function Penduduk() {
                   <span>Kembali ke Dashboard</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setIsEditing(false);
-                    resetForm(false); // Reset form tanpa menutupnya
-                    setShowForm(true); // Pastikan form ditampilkan
-                  }}
+                  onClick={() => openForm()}
                   className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <FaUserPlus size={16} />

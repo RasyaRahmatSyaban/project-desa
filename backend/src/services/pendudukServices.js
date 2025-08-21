@@ -356,7 +356,6 @@ export default {
   addPenduduk,
   updateDataPenduduk,
   deleteDataPenduduk,
-  deleteSemuaKeluarga,
   getPendudukByUmur,
   getTotalKepalaKeluarga,
   getTotalLakiLaki,

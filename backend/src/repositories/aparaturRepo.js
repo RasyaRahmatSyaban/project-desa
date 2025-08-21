@@ -27,17 +27,15 @@ const getAparaturByNip = async (nip) => {
   }
 }
 
-const addAparatur = async (nama, nip, jabatan, telepon, foto = null, status = 1) => {
+const addAparatur = async (nama, nip, jabatan, foto) => {
   try {
     const [result] = await db
       .promise()
-      .query("INSERT INTO aparatur (nama, nip, jabatan, telepon, foto, status) VALUES (?, ?, ?, ?, ?, ?)", [
+      .query("INSERT INTO aparatur (nama, nip, jabatan, foto) VALUES (?, ?, ?, ?)", [
         nama,
         nip,
         jabatan,
-        telepon,
         foto,
-        status,
       ])
 
     // Return data yang baru diinsert
@@ -48,7 +46,7 @@ const addAparatur = async (nama, nip, jabatan, telepon, foto = null, status = 1)
   }
 }
 
-const updateAparatur = async (id, nama, nip, jabatan, telepon, foto = null, status = null) => {
+const updateAparatur = async (id, nama, nip, jabatan, foto) => {
   try {
     // Ambil data existing untuk mendapatkan foto lama
     const existingData = await getAparaturById(id)
@@ -58,18 +56,15 @@ const updateAparatur = async (id, nama, nip, jabatan, telepon, foto = null, stat
 
     // Jika foto null (tidak ada file baru), gunakan foto lama
     const finalFoto = foto !== null ? foto : existingData.foto
-    const finalStatus = status !== null ? status : existingData.status
 
     // Update dengan foto yang sudah ditentukan
     await db
       .promise()
-      .query("UPDATE aparatur SET nama = ?, nip = ?, jabatan = ?, telepon = ?, foto = ?, status = ? WHERE id = ?", [
+      .query("UPDATE aparatur SET nama = ?, nip = ?, jabatan = ?, foto = ? WHERE id = ?", [
         nama,
         nip,
         jabatan,
-        telepon,
         finalFoto,
-        finalStatus,
         id,
       ])
 

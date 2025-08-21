@@ -10,7 +10,6 @@ router.post("/", authAdmin, pendudukController.addPenduduk)
 router.put("/update", authAdmin, pendudukController.updateDataPenduduk)
 
 router.delete("/delete/:nik", authAdmin, pendudukController.deleteDataPenduduk)
-router.delete("/delete-semua-keluarga/:nik", authAdmin, pendudukController.deleteSemuaKeluarga)
 
 router.get("/stats/total", pendudukController.getTotalPenduduk)
 router.get("/stats/kepala-keluarga", pendudukController.getTotalKepalaKeluarga)

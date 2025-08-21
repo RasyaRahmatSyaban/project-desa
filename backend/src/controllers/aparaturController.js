@@ -36,11 +36,11 @@ const getAparaturByNip = async (req, res) => {
 }
 
 const addAparatur = async (req, res) => {
-  const { nama, nip, jabatan, telepon, status = 1 } = req.body
-  const foto = req.file ? req.file.filename : null
+  const { nama, nip, jabatan } = req.body
+  const foto = req.file
 
   try {
-    const newAparatur = await aparaturService.addAparatur(nama, nip, jabatan, telepon, foto, status)
+    const newAparatur = await aparaturService.addAparatur(nama, nip, jabatan, foto)
     res.status(201).json({ success: true, message: "Data aparatur berhasil ditambahkan", data: newAparatur })
   } catch (error) {
     res.status(400).json({ success: false, message: error.message })
@@ -49,13 +49,13 @@ const addAparatur = async (req, res) => {
 
 const updateAparatur = async (req, res) => {
   const { id } = req.params
-  const { nama, nip, jabatan, telepon, status } = req.body
+  const { nama, nip, jabatan } = req.body
 
   // Foto hanya diupdate jika ada file baru yang diupload
-  const foto = req.file ? req.file.filename : null
+  const foto = req.file
 
   try {
-    const updatedAparatur = await aparaturService.updateAparatur(id, nama, nip, jabatan, telepon, foto, status)
+    const updatedAparatur = await aparaturService.updateAparatur(id, nama, nip, jabatan, foto)
     res.json({ success: true, message: "Data aparatur berhasil diperbarui", data: updatedAparatur })
   } catch (error) {
     console.error("Update error:", error.message)

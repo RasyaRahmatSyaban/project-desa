@@ -1,17 +1,36 @@
-import express from "express";
-import cors from "cors";
-import router from "./src/routes/index.js";
-import "dotenv/config";
-import path from "path"; // ✅ Pastikan path di-import
+import express from "express"
+import cors from "cors"
+import router from "./src/routes/index.js"
+import "dotenv/config"
+import path from "path"
 
-const app = express();
-const port = 3000;
+const app = express()
+const port = 3000
 
 // Middleware untuk akses folder uploads
-app.use("/uploads", express.static(path.resolve("uploads"))); // ✅ Gunakan path.resolve()
+app.use("/uploads", express.static(path.resolve("uploads")))
 
-app.use(cors());
-app.use(express.json());
-app.use("/", router);
+// Update CORS configuration to include your ngrok URLs
+app.use(
+    cors({
+        origin: [
+        "http://localhost:5173", // Vite dev server
+        "https://45b1-180-247-44-189.ngrok-free.app", // Replace with your actual frontend ngrok URL
+        "https://fb75-180-247-44-189.ngrok-free.app", // Your backend ngrok URL for testing
+        ],
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "ngrok-skip-browser-warning"],
+    }),
+)
 
-app.listen(port, () => `Server berjalan di port ${port}`);
+// Add middleware to handle ngrok browser warning
+app.use((req, res, next) => {
+    res.header("ngrok-skip-browser-warning", "true")
+    next()
+})
+
+app.use(express.json())
+app.use("/", router)
+
+app.listen(port, () => console.log(`Server berjalan di port ${port}`))

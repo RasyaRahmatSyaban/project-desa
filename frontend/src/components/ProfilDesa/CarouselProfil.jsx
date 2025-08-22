@@ -15,7 +15,7 @@ export default function CarouselAparatur() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/aparatur");
+        const res = await axios.get("http://192.168.10.202:3000/aparatur");
         if (res.data.success) {
           setAparatur(res.data.data);
         }

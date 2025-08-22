@@ -124,6 +124,8 @@ export default function Penduduk() {
     if (editData) {
       setFormData({
         ...editData,
+        tanggalLahir: editData.tanggalLahir ? editData.tanggalLahir.split("T")[0] : "",
+        existingNik: editData.nik,
         kepalaKeluarga: !!editData.kepalaKeluarga,
         selectedKK: editData.id_kepalakeluarga || "",
       });
@@ -187,7 +189,7 @@ export default function Penduduk() {
     }
     try {
       if (isEditing) {
-        await PendudukService.updatePenduduk(formData.nik, formData);
+        await PendudukService.updatePenduduk(formData.existingNik, formData);
       } else {
         await PendudukService.addPenduduk(formData);
       }

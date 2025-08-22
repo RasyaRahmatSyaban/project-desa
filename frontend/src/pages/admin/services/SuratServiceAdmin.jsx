@@ -548,7 +548,7 @@ const SuratService = {
     }
 
     // For files in the berita directory (as seen in your setup)
-    const fileUrl = `/berita/${fileName.split("/").pop()}`;
+    const fileUrl = `/storage/${fileName.split("/").pop()}`;
     return fileUrl;
   },
 

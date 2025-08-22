@@ -198,6 +198,7 @@ function SuratAdmin() {
           item.status ||
           (item.jenis === "Surat Masuk" ? "Diterima" : "Terkirim"),
         file: null,
+        fileUrl: item.file,
       });
       setShowEditModal(true);
     }
@@ -377,7 +378,7 @@ function SuratAdmin() {
       }
 
       setShowEditModal(false);
-      toast.error("Surat berhasil diperbarui");
+      toast.success("Surat berhasil diperbarui");
     } catch (err) {
       console.error("Error updating data:", err);
       toast.error("Terjadi kesalahan saat memperbarui");

@@ -88,6 +88,7 @@ const updateDanaKeluar = async (id, tahun, bulan, jumlah, kategori, keterangan) 
         if(!existing){
             return new Error("Dana Keluar tidak ditemukan")
         }
+        await danaRepo.updateDanaKeluar(id, tahun, bulan, jumlah, kategori, keterangan)
         return {success: true, message: "dana berhasil diperbarui", id, tahun, bulan, jumlah, kategori, keterangan}
     } catch (error) {
         throw error

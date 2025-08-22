@@ -15,6 +15,7 @@ app.use(
     cors({
         origin: [
         "http://localhost:5173", // Vite dev server
+        "http://192.168.10.202:5173", //contoh url lan
         "https://45b1-180-247-44-189.ngrok-free.app", // Replace with your actual frontend ngrok URL
         "https://fb75-180-247-44-189.ngrok-free.app", // Your backend ngrok URL for testing
         ],

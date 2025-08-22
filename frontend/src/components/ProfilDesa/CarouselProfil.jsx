@@ -11,11 +11,26 @@ export default function CarouselAparatur() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  const getAparaturPhotoUrl = (filename) => {
+    if (!filename) return "/placeholder.svg?height=300&width=220";
+
+    // If path already starts with http:// or https://, return as is
+    if (filename.startsWith("http://") || filename.startsWith("https://")) {
+      return filename;
+    }
+
+    // Ekstrak nama file dari path jika ada
+    const filenameOnly = filename.split("/").pop();
+
+    // Return the complete URL (mengikuti cara MediaService)
+    return `../../storage/${filenameOnly}`;
+  };
+
   // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://192.168.10.202:3000/aparatur");
+        const res = await axios.get("http://localhost:3000/aparatur");
         if (res.data.success) {
           setAparatur(res.data.data);
         }
@@ -145,7 +160,7 @@ export default function CarouselAparatur() {
                   }}
                 >
                   <img
-                    src={`/${item.foto}`}
+                    src={getAparaturPhotoUrl(item.foto)}
                     alt={item.jabatan}
                     className="w-full h-full object-cover"
                   />

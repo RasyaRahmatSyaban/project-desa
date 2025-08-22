@@ -548,25 +548,33 @@ export default function ArsipSurat() {
                 <h4 className="text-sm font-medium text-gray-700 mb-2">
                   Preview Dokumen
                 </h4>
-                <div className="bg-gray-100 rounded-lg p-4 flex flex-col gap-4">
+                <div className="bg-gray-100 rounded-lg p-4 flex flex-col gap-4 max-w-full overflow-hidden">
                   {pdfLoading ? (
                     <div className="flex flex-col items-center justify-center py-8">
                       <FaSpinner className="animate-spin text-4xl text-[#6CABCA] mb-4" />
-                      <p>Memuat dokumen...</p>
+                      <p className="text-center">Memuat dokumen...</p>
                     </div>
                   ) : currentItem.file && pdfUrl ? (
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center justify-between">
-                        <p className="font-medium">
-                          <FaFilePdf className="inline-block mr-2 text-red-500" />
-                          {currentItem.file.split("/").pop() || "Dokumen Surat"}
-                        </p>
+                    <div className="flex flex-col gap-4 min-w-0">
+                      <div className="flex items-center justify-between gap-3 min-w-0">
+                        {/* File name section with text truncation */}
+                        <div className="flex items-center min-w-0 flex-1">
+                          <FaFilePdf className="flex-shrink-0 mr-2 text-red-500" />
+                          <p 
+                            className="font-medium truncate min-w-0"
+                            title={currentItem.file.split("/").pop() || "Dokumen Surat"}
+                          >
+                            {currentItem.file.split("/").pop() || "Dokumen Surat"}
+                          </p>
+                        </div>
+                        
+                        {/* Download button */}
                         <button
                           onClick={() => handleDownload(currentItem.file)}
-                          className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-1"
+                          className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-1 flex-shrink-0 text-sm"
                         >
-                          <FaDownload className="text-white" />
-                          <span>Unduh</span>
+                          <FaDownload className="text-white w-3 h-3" />
+                          <span className="hidden sm:inline">Unduh</span>
                         </button>
                       </div>
 
@@ -582,17 +590,17 @@ export default function ArsipSurat() {
                       </div>
                     </div>
                   ) : pdfError ? (
-                    <div className="flex flex-col items-center justify-center py-8 text-red-500">
+                    <div className="flex flex-col items-center justify-center py-8 text-red-500 text-center">
                       <FaExclamationTriangle className="text-4xl mb-4" />
-                      <p>Terjadi kesalahan saat memuat dokumen.</p>
-                      <p className="text-sm mt-2">
+                      <p className="px-2">Terjadi kesalahan saat memuat dokumen.</p>
+                      <p className="text-sm mt-2 px-2">
                         File mungkin tidak tersedia atau tidak dapat diakses.
                       </p>
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center h-full py-8">
+                    <div className="flex flex-col items-center justify-center h-full py-8 text-center">
                       <FaFileAlt className="text-gray-300 text-5xl mb-3" />
-                      <p className="text-gray-500">
+                      <p className="text-gray-500 px-2">
                         Dokumen tidak tersedia untuk ditampilkan
                       </p>
                     </div>

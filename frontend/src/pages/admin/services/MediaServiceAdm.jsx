@@ -221,7 +221,7 @@ const MediaService = {
     const filenameOnly = filename.split("/").pop();
 
     // Return the complete URL
-    return `../../storage/${filenameOnly}`;
+    return `/storage/${filenameOnly}`;
   },
 
   // Format date - Dapat diakses oleh admin dan user

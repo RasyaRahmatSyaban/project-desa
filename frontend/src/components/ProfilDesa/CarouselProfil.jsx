@@ -23,7 +23,7 @@ export default function CarouselAparatur() {
     const filenameOnly = filename.split("/").pop();
 
     // Return the complete URL (mengikuti cara MediaService)
-    return `../../storage/${filenameOnly}`;
+    return `/storage/${filenameOnly}`;
   };
 
   // Fetch data from API

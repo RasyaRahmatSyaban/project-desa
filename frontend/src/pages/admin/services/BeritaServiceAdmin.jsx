@@ -391,7 +391,7 @@ const BeritaServiceAdmin = {
     const filename = extractFilename(imagePath);
 
     // Construct the URL to the image
-    return `../../storage/${filename}`;
+    return `/storage/${filename}`;
   },
 };
 

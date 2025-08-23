@@ -85,6 +85,17 @@ const deleteKepalaKeluarga = async (id) => {
   }
 };
 
+const deleteKepalaKeluargaByNik = async (nik) => {
+  try {
+    const [results] = await db
+      .promise()
+      .query("DELETE FROM kepalakeluarga WHERE nik = ?", [nik]);
+    return results.affectedRows > 0;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   getAllKepalaKeluarga,
   getKepalaKeluargaById,
@@ -93,4 +104,5 @@ export default {
   updateKepalaKeluarga,
   updateKepalaKeluargaByNik,
   deleteKepalaKeluarga,
+  deleteKepalaKeluargaByNik,
 };

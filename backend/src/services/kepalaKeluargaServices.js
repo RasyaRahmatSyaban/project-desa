@@ -97,6 +97,18 @@ const deleteKepalaKeluarga = async (id) => {
   }
 }
 
+const deleteKepalaKeluargaByNik = async (nik) => {
+  try {
+    const existing = await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik)
+    if (!existing) {
+      return false
+    }
+    return await kepalaKeluargaRepo.deleteKepalaKeluargaByNik(nik)
+  } catch (error) {
+    throw new Error("Gagal menghapus data kepala keluarga")
+  }
+}
+
 export default {
   getAllKepalaKeluarga,
   getKepalaKeluargaById,
@@ -105,4 +117,5 @@ export default {
   updateKepalaKeluarga,
   updateKepalaKeluargaByNik,
   deleteKepalaKeluarga,
+  deleteKepalaKeluargaByNik,
 }

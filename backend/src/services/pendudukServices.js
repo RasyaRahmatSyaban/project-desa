@@ -239,12 +239,17 @@ const deleteDataPenduduk = async (nik) => {
     if (!existingPenduduk) {
       return {
         success: false,
-        message: "Data dengan NIK tersebut tidak ditemukan",
+        message: "Data penduduk dengan NIK tersebut tidak ditemukan",
       };
+    }
+    
+    const existingKepalaKeluarga = await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik);
+    if (existingKepalaKeluarga) {
+      await kepalaKeluargaRepo.deleteKepalaKeluargaByNik(nik);
     }
     const isDeleted = await pendudukRepo.deleteDataPenduduk(nik);
     if (!isDeleted) {
-      return { success: false, message: "Gagal menghapus data" };
+      return { success: false, message: "Gagal menghapus data penduduk" };
     }
     return { success: true, message: "Data berhasil dihapus" };
   } catch (error) {

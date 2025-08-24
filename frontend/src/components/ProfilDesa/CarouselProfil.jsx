@@ -4,6 +4,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true"
+  },
+});
+
 export default function CarouselAparatur() {
   const [aparatur, setAparatur] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -30,7 +40,7 @@ export default function CarouselAparatur() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/aparatur");
+        const res = await api.get(`${API_URL}/aparatur`);
         if (res.data.success) {
           setAparatur(res.data.data);
         }

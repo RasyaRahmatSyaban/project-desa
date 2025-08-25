@@ -45,7 +45,6 @@ const BeritaAdmin = () => {
   // Form state
   const [formData, setFormData] = useState({
     judul: "",
-    kategori: "Umum",
     tanggalTerbit: "",
     penulis: "",
     status: "Draft",
@@ -107,7 +106,6 @@ const BeritaAdmin = () => {
       const transformedData = data.map((item) => ({
         id: item.id,
         judul: item.judul,
-        kategori: item.kategori || "Umum", // Default to "Umum" if not provided
         tanggalTerbit: item.tanggalTerbit,
         penulis: item.penulis,
         status: item.status || "Dipublikasi", // Default to "Dipublikasi" if not provided
@@ -128,11 +126,7 @@ const BeritaAdmin = () => {
   // Filter data based on active tab and search query
   const filteredData = beritaData.filter((item) => {
     const matchesSearch =
-      (item.judul?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
-      (item.kategori?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase()
-      ) ||
-      (item.penulis?.toLowerCase() || "").includes(searchQuery.toLowerCase());
+      (item.judul?.toLowerCase() || "").includes(searchQuery.toLowerCase()) || (item.penulis?.toLowerCase() || "").includes(searchQuery.toLowerCase());
 
     const matchesFilter =
       activeTab === "semua" ||
@@ -154,7 +148,6 @@ const BeritaAdmin = () => {
   const handleAdd = () => {
     setFormData({
       judul: "",
-      kategori: "Umum",
       tanggalTerbit: new Date().toISOString().split("T")[0],
       penulis: "Admin",
       status: "Draft",
@@ -191,7 +184,6 @@ const BeritaAdmin = () => {
 
       setFormData({
         judul: item.judul || "",
-        kategori: item.kategori || "Umum",
         tanggalTerbit: formattedDate,
         penulis: item.penulis || "",
         status: item.status || "Draft",
@@ -279,7 +271,6 @@ const BeritaAdmin = () => {
         tanggalTerbit: formData.tanggalTerbit,
         penulis: formData.penulis,
         status: formData.status,
-        kategori: formData.kategori,
         ringkasan: formData.ringkasan,
         foto: formData.foto,
       };
@@ -326,7 +317,6 @@ const BeritaAdmin = () => {
         tanggalTerbit: formData.tanggalTerbit,
         penulis: formData.penulis,
         status: formData.status,
-        kategori: formData.kategori,
         ringkasan: formData.ringkasan,
         foto: formData.foto,
         deleteFoto: formData.deleteFoto,
@@ -626,9 +616,6 @@ const BeritaAdmin = () => {
                       Thumbnail
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                      Kategori
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
                       Tanggal
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
@@ -664,15 +651,6 @@ const BeritaAdmin = () => {
                               <FaImage className="text-gray-400" />
                             </div>
                           )}
-                        </td>
-                        <td className="px-4 py-3 text-sm">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(
-                              berita.kategori
-                            )}`}
-                          >
-                            {berita.kategori || "Umum"}
-                          </span>
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
                           <div className="flex items-center gap-2">
@@ -831,29 +809,6 @@ const BeritaAdmin = () => {
                     </div>
                   )}
                 </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="kategori"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Kategori
-                </label>
-                <select
-                  id="kategori"
-                  value={formData.kategori}
-                  onChange={(e) =>
-                    setFormData({ ...formData, kategori: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                >
-                  <option value="Umum">Umum</option>
-                  <option value="Kesehatan">Kesehatan</option>
-                  <option value="Pendidikan">Pendidikan</option>
-                  <option value="Infrastruktur">Infrastruktur</option>
-                  <option value="Pertanian">Pertanian</option>
-                </select>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1074,29 +1029,6 @@ const BeritaAdmin = () => {
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="edit-kategori"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Kategori
-                </label>
-                <select
-                  id="edit-kategori"
-                  value={formData.kategori}
-                  onChange={(e) =>
-                    setFormData({ ...formData, kategori: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                >
-                  <option value="Umum">Umum</option>
-                  <option value="Kesehatan">Kesehatan</option>
-                  <option value="Pendidikan">Pendidikan</option>
-                  <option value="Infrastruktur">Infrastruktur</option>
-                  <option value="Pertanian">Pertanian</option>
-                </select>
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -1312,14 +1244,6 @@ const BeritaAdmin = () => {
               </h2>
 
               <div className="flex flex-wrap gap-2 mb-4">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(
-                    currentItem?.kategori
-                  )}`}
-                >
-                  <FaTags className="inline-block mr-1" />
-                  {currentItem?.kategori || "Umum"}
-                </span>
                 <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                   <FaCalendarAlt className="inline-block mr-1" />
                   {currentItem?.tanggalTerbit &&

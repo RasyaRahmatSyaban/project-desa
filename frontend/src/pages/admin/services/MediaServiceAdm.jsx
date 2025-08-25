@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Buat axios instance dengan default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true",
   },
 });
 
@@ -221,7 +222,7 @@ const MediaService = {
     const filenameOnly = filename.split("/").pop();
 
     // Return the complete URL
-    return `../../public/berita/${filenameOnly}`;
+    return `/storage/${filenameOnly}`;
   },
 
   // Format date - Dapat diakses oleh admin dan user

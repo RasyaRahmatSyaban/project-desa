@@ -21,9 +21,7 @@ const getAparaturById = async (id) => {
       result.nama,
       result.nip,
       result.jabatan,
-      result.telepon,
       result.foto,
-      result.status,
     )
   } catch (error) {
     throw new Error("Gagal mengambil data aparatur berdasarkan ID")
@@ -41,19 +39,19 @@ const getAparaturByNip = async (nip) => {
       result.nama,
       result.nip,
       result.jabatan,
-      result.telepon,
       result.foto,
-      result.status,
     )
   } catch (error) {
     throw new Error("Gagal mengambil data aparatur berdasarkan NIP")
   }
 }
 
-const addAparatur = async (nama, nip, jabatan, telepon, foto = null, status = null) => {
-  if (!nama || !nip || !jabatan || !telepon) {
-    throw new Error("Nama, NIP, Jabatan, dan Telepon aparatur wajib diisi!")
+const addAparatur = async (nama, nip, jabatan, foto) => {
+  if (!nama || !nip || !jabatan) {
+    throw new Error("Nama, NIP, dan Jabatan aparatur wajib diisi!")
   }
+
+  const fotoPath = foto ? foto.filename : null;
 
   const existing = await aparaturRepo.getAparaturByNip(nip)
   if (existing) {
@@ -61,26 +59,25 @@ const addAparatur = async (nama, nip, jabatan, telepon, foto = null, status = nu
   }
 
   try {
-    const result = await aparaturRepo.addAparatur(nama, nip, jabatan, telepon, foto, status)
+    const result = await aparaturRepo.addAparatur(nama, nip, jabatan, fotoPath)
     return new AparaturDTO(
       result.id,
       result.nama,
       result.nip,
       result.jabatan,
-      result.telepon,
       result.foto,
-      result.status,
     )
   } catch (error) {
-    throw new Error("Gagal menambahkan data aparatur")
+    throw new Error("Gagal menambahkan data aparatur anjay")
   }
 }
 
-const updateAparatur = async (id, nama, nip, jabatan, telepon, foto = null, status = null) => {
+const updateAparatur = async (id, nama, nip, jabatan, foto) => {
   // 1. Validasi input wajib terlebih dahulu
-  if (!nama || !nip || !jabatan || !telepon) {
-    throw new Error("Nama, NIP, Jabatan, dan Telepon aparatur wajib diisi!")
+  if (!nama || !nip || !jabatan ) {
+    throw new Error("Nama, NIP, dan Jabatan aparatur wajib diisi!")
   }
+  const fotoPath = foto ? foto.filename : null;
 
   // 2. Cek apakah data yang akan diupdate ada
   const existingById = await aparaturRepo.getAparaturById(id)
@@ -98,15 +95,13 @@ const updateAparatur = async (id, nama, nip, jabatan, telepon, foto = null, stat
 
   try {
     // 4. Update data - foto akan dihandle di repository
-    const updatedAparatur = await aparaturRepo.updateAparatur(id, nama, nip, jabatan, telepon, foto, status)
+    const updatedAparatur = await aparaturRepo.updateAparatur(id, nama, nip, jabatan, fotoPath)
     return new AparaturDTO(
       updatedAparatur.id,
       updatedAparatur.nama,
       updatedAparatur.nip,
       updatedAparatur.jabatan,
-      updatedAparatur.telepon,
       updatedAparatur.foto,
-      updatedAparatur.status,
     )
   } catch (error) {
     throw new Error("Gagal memperbarui data aparatur: " + error.message)

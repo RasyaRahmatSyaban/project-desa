@@ -118,7 +118,7 @@ const updateBerita = async (
     }
 
     // Set path foto baru
-    fotoPath = `/uploads/berita/${foto.filename}`;
+    fotoPath = `/uploads/storage/${foto.filename}`;
   }
 
   return await beritaRepository.updateBerita(

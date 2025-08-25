@@ -48,20 +48,24 @@ const getSuratKeluarById = async (id) => {
 const updateSuratMasuk = async (id, nomorSurat, pengirim, perihal, tanggalTerima, file) => {
     const existing = await suratRepo.getSuratMasukById(id);
     if (!existing) {
-        return new Error("Surat tidak ditemukan");
+        throw new Error("Surat tidak ditemukan");
     }
 
-    const updated = await suratRepo.updateSuratMasuk(id, nomorSurat, pengirim, perihal, tanggalTerima, file.filename);
+    const fileToSave = file || existing.file;
+
+    const updated = await suratRepo.updateSuratMasuk(id, nomorSurat, pengirim, perihal, tanggalTerima, fileToSave);
     return updated;
 };
 
 const updateSuratKeluar = async (id, nomorSurat, penerima, perihal, tanggalKirim, file) => {
     const existing = await suratRepo.getSuratKeluarById(id);
     if (!existing) {
-        return new Error("Surat tidak ditemukan");
+        throw new Error("Surat tidak ditemukan");
     }
 
-    const updated = await suratRepo.updateSuratKeluar(id, nomorSurat, penerima, perihal, tanggalKirim, file.filename);
+    const fileToSave = file || existing.file;
+
+    const updated = await suratRepo.updateSuratKeluar(id, nomorSurat, penerima, perihal, tanggalKirim, fileToSave);
     return updated;
 };
 

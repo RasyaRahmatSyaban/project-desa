@@ -5,7 +5,7 @@ import path from "path";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // sesuaikan dengan direktori penyimpanan yang diinginkan
-    cb(null, "D:/PROJECT/DONEEEE/frontend/public");
+    cb(null, "D:/CODING/project-desa/frontend/public/storage");
   },
   filename: (req, file, cb) => {
     const prefix = req.uploadPrefix || "file";

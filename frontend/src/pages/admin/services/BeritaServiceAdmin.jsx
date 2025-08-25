@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Create axios instance with default config
 const secureApi = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true",
   },
 });
 
@@ -88,7 +89,7 @@ const extractFilename = (path) => {
   if (!path) return null;
 
   // Jika path berisi 'uploads/berita/', ekstrak hanya nama filenya
-  if (path.includes("uploads/berita/")) {
+  if (path.includes("uploads/storage/")) {
     return path.split("/").pop();
   }
 
@@ -391,7 +392,7 @@ const BeritaServiceAdmin = {
     const filename = extractFilename(imagePath);
 
     // Construct the URL to the image
-    return `../../public/berita/${filename}`;
+    return `/storage/${filename}`;
   },
 };
 

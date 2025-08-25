@@ -186,9 +186,17 @@ const SuratForm = ({
           onChange={handleFileChange}
           className="w-full border border-gray-300 rounded-lg p-2 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
         />
-        {isEdit && currentItem?.file_surat && (
+        {isEdit && currentItem?.file && (
           <p className="mt-1 text-sm text-gray-500">
-            File saat ini: {currentItem.file_surat}
+            File saat ini:{" "}
+            <a
+              href={`/storage/${currentItem.file}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline hover:text-blue-800"
+            >
+              Lihat Dokumen
+            </a>
           </p>
         )}
       </div>

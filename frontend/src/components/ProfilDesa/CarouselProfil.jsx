@@ -4,6 +4,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true"
+  },
+});
+
 export default function CarouselAparatur() {
   const [aparatur, setAparatur] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -11,11 +21,26 @@ export default function CarouselAparatur() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
 
+  const getAparaturPhotoUrl = (filename) => {
+    if (!filename) return "/placeholder.svg?height=300&width=220";
+
+    // If path already starts with http:// or https://, return as is
+    if (filename.startsWith("http://") || filename.startsWith("https://")) {
+      return filename;
+    }
+
+    // Ekstrak nama file dari path jika ada
+    const filenameOnly = filename.split("/").pop();
+
+    // Return the complete URL (mengikuti cara MediaService)
+    return `/storage/${filenameOnly}`;
+  };
+
   // Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/aparatur");
+        const res = await api.get(`${API_URL}/aparatur`);
         if (res.data.success) {
           setAparatur(res.data.data);
         }
@@ -145,7 +170,7 @@ export default function CarouselAparatur() {
                   }}
                 >
                   <img
-                    src={`/${item.foto}`}
+                    src={getAparaturPhotoUrl(item.foto)}
                     alt={item.jabatan}
                     className="w-full h-full object-cover"
                   />

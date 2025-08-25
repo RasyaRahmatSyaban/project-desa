@@ -64,14 +64,10 @@ const PengumumanAdmin = () => {
         id: item.id,
         judul: item.judul,
         isi: item.isi,
-        tanggal: item.tanggalMulai,
-        tanggalBerakhir: item.tanggalSelesai,
+        tanggalMulai: item.tanggalMulai ? new Date(item.tanggalMulai).toISOString() : null,
+        tanggalSelesai: item.tanggalSelesai ? new Date(item.tanggalSelesai).toISOString() : null,
         status:
           new Date(item.tanggalSelesai) < new Date() ? "Kadaluarsa" : "Aktif",
-        // Default values for fields not in the API
-        kategori: "Informasi",
-        penulis: "Admin",
-        prioritas: "Sedang",
       }));
 
       setPengumumanData(transformedData);
@@ -91,11 +87,7 @@ const PengumumanAdmin = () => {
   // Filter data based on active tab and search query
   const filteredData = pengumumanData.filter((item) => {
     const matchesSearch =
-      item.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.kategori?.toLowerCase() || "").includes(
-        searchQuery.toLowerCase()
-      ) ||
-      item.isi.toLowerCase().includes(searchQuery.toLowerCase());
+      item.judul.toLowerCase().includes(searchQuery.toLowerCase()) || item.isi.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesFilter =
       activeTab === "semua" ||
@@ -122,10 +114,6 @@ const PengumumanAdmin = () => {
       tanggalSelesai: new Date(new Date().setDate(new Date().getDate() + 7))
         .toISOString()
         .split("T")[0],
-      // Default values for UI
-      kategori: "Informasi",
-      penulis: "Admin",
-      prioritas: "Sedang",
       status: "Aktif",
     });
     setShowAddModal(true);
@@ -138,12 +126,9 @@ const PengumumanAdmin = () => {
       setFormData({
         judul: item.judul,
         isi: item.isi,
-        tanggalMulai: item.tanggal,
-        tanggalSelesai: item.tanggalBerakhir,
+        tanggalMulai: item.tanggalMulai ? new Date(item.tanggalMulai).toISOString().split("T")[0] : "",
+        tanggalSelesai: item.tanggalSelesai ? new Date(item.tanggalSelesai).toISOString().split("T")[0] : "",
         // Include UI fields
-        kategori: item.kategori || "Informasi",
-        penulis: item.penulis || "Admin",
-        prioritas: item.prioritas || "Sedang",
         status: item.status,
       });
       setShowEditModal(true);
@@ -186,16 +171,10 @@ const PengumumanAdmin = () => {
         return;
       }
 
-      // Prepare data for API
-      const pengumumanData = {
-        judul: formData.judul,
-        isi: formData.isi,
-        tanggalMulai: formData.tanggalMulai,
-        tanggalSelesai: formData.tanggalSelesai,
-      };
+      console.log("Data dikirim (add):", formData);
 
       // Call API
-      const result = await PengumumanServiceAdmin.addPengumuman(pengumumanData);
+      await PengumumanServiceAdmin.addPengumuman(formData);
 
       // Refresh data
       await fetchAllPengumuman();
@@ -216,18 +195,11 @@ const PengumumanAdmin = () => {
     }
 
     try {
-      // Prepare data for API
-      const pengumumanData = {
-        judul: formData.judul,
-        isi: formData.isi,
-        tanggalMulai: formData.tanggalMulai,
-        tanggalSelesai: formData.tanggalSelesai,
-      };
 
       // Call API
       await PengumumanServiceAdmin.updatePengumuman(
         currentItem.id,
-        pengumumanData
+        formData
       );
 
       // Refresh data
@@ -273,36 +245,6 @@ const PengumumanAdmin = () => {
         return "bg-green-100 text-green-800";
       case "Kadaluarsa":
         return "bg-gray-100 text-gray-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  // Get priority badge color
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "Tinggi":
-        return "bg-red-100 text-red-800";
-      case "Sedang":
-        return "bg-yellow-100 text-yellow-800";
-      case "Rendah":
-        return "bg-blue-100 text-blue-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  // Get category badge color
-  const getCategoryColor = (category) => {
-    switch (category) {
-      case "Informasi":
-        return "bg-blue-100 text-blue-800";
-      case "Layanan":
-        return "bg-purple-100 text-purple-800";
-      case "Kesehatan":
-        return "bg-green-100 text-green-800";
-      case "Acara":
-        return "bg-orange-100 text-orange-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -511,16 +453,13 @@ const PengumumanAdmin = () => {
                       Judul
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                      Kategori
+                      Tanggal Mulai
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                      Tanggal
+                      Tanggal Selesai
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
                       Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                      Prioritas
                     </th>
                     <th className="px-4 py-3 text-right text-sm font-medium text-gray-600 rounded-tr-lg">
                       Aksi
@@ -537,19 +476,23 @@ const PengumumanAdmin = () => {
                         <td className="px-4 py-3 text-sm text-gray-800 font-medium">
                           {pengumuman.judul}
                         </td>
-                        <td className="px-4 py-3 text-sm">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(
-                              pengumuman.kategori
-                            )}`}
-                          >
-                            {pengumuman.kategori}
-                          </span>
+                        <td className="px-4 py-3 text-sm text-gray-800">
+                          <div className="flex items-center gap-2">
+                            <FaCalendarAlt className="text-gray-400" />
+                            {new Date(pengumuman.tanggalMulai).toLocaleDateString(
+                              "id-ID",
+                              {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </div>
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
                           <div className="flex items-center gap-2">
                             <FaCalendarAlt className="text-gray-400" />
-                            {new Date(pengumuman.tanggal).toLocaleDateString(
+                            {new Date(pengumuman.tanggalSelesai).toLocaleDateString(
                               "id-ID",
                               {
                                 day: "numeric",
@@ -566,15 +509,6 @@ const PengumumanAdmin = () => {
                             )}`}
                           >
                             {pengumuman.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-sm">
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(
-                              pengumuman.prioritas
-                            )}`}
-                          >
-                            {pengumuman.prioritas}
                           </span>
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -654,28 +588,6 @@ const PengumumanAdmin = () => {
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="kategori"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Kategori
-                </label>
-                <select
-                  id="kategori"
-                  value={formData.kategori}
-                  onChange={(e) =>
-                    setFormData({ ...formData, kategori: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                >
-                  <option value="Informasi">Informasi</option>
-                  <option value="Layanan">Layanan</option>
-                  <option value="Kesehatan">Kesehatan</option>
-                  <option value="Acara">Acara</option>
-                </select>
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -714,48 +626,6 @@ const PengumumanAdmin = () => {
                     }
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                   />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="penulis"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Penulis
-                  </label>
-                  <input
-                    id="penulis"
-                    type="text"
-                    value={formData.penulis}
-                    onChange={(e) =>
-                      setFormData({ ...formData, penulis: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                    placeholder="Nama penulis"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="prioritas"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Prioritas
-                  </label>
-                  <select
-                    id="prioritas"
-                    value={formData.prioritas}
-                    onChange={(e) =>
-                      setFormData({ ...formData, prioritas: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  >
-                    <option value="Rendah">Rendah</option>
-                    <option value="Sedang">Sedang</option>
-                    <option value="Tinggi">Tinggi</option>
-                  </select>
                 </div>
               </div>
 
@@ -824,28 +694,6 @@ const PengumumanAdmin = () => {
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                 />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="edit-kategori"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Kategori
-                </label>
-                <select
-                  id="edit-kategori"
-                  value={formData.kategori}
-                  onChange={(e) =>
-                    setFormData({ ...formData, kategori: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                >
-                  <option value="Informasi">Informasi</option>
-                  <option value="Layanan">Layanan</option>
-                  <option value="Kesehatan">Kesehatan</option>
-                  <option value="Acara">Acara</option>
-                </select>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -993,31 +841,6 @@ const PengumumanAdmin = () => {
                   {currentItem?.judul}
                 </h2>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(
-                      currentItem?.kategori
-                    )}`}
-                  >
-                    <FaTag className="inline-block mr-1" />
-                    {currentItem?.kategori}
-                  </span>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(
-                      currentItem?.prioritas
-                    )}`}
-                  >
-                    Prioritas: {currentItem?.prioritas}
-                  </span>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                      currentItem?.status
-                    )}`}
-                  >
-                    {currentItem?.status}
-                  </span>
-                </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-gray-500">Tanggal Mulai</p>
@@ -1046,13 +869,6 @@ const PengumumanAdmin = () => {
                           month: "long",
                           year: "numeric",
                         })}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Penulis</p>
-                    <p className="font-medium flex items-center gap-1">
-                      <FaUser className="text-gray-400" />
-                      {currentItem?.penulis}
                     </p>
                   </div>
                 </div>

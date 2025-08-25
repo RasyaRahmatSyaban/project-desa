@@ -18,8 +18,8 @@ import {
 
 // Ubah import PopupForm untuk mengarah ke file .jsx bukan .tsx
 import PopupForm from "./PopupForm.jsx";
-import PendudukService from "../../services/PendudukService";
-import toast from "../../../../components/Toast.jsx";
+import PendudukService from "../services/PendudukService";
+import toast from "../../../components/Toast.jsx";
 
 export default function Penduduk() {
   // Data penduduk individual
@@ -124,6 +124,8 @@ export default function Penduduk() {
     if (editData) {
       setFormData({
         ...editData,
+        tanggalLahir: editData.tanggalLahir ? editData.tanggalLahir.split("T")[0] : "",
+        existingNik: editData.nik,
         kepalaKeluarga: !!editData.kepalaKeluarga,
         selectedKK: editData.id_kepalakeluarga || "",
       });
@@ -187,7 +189,7 @@ export default function Penduduk() {
     }
     try {
       if (isEditing) {
-        await PendudukService.updatePenduduk(formData.nik, formData);
+        await PendudukService.updatePenduduk(formData.existingNik, formData);
       } else {
         await PendudukService.addPenduduk(formData);
       }
@@ -591,11 +593,7 @@ export default function Penduduk() {
                   <span>Kembali ke Dashboard</span>
                 </button>
                 <button
-                  onClick={() => {
-                    setIsEditing(false);
-                    resetForm(false); // Reset form tanpa menutupnya
-                    setShowForm(true); // Pastikan form ditampilkan
-                  }}
+                  onClick={() => openForm()}
                   className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   <FaUserPlus size={16} />

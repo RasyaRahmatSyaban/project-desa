@@ -38,7 +38,7 @@ const extractFilename = (path) => {
   if (!path) return null;
 
   // Jika path berisi 'uploads/berita/', ekstrak hanya nama filenya
-  if (path.includes("uploads/storage/")) {
+  if (path.includes("uploads/")) {
     return path.split("/").pop();
   }
 
@@ -192,7 +192,7 @@ const BeritaService = {
     const filename = extractFilename(imagePath);
 
     // Construct the URL to the image
-    return `/storage/${filename}`;
+    return `${API_URL}/storage/${filename}`;
   },
 };
 

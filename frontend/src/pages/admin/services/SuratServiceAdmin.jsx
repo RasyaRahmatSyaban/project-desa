@@ -45,6 +45,18 @@ api.interceptors.response.use(
   }
 );
 
+const extractFilename = (path) => {
+  if (!path) return null;
+
+  // Jika path berisi 'uploads/berita/', ekstrak hanya nama filenya
+  if (path.includes("uploads/")) {
+    return path.split("/").pop();
+  }
+
+  // Jika tidak, kembalikan path asli
+  return path;
+};
+
 // Helper function to find file field in an object
 const findFileField = (item) => {
   // Check for the 'file' field first (as seen in the database)
@@ -549,8 +561,8 @@ const SuratService = {
     }
 
     // For files in the berita directory (as seen in your setup)
-    const fileUrl = `/storage/${fileName.split("/").pop()}`;
-    return fileUrl;
+    const fileUrl = extractFilename(fileName);
+    return `${API_URL}/uploads/${fileUrl}`;
   },
 
   // Download file as blob to avoid browser blocking

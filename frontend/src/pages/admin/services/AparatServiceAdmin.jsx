@@ -78,16 +78,22 @@ const AparatServiceAdmin = {
   getAllAparat: async () => {
     try {
       const response = await secureApi.get("/aparatur");
-      
+
       // Cek struktur response
       let dataArray = [];
 
-      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+      if (
+        response.data &&
+        response.data.success &&
+        Array.isArray(response.data.data)
+      ) {
         dataArray = response.data.data;
       } else if (Array.isArray(response.data)) {
         dataArray = response.data;
       } else if (response.data && response.data.data) {
-        dataArray = Array.isArray(response.data.data) ? response.data.data : [response.data.data];
+        dataArray = Array.isArray(response.data.data)
+          ? response.data.data
+          : [response.data.data];
       } else {
         console.error("Unexpected response structure:", response.data);
         return [];
@@ -122,11 +128,11 @@ const AparatServiceAdmin = {
         formData.append("nama", aparatData.nama);
         formData.append("jabatan", aparatData.jabatan);
         formData.append("nip", aparatData.nip);
-        
+
         if (aparatData.telepon) {
           formData.append("telepon", aparatData.telepon);
         }
-        
+
         formData.append("foto", aparatData.foto);
 
         const response = await axios.post(`${API_URL}/aparatur`, formData, {
@@ -159,19 +165,23 @@ const AparatServiceAdmin = {
         formData.append("nama", aparatData.nama);
         formData.append("jabatan", aparatData.jabatan);
         formData.append("nip", aparatData.nip);
-        
+
         if (aparatData.telepon) {
           formData.append("telepon", aparatData.telepon);
         }
-        
+
         formData.append("foto", aparatData.foto);
 
-        const response = await axios.put(`${API_URL}/aparatur/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.put(
+          `${API_URL}/aparatur/${id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         return response.data;
       } else {
         // Jika tidak ada file foto baru
@@ -230,7 +240,7 @@ const AparatServiceAdmin = {
     const filename = extractFilename(imagePath);
 
     // Construct the URL to the image
-    return `/storage/${filename}`;
+    return `${API_URL}/uploads/${filename}`;
   },
 
   // Format data dari API ke format yang digunakan component

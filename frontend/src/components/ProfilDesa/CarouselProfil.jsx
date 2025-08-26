@@ -1,18 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const API_URL = import.meta.env.VITE_API_URL;
-
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": "true"
-  },
-});
+import AparatServiceAdmin from "../../pages/admin/services/AparatServiceAdmin"; // Sesuaikan path
 
 export default function CarouselAparatur() {
   const [aparatur, setAparatur] = useState([]);
@@ -20,30 +10,20 @@ export default function CarouselAparatur() {
   const [isHovered, setIsHovered] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const getAparaturPhotoUrl = (filename) => {
-    if (!filename) return "/placeholder.svg?height=300&width=220";
-
-    // If path already starts with http:// or https://, return as is
-    if (filename.startsWith("http://") || filename.startsWith("https://")) {
-      return filename;
-    }
-
-    // Ekstrak nama file dari path jika ada
-    const filenameOnly = filename.split("/").pop();
-
-    // Return the complete URL (mengikuti cara MediaService)
-    return `/storage/${filenameOnly}`;
-  };
-
-  // Fetch data from API
+  // Fetch data from API menggunakan AparatServiceAdmin
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await api.get(`${API_URL}/aparatur`);
-        if (res.data.success) {
-          setAparatur(res.data.data);
-        }
+        setLoading(true);
+        setError(null);
+
+        const data = await AparatServiceAdmin.getAllAparat();
+
+        const formattedData = AparatServiceAdmin.formatAparatData(data);
+
+        setAparatur(formattedData);
       } catch (error) {
         console.error("Gagal memuat data aparatur:", error);
       } finally {
@@ -58,7 +38,7 @@ export default function CarouselAparatur() {
   useEffect(() => {
     if (isAutoPlaying && !isHovered && aparatur.length > 0) {
       const interval = setInterval(() => {
-        nextSlide();
+        setCurrentIndex((prev) => (prev + 1) % aparatur.length);
       }, 5000);
       return () => clearInterval(interval);
     }
@@ -80,12 +60,26 @@ export default function CarouselAparatur() {
     const slides = [];
     const total = aparatur.length;
 
+    if (total === 0) return [];
+
     const prevIndex = (currentIndex - 1 + total) % total;
     const nextIndex = (currentIndex + 1) % total;
 
-    slides.push({ index: prevIndex, position: "left" });
-    slides.push({ index: currentIndex, position: "center" });
-    slides.push({ index: nextIndex, position: "right" });
+    slides.push({
+      index: prevIndex,
+      position: "left",
+      key: `left-${prevIndex}`,
+    });
+    slides.push({
+      index: currentIndex,
+      position: "center",
+      key: `center-${currentIndex}`,
+    });
+    slides.push({
+      index: nextIndex,
+      position: "right",
+      key: `right-${nextIndex}`,
+    });
 
     return slides;
   };
@@ -99,9 +93,26 @@ export default function CarouselAparatur() {
     );
   }
 
-  if (aparatur.length === 0) {
+  // Error state
+  if (error) {
     return (
       <div className="text-center py-20 text-red-500">
+        Error: {error}
+        <br />
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Coba Lagi
+        </button>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (aparatur.length === 0) {
+    return (
+      <div className="text-center py-20 text-gray-500">
         Tidak ada data aparatur ditemukan.
       </div>
     );
@@ -121,7 +132,7 @@ export default function CarouselAparatur() {
       >
         {/* Slides */}
         <div className="absolute inset-0 flex items-center justify-center">
-          {visibleSlides.map(({ index, position }) => {
+          {visibleSlides.map(({ index, position, key }) => {
             const item = aparatur[index];
             if (!item) return null;
 
@@ -149,7 +160,7 @@ export default function CarouselAparatur() {
 
             return (
               <div
-                key={index}
+                key={key} // Menggunakan key yang unik berdasarkan posisi dan index
                 className="absolute transition-all duration-500 ease-in-out cursor-pointer"
                 style={{
                   transform: `translateX(${translateX}px) scale(${scale})`,
@@ -170,8 +181,8 @@ export default function CarouselAparatur() {
                   }}
                 >
                   <img
-                    src={getAparaturPhotoUrl(item.foto)}
-                    alt={item.jabatan}
+                    src={item.foto}
+                    alt={item.jabatan || "Aparatur"}
                     className="w-full h-full object-cover"
                   />
                   {isCenter && (
@@ -182,8 +193,13 @@ export default function CarouselAparatur() {
                           "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))",
                       }}
                     >
-                      <p className="font-semibold capitalize">{item.jabatan}</p>
-                      <p className="text-sm">{item.nama}</p>
+                      <p className="font-semibold capitalize">
+                        {item.jabatan || "Jabatan"}
+                      </p>
+                      <p className="text-sm">{item.nama || "Nama"}</p>
+                      {item.nip && (
+                        <p className="text-xs opacity-75">NIP: {item.nip}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -213,7 +229,7 @@ export default function CarouselAparatur() {
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20 bg-white/80 rounded-full px-3 py-2 shadow-sm">
           {aparatur.map((_, index) => (
             <button
-              key={index}
+              key={`indicator-${index}`} // Key unik untuk setiap indicator
               onClick={() => goToSlide(index)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                 index === currentIndex
@@ -268,9 +284,16 @@ export default function CarouselAparatur() {
       {aparatur[currentIndex] && (
         <div className="text-center mt-8">
           <h2 className="text-2xl font-semibold text-gray-800">
-            {aparatur[currentIndex].jabatan}
+            {aparatur[currentIndex].jabatan || "Jabatan"}
           </h2>
-          <p className="text-gray-600 mt-2">{aparatur[currentIndex].nama}</p>
+          <p className="text-gray-600 mt-2">
+            {aparatur[currentIndex].nama || "Nama"}
+          </p>
+          {aparatur[currentIndex].nip && (
+            <p className="text-sm text-gray-500 mt-1">
+              NIP: {aparatur[currentIndex].nip}
+            </p>
+          )}
           <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
             Aparatur desa yang bertugas melayani masyarakat dan memastikan
             pelaksanaan program pembangunan desa berjalan dengan baik.

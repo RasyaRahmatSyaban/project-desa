@@ -65,9 +65,21 @@ export default function CarouselAparatur() {
     const prevIndex = (currentIndex - 1 + total) % total;
     const nextIndex = (currentIndex + 1) % total;
 
-    slides.push({ index: prevIndex, position: "left" });
-    slides.push({ index: currentIndex, position: "center" });
-    slides.push({ index: nextIndex, position: "right" });
+    slides.push({
+      index: prevIndex,
+      position: "left",
+      key: `left-${prevIndex}`,
+    });
+    slides.push({
+      index: currentIndex,
+      position: "center",
+      key: `center-${currentIndex}`,
+    });
+    slides.push({
+      index: nextIndex,
+      position: "right",
+      key: `right-${nextIndex}`,
+    });
 
     return slides;
   };
@@ -120,7 +132,7 @@ export default function CarouselAparatur() {
       >
         {/* Slides */}
         <div className="absolute inset-0 flex items-center justify-center">
-          {visibleSlides.map(({ index, position }) => {
+          {visibleSlides.map(({ index, position, key }) => {
             const item = aparatur[index];
             if (!item) return null;
 
@@ -148,7 +160,7 @@ export default function CarouselAparatur() {
 
             return (
               <div
-                key={`${item.id}-${index}`} // Improved key
+                key={key} // Menggunakan key yang unik berdasarkan posisi dan index
                 className="absolute transition-all duration-500 ease-in-out cursor-pointer"
                 style={{
                   transform: `translateX(${translateX}px) scale(${scale})`,
@@ -169,12 +181,9 @@ export default function CarouselAparatur() {
                   }}
                 >
                   <img
-                    src={item.foto || "/placeholder.svg?height=300&width=220"}
+                    src={item.foto}
                     alt={item.jabatan || "Aparatur"}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.src = "/placeholder.svg?height=300&width=220";
-                    }}
                   />
                   {isCenter && (
                     <div
@@ -220,7 +229,7 @@ export default function CarouselAparatur() {
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20 bg-white/80 rounded-full px-3 py-2 shadow-sm">
           {aparatur.map((_, index) => (
             <button
-              key={index}
+              key={`indicator-${index}`} // Key unik untuk setiap indicator
               onClick={() => goToSlide(index)}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                 index === currentIndex

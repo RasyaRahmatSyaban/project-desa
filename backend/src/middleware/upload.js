@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
+import slugify from "slugify";
 
 // Untuk mendapatkan __dirname di ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -23,8 +24,8 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const prefix = req.uploadPrefix || "file";
     const uniqueSuffix = Date.now();
-    const originalName = file.originalname.replace(/\s+/g, "_");
-    cb(null, `${prefix}-${uniqueSuffix}-${originalName}`);
+    const safeName = slugify(file.originalname, { lower: true, strict: true });
+    cb(null, `${prefix}-${uniqueSuffix}-${safeName}`);
   },
 });
 

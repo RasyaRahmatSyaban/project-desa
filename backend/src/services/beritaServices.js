@@ -3,6 +3,16 @@ import { BeritaDTO } from "../dto/dto.js";
 import fs from "fs";
 import path from "path";
 
+const UPLOAD_DIR = path.resolve("uploads");
+
+function deleteOldFile(filename) {
+  if (!filename) return;
+  const oldFilePath = path.join(UPLOAD_DIR, filename);
+  if (fs.existsSync(oldFilePath)) {
+    fs.unlinkSync(oldFilePath);
+  }
+}
+
 const addBerita = async (
   judul,
   foto,
@@ -98,27 +108,12 @@ const updateBerita = async (
   status
 ) => {
   const existing = await beritaRepository.getBeritaById(id);
-  if (!existing) {
-    return false;
-  }
+  if (!existing) throw new Error("Berita tidak ditemukan!");
 
-  // Jika ada foto baru, hapus foto lama jika ada
   let fotoPath = existing.foto;
   if (foto) {
-    // Hapus foto lama jika ada
-    if (existing.foto) {
-      try {
-        const oldFilePath = path.join("public", existing.foto);
-        if (fs.existsSync(oldFilePath)) {
-          fs.unlinkSync(oldFilePath);
-        }
-      } catch (error) {
-        console.error("Error deleting old file:", error);
-      }
-    }
-
-    // Set path foto baru
-    fotoPath = `/uploads/storage/${foto.filename}`;
+    deleteOldFile(existing.foto); // hapus lama
+    fotoPath = foto.filename;
   }
 
   return await beritaRepository.updateBerita(

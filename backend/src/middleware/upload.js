@@ -1,11 +1,17 @@
 import multer from "multer";
 import path from "path";
+import { fileURLToPath } from "url";
+
+// Untuk mendapatkan __dirname di ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Konfigurasi penyimpanan file
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // sesuaikan dengan direktori penyimpanan yang diinginkan
-    cb(null, "D:/CODING/project-desa/frontend/public/storage");
+    // Menggunakan path.resolve untuk path yang dinamis
+    const uploadPath = path.resolve(__dirname, "../../uploads");
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     const prefix = req.uploadPrefix || "file";
@@ -20,7 +26,7 @@ const fileFilter = (req, file, cb) => {
   const allowedTypes = {
     foto: ["image/jpeg", "image/png", "image/jpg"],
     video: ["video/mp4", "video/mkv", "video/webm"],
-    dokumen: ["application/pdf"], // Hanya PDF yang diperbolehkan
+    dokumen: ["application/pdf"],
   };
 
   // Cek apakah file yang diunggah sesuai dengan salah satu kategori

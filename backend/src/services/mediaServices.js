@@ -1,5 +1,17 @@
 import mediaRepo from "../repositories/mediaRepo.js";
 import { MediaDTO } from "../dto/dto.js";
+import fs from "fs";
+import path from "path";
+
+const UPLOAD_DIR = path.resolve("uploads");
+
+function deleteOldFile(filename) {
+  if (!filename) return;
+  const oldFilePath = path.join(UPLOAD_DIR, filename);
+  if (fs.existsSync(oldFilePath)) {
+    fs.unlinkSync(oldFilePath);
+  }
+}
 
 const allowedTypes = {
   foto: ["image/jpeg", "image/png", "image/jpg"],
@@ -85,17 +97,30 @@ const getMediaById = async (id) => {
 const updateMedia = async (id, nama, tipe, file, deskripsi, thumbnail) => {
   const existing = await mediaRepo.getMediaById(id);
   if (!existing) throw new Error("Media tidak ditemukan!");
+
   if (file && !allowedTypes[tipe].includes(file.mimetype)) {
     throw new Error(`Format file tidak didukung untuk tipe ${tipe}!`);
+  }
+
+  let filePath = existing.file;
+  if (file) {
+    deleteOldFile(existing.file);
+    filePath = file.filename;
+  }
+
+  let thumbnailPath = existing.thumbnail;
+  if (thumbnail) {
+    deleteOldFile(existing.thumbnail);
+    thumbnailPath = thumbnail.filename;
   }
 
   const updated = await mediaRepo.updateMedia(
     id,
     nama,
     tipe,
-    file ? file.filename : existing.file,
+    filePath,
     deskripsi,
-    thumbnail ? thumbnail.filename : existing.thumbnail
+    thumbnailPath
   );
   return new MediaDTO(
     updated.id,

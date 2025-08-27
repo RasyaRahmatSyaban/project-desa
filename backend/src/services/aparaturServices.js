@@ -70,15 +70,17 @@ const getAparaturByNip = async (nip) => {
 };
 
 const addAparatur = async (nama, nip, jabatan, foto) => {
-  if (!nama || !nip || !jabatan) {
-    throw new Error("Nama, NIP, dan Jabatan aparatur wajib diisi!");
+  if (!nama || !jabatan) {
+    throw new Error("Nama dan Jabatan aparatur wajib diisi!");
   }
 
   const fotoPath = foto ? foto.filename : null;
 
-  const existing = await aparaturRepo.getAparaturByNip(nip);
-  if (existing) {
-    throw new Error("NIP aparatur sudah terdaftar!");
+  if (nip && nip.trim()) {
+    const existing = await aparaturRepo.getAparaturByNip(nip);
+    if (existing) {
+      throw new Error("NIP aparatur sudah terdaftar!");
+    }
   }
 
   try {
@@ -91,7 +93,7 @@ const addAparatur = async (nama, nip, jabatan, foto) => {
       result.foto
     );
   } catch (error) {
-    throw new Error("Gagal menambahkan data aparatur anjay");
+    throw new Error("Gagal menambahkan data aparatur");
   }
 };
 
@@ -100,8 +102,12 @@ const updateAparatur = async (id, nama, nip, jabatan, foto) => {
   if (!existing) throw new Error("Data aparatur tidak ditemukan!");
 
   if (nip !== existing.nip) {
-    const existingByNip = await aparaturRepo.getAparaturByNip(nip);
-    if (existingByNip) throw new Error("NIP aparatur sudah terdaftar!");
+    if (nip && nip.trim()) {
+      const existing = await aparaturRepo.getAparaturByNip(nip);
+      if (existing) {
+        throw new Error("NIP aparatur sudah terdaftar!");
+      }
+    }
   }
 
   let fotoPath = existing.foto;

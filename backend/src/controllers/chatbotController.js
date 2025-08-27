@@ -14,7 +14,7 @@ export const chatbot = async (req, res) => {
       "Jawablah semua pertanyaan HANYA dalam bahasa Indonesia yang sopan dan ramah, layaknya asisten desa. Jangan pernah menjawab dalam bahasa Inggris.";
     try {
       systemPrompt = await buildSystemPrompt();
-    } catch {}
+    } catch { }
     const fullMessages = [
       { role: "system", content: systemPrompt },
       ...messages,

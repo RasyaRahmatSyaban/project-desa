@@ -89,7 +89,7 @@ export default function ModernSidebarAdmin() {
       {/* Sidebar */}
       <aside
         id="sidebar"
-        className={`fixed top-0 left-0 h-full bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-900 text-white transition-all duration-300 ease-in-out z-10 ${
+        className={`fixed top-0 left-0 h-full bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-900 text-white transition-all duration-300 ease-in-out z-10 overflow-y-scroll scrollbar-hide ${
           collapsed ? "w-20" : "w-72"
         } shadow-2xl overflow-y-auto`}
       >

@@ -8,7 +8,7 @@ export default function DashboardAdmin() {
       <SidebarAdmin />
       <div className="flex-1 flex flex-col">
         <HeaderAdmin />
-        <main className="flex-1 bg-gray-100 p-6 overflow-y-auto">
+        <main className="flex-1 bg-gray-100 p-6 overflow-y-auto scrollbar-hide">
           <Outlet />
         </main>
       </div>

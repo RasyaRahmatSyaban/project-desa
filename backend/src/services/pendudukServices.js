@@ -1,7 +1,7 @@
 import pendudukRepo from "../repositories/pendudukRepo.js";
 import { PendudukDTO } from "../dto/dto.js";
 import kepalaKeluargaRepo from "../repositories/kepalaKeluargaRepo.js";
-import kepalaKeluargaService from "./kepalaKeluargaServices.js"
+import kepalaKeluargaService from "./kepalaKeluargaServices.js";
 
 const getAllPenduduk = async () => {
   try {
@@ -17,7 +17,7 @@ const getAllPenduduk = async () => {
           p.jenisKelamin,
           p.agama,
           p.id_kepalakeluarga,
-          p.namaKepalaKeluarga
+          p.status
         )
     );
   } catch (error) {
@@ -40,7 +40,7 @@ const getPendudukByNik = async (nik) => {
       result.jenisKelamin,
       result.agama,
       result.id_kepalakeluarga,
-      result.namaKepalaKeluarga
+      result.status
     );
   } catch (error) {
     throw new Error("Gagal mengambil data penduduk berdasarkan NIK");
@@ -55,14 +55,23 @@ const addPenduduk = async (
   jenisKelamin,
   agama,
   id_kepalakeluarga,
+  status,
   isKepalaKeluarga = false
 ) => {
-  if (!nama || !nik || !alamat || !tanggalLahir || !jenisKelamin || !agama) {
+  if (
+    !nama ||
+    !nik ||
+    !alamat ||
+    !tanggalLahir ||
+    !jenisKelamin ||
+    !agama ||
+    !status
+  ) {
     throw new Error("Semua data wajib diisi!");
   }
 
   // Cek apakah NIK sudah ada
-  const existingPenduduk = await pendudukRepo.getPendudukByNik(nik)
+  const existingPenduduk = await pendudukRepo.getPendudukByNik(nik);
   if (existingPenduduk) {
     throw new Error("NIK sudah terdaftar!");
   }
@@ -79,6 +88,7 @@ const addPenduduk = async (
 
       await kepalaKeluargaRepo.addKepalaKeluarga(nama, nik);
       kepalaKeluargaId = null; // <--- Perbaikan: harus null untuk kepala keluarga
+      status = "Kepala Keluarga";
     } else if (id_kepalakeluarga) {
       // Jika tidak sebagai kepala keluarga, validasi id_kepalakeluarga yang dipilih
       const existingKK = await kepalaKeluargaRepo.getKepalaKeluargaById(
@@ -98,7 +108,8 @@ const addPenduduk = async (
       tanggalLahir,
       jenisKelamin,
       agama,
-      kepalaKeluargaId
+      kepalaKeluargaId,
+      status
     );
 
     return new PendudukDTO(
@@ -110,7 +121,7 @@ const addPenduduk = async (
       result.jenisKelamin,
       result.agama,
       result.id_kepalakeluarga,
-      result.namaKepalaKeluarga
+      result.status
     );
   } catch (error) {
     throw new Error("Gagal menambahkan data penduduk: " + error.message);
@@ -126,6 +137,7 @@ const updateDataPenduduk = async (
   jenisKelamin,
   agama,
   id_kepalakeluarga,
+  status,
   isKepalaKeluarga
 ) => {
   const existingPenduduk = await pendudukRepo.getPendudukByNik(oldNik);
@@ -161,7 +173,8 @@ const updateDataPenduduk = async (
       tanggalLahir,
       jenisKelamin,
       agama,
-      id_kepalakeluarga
+      id_kepalakeluarga,
+      status
     );
     return {
       success: true,
@@ -186,7 +199,8 @@ const updateDataPenduduk = async (
       tanggalLahir,
       jenisKelamin,
       agama,
-      null
+      null,
+      (status = "Kepala Keluarga")
     );
     return {
       success: true,
@@ -211,7 +225,8 @@ const updateDataPenduduk = async (
       tanggalLahir,
       jenisKelamin,
       agama,
-      null
+      null,
+      status
     );
     return { success: true, message: "Data kepala keluarga diperbarui." };
   }
@@ -227,7 +242,8 @@ const updateDataPenduduk = async (
       tanggalLahir,
       jenisKelamin,
       agama,
-      id_kepalakeluarga
+      id_kepalakeluarga,
+      status
     );
     return { success: true, message: "Data anggota keluarga diperbarui." };
   }
@@ -242,8 +258,9 @@ const deleteDataPenduduk = async (nik) => {
         message: "Data penduduk dengan NIK tersebut tidak ditemukan",
       };
     }
-    
-    const existingKepalaKeluarga = await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik);
+
+    const existingKepalaKeluarga =
+      await kepalaKeluargaRepo.getKepalaKeluargaByNik(nik);
     if (existingKepalaKeluarga) {
       await kepalaKeluargaRepo.deleteKepalaKeluargaByNik(nik);
     }

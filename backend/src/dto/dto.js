@@ -19,7 +19,7 @@ class PendudukDTO {
     jenisKelamin,
     agama,
     id_kepalakeluarga,
-    namaKepalaKeluarga = null
+    status
   ) {
     this.id = id;
     this.nama = nama;
@@ -29,7 +29,7 @@ class PendudukDTO {
     this.jenisKelamin = jenisKelamin;
     this.agama = agama;
     this.id_kepalakeluarga = id_kepalakeluarga;
-    this.namaKepalaKeluarga = namaKepalaKeluarga;
+    this.status = status;
   }
 }
 
@@ -139,12 +139,12 @@ class KepalaKeluargaDTO {
 
 class AparaturDTO {
   constructor(id, nama, nip, jabatan, telepon, foto = null) {
-    this.id = id
-    this.nama = nama
-    this.nip = nip
-    this.jabatan = jabatan
-    this.telepon = telepon
-    this.foto = foto
+    this.id = id;
+    this.nama = nama;
+    this.nip = nip;
+    this.jabatan = jabatan;
+    this.telepon = telepon;
+    this.foto = foto;
   }
 }
 
@@ -161,4 +161,4 @@ export {
   PelayananDTO,
   KepalaKeluargaDTO,
   AparaturDTO,
-}
+};

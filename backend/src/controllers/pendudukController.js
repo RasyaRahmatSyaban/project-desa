@@ -33,6 +33,7 @@ const addPenduduk = async (req, res) => {
     jenisKelamin,
     agama,
     id_kepalakeluarga,
+    status,
     isKepalaKeluarga,
   } = req.body;
 
@@ -45,16 +46,15 @@ const addPenduduk = async (req, res) => {
       jenisKelamin,
       agama,
       id_kepalakeluarga,
+      status,
       isKepalaKeluarga
     );
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Data berhasil ditambahkan",
-        data: result,
-      });
+    res.status(201).json({
+      success: true,
+      message: "Data berhasil ditambahkan",
+      data: result,
+    });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
@@ -70,6 +70,7 @@ const updateDataPenduduk = async (req, res) => {
     jenisKelamin,
     agama,
     id_kepalakeluarga,
+    status,
     isKepalaKeluarga,
   } = req.body;
   try {
@@ -82,6 +83,7 @@ const updateDataPenduduk = async (req, res) => {
       jenisKelamin,
       agama,
       id_kepalakeluarga,
+      status,
       isKepalaKeluarga
     );
     res.json(result);
@@ -101,7 +103,7 @@ const deleteDataPenduduk = async (req, res) => {
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
-}
+};
 
 // const deleteSemuaKeluarga = async (req, res) => {
 //   const { nik } = req.params

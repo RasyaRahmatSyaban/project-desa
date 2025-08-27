@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,10 +10,8 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor to include auth token for admin endpoints
 api.interceptors.request.use(
   (config) => {
-    // Only add token for admin endpoints
     if (config.url.includes("/penduduk") && !config.url.includes("/stats")) {
       const token = localStorage.getItem("token");
       if (token) {
@@ -50,7 +47,6 @@ const PendudukService = {
 
   addPenduduk: async (pendudukData) => {
     try {
-      // Kirim payload sesuai backend: isKepalaKeluarga dan id_kepalakeluarga
       const payload = {
         nama: pendudukData.nama,
         nik: pendudukData.nik,
@@ -58,13 +54,11 @@ const PendudukService = {
         tanggalLahir: pendudukData.tanggalLahir,
         jenisKelamin: pendudukData.jenisKelamin,
         agama: pendudukData.agama,
-        isKepalaKeluarga: !!pendudukData.kepalaKeluarga,
-        status: pendudukData.kepalaKeluarga
-          ? "Kepala Keluarga"
-          : pendudukData.status,
-        id_kepalakeluarga: pendudukData.kepalaKeluarga
-          ? null
-          : pendudukData.selectedKK || null,
+        status: pendudukData.status,
+        id_kepalakeluarga:
+          pendudukData.status === "Kepala Keluarga"
+            ? null
+            : pendudukData.id_kepalakeluarga || null,
       };
       const response = await api.post("/penduduk", payload);
       return response.data;
@@ -77,22 +71,20 @@ const PendudukService = {
   updatePenduduk: async (oldNik, pendudukData) => {
     try {
       const updateData = {
-        oldNik,
+        oldNik: oldNik,
         newNik: pendudukData.nik,
         nama: pendudukData.nama,
         alamat: pendudukData.alamat,
         tanggalLahir: pendudukData.tanggalLahir,
         jenisKelamin: pendudukData.jenisKelamin,
         agama: pendudukData.agama,
-        id_kepalakeluarga: pendudukData.kepalaKeluarga
-          ? null
-          : pendudukData.selectedKK || null,
-        status: pendudukData.kepalaKeluarga
-          ? "Kepala Keluarga"
-          : pendudukData.status,
-        isKepalaKeluarga: !!pendudukData.kepalaKeluarga,
+        status: pendudukData.status,
+        id_kepalakeluarga:
+          pendudukData.status === "Kepala Keluarga"
+            ? null
+            : pendudukData.id_kepalakeluarga || null,
       };
-      const response = await api.put("/penduduk/update", updateData);
+      const response = await api.put(`/penduduk/update`, updateData);
       return response.data;
     } catch (error) {
       console.error(`Error updating penduduk:`, error);
@@ -102,7 +94,7 @@ const PendudukService = {
 
   deletePenduduk: async (nik) => {
     try {
-      const response = await api.delete(`/penduduk/delete/${nik}`);
+      const response = await api.delete(`/penduduk/${nik}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting penduduk with NIK ${nik}:`, error);
@@ -171,39 +163,13 @@ const PendudukService = {
     }
   },
 
-  // Tambahkan method untuk fetch daftar kepala keluarga
   getAllKepalaKeluarga: async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await api.get("/kepalakeluarga", {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const response = await api.get("/penduduk/kepala-keluarga");
       return response.data.data || [];
     } catch (error) {
       console.error("Error fetching kepala keluarga:", error);
       return [];
-    }
-  },
-
-  // Hapus kepala keluarga berdasarkan NIK
-  deleteKepalaKeluargaByNik: async (nik) => {
-    try {
-      const token = localStorage.getItem("token");
-      // 1. Fetch kepala keluarga by NIK
-      const res = await api.get(`/kepalakeluarga/nik/${nik}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      const kk = res.data.data;
-      if (!kk || !kk.id)
-        throw new Error("Data kepala keluarga tidak ditemukan");
-      // 2. Delete by ID
-      await api.delete(`/kepalakeluarga/${kk.id}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      return true;
-    } catch (error) {
-      console.error("Gagal menghapus kepala keluarga:", error);
-      throw error;
     }
   },
 

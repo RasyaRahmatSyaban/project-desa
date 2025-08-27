@@ -1,7 +1,6 @@
 "use client";
 import { FaUserPlus, FaTimes } from "react-icons/fa";
-import { useState, useEffect , useRef} from "react";
-import PendudukService from "../services/PendudukService";
+import { useState, useEffect, useRef } from "react";
 
 // Helper untuk format tanggal ke yyyy-MM-dd
 function toDateInputValue(dateStr) {
@@ -10,7 +9,6 @@ function toDateInputValue(dateStr) {
     return dateStr;
   }
 
-  // Kalau bukan, baru coba parse ke Date
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return "";
 
@@ -27,110 +25,57 @@ const PopupForm = ({
   resetForm,
   isEditing,
   kepalaKeluargaList = [],
-  fetchKepalaKeluarga, // pastikan prop ini diteruskan dari parent
 }) => {
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [pendingKepalaKeluarga, setPendingKepalaKeluarga] = useState(null);
-  const [isFetchingKepalaKeluarga, setIsFetchingKepalaKeluarga] =
-    useState(false);
   const [searchKK, setSearchKK] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
 
-  const statusOptions = ["Istri", "Anak", "Mertua", "Cucu", "Menantu"];
+  // Status options, sekarang 'Kepala Keluarga' akan menjadi opsi default
+  const statusOptions = [
+    "Kepala Keluarga",
+    "Istri",
+    "Anak",
+    "Mertua",
+    "Cucu",
+    "Menantu",
+  ];
 
-  // Reset searchKK saat formData.kepalaKeluarga berubah (form dibuka ulang)
+  // Sinkronisasi status dan id_kepalakeluarga saat form data berubah
   useEffect(() => {
-    setSearchKK("");
-  }, [formData.kepalaKeluarga]);
-
-  // Listen perubahan kepalaKeluargaList, reset selectedKK jika tidak valid atau sama dengan nik sendiri
-  useEffect(() => {
-    if (
-      !formData.kepalaKeluarga &&
-      formData.selectedKK &&
-      kepalaKeluargaList.find(
-        (kk) => kk.id === formData.selectedKK && kk.nik === formData.nik
-      )
-    ) {
-      handleInputChange({ target: { name: "selectedKK", value: "" } });
-    }
-  }, [kepalaKeluargaList, formData.nik]);
-
-  useEffect(() => {
-    if (formData.tanggalLahir) {
+    // Jika status adalah "Kepala Keluarga", pastikan id_kepalakeluarga adalah null
+    if (formData.status === "Kepala Keluarga") {
       handleInputChange({
-        target: {
-          name: "tanggalLahir",
-          value: toDateInputValue(formData.tanggalLahir),
-        },
+        target: { name: "id_kepalakeluarga", value: null },
       });
-    }
-  }, [formData.tanggalLahir]);
-
-  // Handler untuk checkbox kepala keluarga
-  const handleKepalaKeluargaChange = (e) => {
-    const checked = e.target.checked;
-
-    if (checked) {
-      handleInputChange({
-        target: {
-          name: "kepalaKeluarga",
-          value: checked,
-        },
-      });
-      handleInputChange({
-        target: {
-          name: "status",
-          value: "Kepala Keluarga",
-        },
-      });
-    } else {
-      // Jika sedang edit dan uncheck, tampilkan konfirmasi
-      if (isEditing && formData.kepalaKeluarga && !checked) {
-        setPendingKepalaKeluarga(false);
-        setShowConfirm(true);
+      setSearchKK("");
+    } else if (formData.id_kepalakeluarga) {
+      const selectedKK = kepalaKeluargaList.find(
+        (kk) => Number(kk.id) === Number(formData.id_kepalakeluarga)
+      );
+      if (selectedKK) {
+        setSearchKK(`${selectedKK.nama} (${selectedKK.nik})`);
       } else {
-        handleInputChange({
-          target: {
-            name: "kepalaKeluarga",
-            value: checked,
-          },
-        });
-        handleInputChange({
-          target: {
-            name: "status",
-            value: statusOptions[0],
-          },
-        });
+        setSearchKK("");
       }
     }
-  };
+  }, [
+    formData.status,
+    formData.id_kepalakeluarga,
+    kepalaKeluargaList,
+    handleInputChange,
+  ]);
 
-  // Konfirmasi perubahan status
-  const handleConfirm = async (confirm) => {
-    setShowConfirm(false);
-    if (confirm) {
-      setIsFetchingKepalaKeluarga(true);
-      // Hapus data kepala keluarga dari tabel kepala keluarga
-      try {
-        await PendudukService.deleteKepalaKeluargaByNik(formData.nik);
-        if (fetchKepalaKeluarga) await fetchKepalaKeluarga(); // refetch dropdown
-      } catch (err) {
-        alert("Gagal menghapus data kepala keluarga!");
-      }
-      setIsFetchingKepalaKeluarga(false);
-      handleInputChange({ target: { name: "kepalaKeluarga", value: false } });
-      handleInputChange({
-        target: { name: "status", value: statusOptions[0] },
-      });
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value, checked, type } = e.target;
+    // Handle checkbox terpisah jika diperlukan, atau langsung di handleInputChange
+    if (name === "isKepalaKeluarga") {
+      const newStatus = checked ? "Kepala Keluarga" : "Istri";
+      handleInputChange({ target: { name: "status", value: newStatus } });
+      handleInputChange({ target: { name: "id_kepalakeluarga", value: null } });
     } else {
-      handleInputChange({ target: { name: "kepalaKeluarga", value: true } });
-      handleInputChange({
-        target: { name: "status", value: "Kepala Keluarga" },
-      });
+      handleInputChange(e);
     }
-    setPendingKepalaKeluarga(null);
   };
 
   return (
@@ -203,7 +148,7 @@ const PopupForm = ({
                 type="date"
                 id="tanggalLahir"
                 name="tanggalLahir"
-                value={formData.tanggalLahir || ""}
+                value={toDateInputValue(formData.tanggalLahir) || ""}
                 onChange={handleInputChange}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
                 required
@@ -250,31 +195,20 @@ const PopupForm = ({
                 name="status"
                 value={formData.status}
                 onChange={handleInputChange}
-                disabled={formData.kepalaKeluarga}
                 required
-                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
               >
-                {formData.kepalaKeluarga ? (
-                  <option value="Kepala Keluarga">Kepala Keluarga</option>
-                ) : (
-                  statusOptions.map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))
-                )}
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
               </select>
-              {formData.kepalaKeluarga && (
-                <p className="text-xs text-gray-500 mt-1">
-                  Status otomatis "Kepala Keluarga" karena dipilih sebagai
-                  kepala keluarga
-                </p>
-              )}
             </div>
           </div>
 
           {/* Tambahkan dropdown kepala keluarga jika bukan kepala keluarga */}
-          {!formData.kepalaKeluarga && (
+          {formData.status !== "Kepala Keluarga" && (
             <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Pilih Kepala Keluarga
@@ -287,75 +221,60 @@ const PopupForm = ({
                 value={searchKK}
                 onChange={(e) => {
                   setSearchKK(e.target.value);
-                  setIsFocused(true)
+                  setIsFocused(true);
                 }}
-                onFocus={() => setIsFocused(true)} // Mengatur isFocused menjadi true saat input diklik
+                onFocus={() => setIsFocused(true)}
                 onBlur={() => {
-                  // Cek apakah elemen yang diklik berada di luar daftar
-                  if (!e.relatedTarget || !e.relatedTarget.closest('ul')) {
-                    setTimeout(() => setIsFocused(false), 100);
-                  }
+                  // Berikan sedikit delay agar onMouseDown di item list bisa tereksekusi
+                  setTimeout(() => setIsFocused(false), 100);
                 }}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
               />
 
               {/* Daftar hasil pencarian/pilihan */}
-              {(isFocused) && (
+              {isFocused && (
                 <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto shadow-lg">
-                  {isFetchingKepalaKeluarga ? (
-                    <li className="p-2 text-gray-500">Memuat...</li>
-                  ) : (
-                    kepalaKeluargaList
-                      .filter((kk) => kk.nik !== formData.nik)
-                      .filter((kk) => {
-                        const q = searchKK.toLowerCase();
-                        return (
-                          kk.nama.toLowerCase().includes(q) ||
-                          kk.nik.toLowerCase().includes(q)
-                        );
-                      })
-                      .map((kk) => (
-                        <li
-                          key={kk.id}
-                          onClick={() => {
-                            handleInputChange({
-                              target: { name: "selectedKK", value: kk.id },
-                            });
-                            setSearchKK(`${kk.nama} (${kk.nik})`);
-                            setIsFocused(false);
-                          }}
-                          className="p-2 cursor-pointer hover:bg-gray-100"
-                        >
-                          {kk.nama} ({kk.nik})
-                        </li>
-                      ))
-                  )}
-                  {kepalaKeluargaList.filter((kk) => kk.nik !== formData.nik).filter((kk) => {
-                    const q = searchKK.toLowerCase();
-                    return kk.nama.toLowerCase().includes(q) || kk.nik.toLowerCase().includes(q);
-                  }).length === 0 && (
-                    <li className="p-2 text-gray-500">Tidak ada hasil ditemukan</li>
+                  {kepalaKeluargaList
+                    .filter((kk) => kk.id !== formData.id) // Mencegah memilih diri sendiri
+                    .filter((kk) => {
+                      const q = searchKK.toLowerCase();
+                      return (
+                        kk.nama.toLowerCase().includes(q) ||
+                        kk.nik.toLowerCase().includes(q)
+                      );
+                    })
+                    .map((kk) => (
+                      <li
+                        key={kk.id}
+                        onMouseDown={() => {
+                          handleInputChange({
+                            target: { name: "id_kepalakeluarga", value: kk.id },
+                          });
+                          setSearchKK(`${kk.nama} (${kk.nik})`);
+                          setIsFocused(false);
+                        }}
+                        className="p-2 cursor-pointer hover:bg-gray-100"
+                      >
+                        {kk.nama} ({kk.nik})
+                      </li>
+                    ))}
+                  {kepalaKeluargaList
+                    .filter((kk) => kk.id !== formData.id)
+                    .filter((kk) => {
+                      const q = searchKK.toLowerCase();
+                      return (
+                        kk.nama.toLowerCase().includes(q) ||
+                        kk.nik.toLowerCase().includes(q)
+                      );
+                    }).length === 0 && (
+                    <li className="p-2 text-gray-500">
+                      Tidak ada hasil ditemukan
+                    </li>
                   )}
                 </ul>
               )}
             </div>
           )}
-          <div className="flex items-center mt-4">
-            <input
-              type="checkbox"
-              id="kepalaKeluarga"
-              name="kepalaKeluarga"
-              checked={formData.kepalaKeluarga}
-              onChange={handleKepalaKeluargaChange}
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
-            <label
-              htmlFor="kepalaKeluarga"
-              className="ml-2 block text-sm text-gray-700"
-            >
-              Kepala Keluarga
-            </label>
-          </div>
 
           <div className="flex justify-end gap-2 pt-2">
             <button
@@ -373,31 +292,6 @@ const PopupForm = ({
             </button>
           </div>
         </form>
-        {/* Modal konfirmasi */}
-        {showConfirm && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-black/40 z-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded shadow-lg">
-              <p className="mb-4">
-                Yakin ingin mengubah status kepala keluarga? Data kepala
-                keluarga akan dihapus.
-              </p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleConfirm(true)}
-                  className="px-4 py-2 bg-red-600 text-white rounded"
-                >
-                  Ya, Ubah
-                </button>
-                <button
-                  onClick={() => handleConfirm(false)}
-                  className="px-4 py-2 bg-gray-300 rounded"
-                >
-                  Batal
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

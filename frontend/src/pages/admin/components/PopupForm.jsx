@@ -1,6 +1,6 @@
 "use client";
 import { FaUserPlus, FaTimes } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useRef} from "react";
 import PendudukService from "../services/PendudukService";
 
 // Helper untuk format tanggal ke yyyy-MM-dd
@@ -34,6 +34,8 @@ const PopupForm = ({
   const [isFetchingKepalaKeluarga, setIsFetchingKepalaKeluarga] =
     useState(false);
   const [searchKK, setSearchKK] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const inputRef = useRef(null);
 
   const statusOptions = ["Istri", "Anak", "Mertua", "Cucu", "Menantu"];
 
@@ -269,69 +271,91 @@ const PopupForm = ({
                 </p>
               )}
             </div>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="kepalaKeluarga"
-                name="kepalaKeluarga"
-                checked={formData.kepalaKeluarga}
-                onChange={handleKepalaKeluargaChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="kepalaKeluarga"
-                className="ml-2 block text-sm text-gray-700"
-              >
-                Kepala Keluarga
-              </label>
-            </div>
           </div>
 
           {/* Tambahkan dropdown kepala keluarga jika bukan kepala keluarga */}
           {!formData.kepalaKeluarga && (
-            <div>
+            <div className="relative">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Pilih Kepala Keluarga
               </label>
               {/* Input search kepala keluarga */}
               <input
                 type="text"
+                ref={inputRef}
                 placeholder="Cari nama/NIK kepala keluarga..."
                 value={searchKK}
-                onChange={(e) => setSearchKK(e.target.value)}
-                className="mb-2 w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
-                disabled={isFetchingKepalaKeluarga}
-              />
-              <select
-                name="selectedKK"
-                value={formData.selectedKK}
-                onChange={handleInputChange}
-                required
+                onChange={(e) => {
+                  setSearchKK(e.target.value);
+                  setIsFocused(true)
+                }}
+                onFocus={() => setIsFocused(true)} // Mengatur isFocused menjadi true saat input diklik
+                onBlur={() => {
+                  // Cek apakah elemen yang diklik berada di luar daftar
+                  if (!e.relatedTarget || !e.relatedTarget.closest('ul')) {
+                    setTimeout(() => setIsFocused(false), 100);
+                  }
+                }}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
-                disabled={isFetchingKepalaKeluarga}
-              >
-                <option value="">
-                  {isFetchingKepalaKeluarga
-                    ? "Memuat..."
-                    : "-- Pilih Kepala Keluarga --"}
-                </option>
-                {kepalaKeluargaList
-                  .filter((kk) => kk.nik !== formData.nik)
-                  .filter((kk) => {
+              />
+
+              {/* Daftar hasil pencarian/pilihan */}
+              {(isFocused) && (
+                <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto shadow-lg">
+                  {isFetchingKepalaKeluarga ? (
+                    <li className="p-2 text-gray-500">Memuat...</li>
+                  ) : (
+                    kepalaKeluargaList
+                      .filter((kk) => kk.nik !== formData.nik)
+                      .filter((kk) => {
+                        const q = searchKK.toLowerCase();
+                        return (
+                          kk.nama.toLowerCase().includes(q) ||
+                          kk.nik.toLowerCase().includes(q)
+                        );
+                      })
+                      .map((kk) => (
+                        <li
+                          key={kk.id}
+                          onClick={() => {
+                            handleInputChange({
+                              target: { name: "selectedKK", value: kk.id },
+                            });
+                            setSearchKK(`${kk.nama} (${kk.nik})`);
+                            setIsFocused(false);
+                          }}
+                          className="p-2 cursor-pointer hover:bg-gray-100"
+                        >
+                          {kk.nama} ({kk.nik})
+                        </li>
+                      ))
+                  )}
+                  {kepalaKeluargaList.filter((kk) => kk.nik !== formData.nik).filter((kk) => {
                     const q = searchKK.toLowerCase();
-                    return (
-                      kk.nama.toLowerCase().includes(q) ||
-                      kk.nik.toLowerCase().includes(q)
-                    );
-                  })
-                  .map((kk) => (
-                    <option key={kk.id} value={kk.id}>
-                      {kk.nama} ({kk.nik})
-                    </option>
-                  ))}
-              </select>
+                    return kk.nama.toLowerCase().includes(q) || kk.nik.toLowerCase().includes(q);
+                  }).length === 0 && (
+                    <li className="p-2 text-gray-500">Tidak ada hasil ditemukan</li>
+                  )}
+                </ul>
+              )}
             </div>
           )}
+          <div className="flex items-center mt-4">
+            <input
+              type="checkbox"
+              id="kepalaKeluarga"
+              name="kepalaKeluarga"
+              checked={formData.kepalaKeluarga}
+              onChange={handleKepalaKeluargaChange}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="kepalaKeluarga"
+              className="ml-2 block text-sm text-gray-700"
+            >
+              Kepala Keluarga
+            </label>
+          </div>
 
           <div className="flex justify-end gap-2 pt-2">
             <button

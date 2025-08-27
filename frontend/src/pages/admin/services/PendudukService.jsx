@@ -59,6 +59,9 @@ const PendudukService = {
         jenisKelamin: pendudukData.jenisKelamin,
         agama: pendudukData.agama,
         isKepalaKeluarga: !!pendudukData.kepalaKeluarga,
+        status: pendudukData.kepalaKeluarga
+          ? "Kepala Keluarga"
+          : pendudukData.status,
         id_kepalakeluarga: pendudukData.kepalaKeluarga
           ? null
           : pendudukData.selectedKK || null,
@@ -84,6 +87,9 @@ const PendudukService = {
         id_kepalakeluarga: pendudukData.kepalaKeluarga
           ? null
           : pendudukData.selectedKK || null,
+        status: pendudukData.kepalaKeluarga
+          ? "Kepala Keluarga"
+          : pendudukData.status,
         isKepalaKeluarga: !!pendudukData.kepalaKeluarga,
       };
       const response = await api.put("/penduduk/update", updateData);

@@ -35,6 +35,8 @@ const PopupForm = ({
     useState(false);
   const [searchKK, setSearchKK] = useState("");
 
+  const statusOptions = ["Istri", "Anak", "Mertua", "Cucu", "Menantu"];
+
   // Reset searchKK saat formData.kepalaKeluarga berubah (form dibuka ulang)
   useEffect(() => {
     setSearchKK("");
@@ -67,12 +69,39 @@ const PopupForm = ({
   // Handler untuk checkbox kepala keluarga
   const handleKepalaKeluargaChange = (e) => {
     const checked = e.target.checked;
-    // Jika sedang edit dan uncheck, tampilkan konfirmasi
-    if (isEditing && formData.kepalaKeluarga && !checked) {
-      setPendingKepalaKeluarga(false);
-      setShowConfirm(true);
+
+    if (checked) {
+      handleInputChange({
+        target: {
+          name: "kepalaKeluarga",
+          value: checked,
+        },
+      });
+      handleInputChange({
+        target: {
+          name: "status",
+          value: "Kepala Keluarga",
+        },
+      });
     } else {
-      handleInputChange({ target: { name: "kepalaKeluarga", value: checked } });
+      // Jika sedang edit dan uncheck, tampilkan konfirmasi
+      if (isEditing && formData.kepalaKeluarga && !checked) {
+        setPendingKepalaKeluarga(false);
+        setShowConfirm(true);
+      } else {
+        handleInputChange({
+          target: {
+            name: "kepalaKeluarga",
+            value: checked,
+          },
+        });
+        handleInputChange({
+          target: {
+            name: "status",
+            value: statusOptions[0],
+          },
+        });
+      }
     }
   };
 
@@ -90,8 +119,14 @@ const PopupForm = ({
       }
       setIsFetchingKepalaKeluarga(false);
       handleInputChange({ target: { name: "kepalaKeluarga", value: false } });
+      handleInputChange({
+        target: { name: "status", value: statusOptions[0] },
+      });
     } else {
       handleInputChange({ target: { name: "kepalaKeluarga", value: true } });
+      handleInputChange({
+        target: { name: "status", value: "Kepala Keluarga" },
+      });
     }
     setPendingKepalaKeluarga(null);
   };
@@ -204,6 +239,35 @@ const PopupForm = ({
                 <option value="Budha">Budha</option>
                 <option value="Lainnya">Lainnya</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                disabled={formData.kepalaKeluarga}
+                required
+                className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+              >
+                {formData.kepalaKeluarga ? (
+                  <option value="Kepala Keluarga">Kepala Keluarga</option>
+                ) : (
+                  statusOptions.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))
+                )}
+              </select>
+              {formData.kepalaKeluarga && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Status otomatis "Kepala Keluarga" karena dipilih sebagai
+                  kepala keluarga
+                </p>
+              )}
             </div>
             <div className="flex items-center">
               <input

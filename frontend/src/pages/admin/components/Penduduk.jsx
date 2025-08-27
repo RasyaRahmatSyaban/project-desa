@@ -53,6 +53,7 @@ export default function Penduduk() {
     agama: "Islam",
     kepalaKeluarga: false,
     selectedKK: "",
+    status: "Istri",
   });
   // State untuk daftar kepala keluarga
   const [kepalaKeluargaList, setKepalaKeluargaList] = useState([]);
@@ -124,10 +125,13 @@ export default function Penduduk() {
     if (editData) {
       setFormData({
         ...editData,
-        tanggalLahir: editData.tanggalLahir ? editData.tanggalLahir.split("T")[0] : "",
+        tanggalLahir: editData.tanggalLahir
+          ? editData.tanggalLahir.split("T")[0]
+          : "",
         existingNik: editData.nik,
         kepalaKeluarga: !!editData.kepalaKeluarga,
         selectedKK: editData.id_kepalakeluarga || "",
+        status: editData.status || "Istri",
       });
       setIsEditing(true);
     } else {
@@ -141,6 +145,7 @@ export default function Penduduk() {
         agama: "Islam",
         kepalaKeluarga: false,
         selectedKK: "",
+        status: "Istri",
       });
       setIsEditing(false);
     }
@@ -215,6 +220,7 @@ export default function Penduduk() {
       agama: "Islam",
       kepalaKeluarga: false,
       selectedKK: "",
+      status: "Istri",
     });
     setIsEditing(false);
     if (closeForm) {
@@ -431,9 +437,10 @@ export default function Penduduk() {
                     Jenis Kelamin
                   </th>
                   <th className="px-4 py-3 text-center font-medium">Agama</th>
-                  <th className="px-4 py-3 text-center font-medium">
+                  {/* <th className="px-4 py-3 text-center font-medium">
                     Kepala Keluarga
-                  </th>
+                  </th> */}
+                  <th className="px-4 py-3 text-center font-medium">Status</th>
                   <th className="px-4 py-3 text-center font-medium">Aksi</th>
                 </tr>
               </thead>
@@ -454,8 +461,19 @@ export default function Penduduk() {
                       {item.jenisKelamin}
                     </td>
                     <td className="px-4 py-3 text-center">{item.agama}</td>
-                    <td className="px-4 py-3 text-center">
+                    {/* <td className="px-4 py-3 text-center">
                       {item.kepalaKeluarga ? "Ya" : "Tidak"}
+                    </td> */}
+                    <td className="px-4 py-3 text-center">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          item.status === "Kepala Keluarga"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
+                        {item.status}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex items-center justify-center gap-2">

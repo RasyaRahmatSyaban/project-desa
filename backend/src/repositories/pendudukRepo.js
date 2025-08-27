@@ -12,11 +12,8 @@ const getAllPenduduk = async () => {
         p.jenisKelamin,
         p.agama,
         p.id_kepalakeluarga,
-        p.status,
-        kk.nama as namaKepalaKeluarga,
-        kk.nik as nikKepalaKeluarga
-      FROM penduduk p 
-      LEFT JOIN kepalakeluarga kk ON p.id_kepalakeluarga = kk.id
+        p.status
+      FROM penduduk p
       ORDER BY p.id DESC
     `);
     return results;
@@ -38,11 +35,8 @@ const getPendudukByNik = async (nik) => {
         p.jenisKelamin,
         p.agama,
         p.id_kepalakeluarga,
-        p.status,
-        kk.nama as namaKepalaKeluarga,
-        kk.nik as nikKepalaKeluarga
+        p.status
       FROM penduduk p 
-      LEFT JOIN kepalakeluarga kk ON p.id_kepalakeluarga = kk.id 
       WHERE p.nik = ?
       `,
       [nik]
@@ -66,11 +60,8 @@ const getPendudukById = async (id) => {
         p.jenisKelamin,
         p.agama,
         p.id_kepalakeluarga,
-        p.status,
-        kk.nama as namaKepalaKeluarga,
-        kk.nik as nikKepalaKeluarga
+        p.status
       FROM penduduk p 
-      LEFT JOIN kepalakeluarga kk ON p.id_kepalakeluarga = kk.id 
       WHERE p.id = ?
       `,
       [id]
@@ -108,23 +99,9 @@ const addPenduduk = async (
         ]
       );
 
-    // Ambil data yang baru diinsert dengan JOIN
     const newId = results.insertId;
     const newData = await getPendudukById(newId);
-
-    return (
-      newData || {
-        id: newId,
-        nama,
-        nik,
-        alamat,
-        tanggalLahir,
-        jenisKelamin,
-        agama,
-        id_kepalakeluarga,
-        status,
-      }
-    );
+    return newData;
   } catch (error) {
     throw error;
   }
@@ -175,6 +152,20 @@ const deleteDataPenduduk = async (nik) => {
   }
 };
 
+const getAnggotaKeluargaByKepalaKeluarga = async (id_kepalakeluarga) => {
+  try {
+    const [results] = await db
+      .promise()
+      .query("SELECT id FROM penduduk WHERE id_kepalakeluarga = ?", [
+        id_kepalakeluarga,
+      ]);
+    return results;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Fungsi statistik
 const getTotalPenduduk = async () => {
   try {
     const [results] = await db
@@ -186,23 +177,12 @@ const getTotalPenduduk = async () => {
   }
 };
 
-const getTotalKepalaKeluarga = async () => {
-  try {
-    const [results] = await db
-      .promise()
-      .query("SELECT COUNT(*) AS total FROM kepalakeluarga");
-    return results[0].total;
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getTotalLakiLaki = async () => {
   try {
     const [results] = await db
       .promise()
       .query(
-        "SELECT COUNT(*) AS total FROM penduduk WHERE jenisKelamin = 'laki-laki'"
+        "SELECT COUNT(*) AS total FROM penduduk WHERE jenisKelamin = 'Laki-laki'"
       );
     return results[0].total;
   } catch (error) {
@@ -215,7 +195,20 @@ const getTotalPerempuan = async () => {
     const [results] = await db
       .promise()
       .query(
-        "SELECT COUNT(*) AS total FROM penduduk WHERE jenisKelamin = 'perempuan'"
+        "SELECT COUNT(*) AS total FROM penduduk WHERE jenisKelamin = 'Perempuan'"
+      );
+    return results[0].total;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getTotalKepalaKeluarga = async () => {
+  try {
+    const [results] = await db
+      .promise()
+      .query(
+        "SELECT COUNT(*) AS total FROM penduduk WHERE status = 'Kepala Keluarga'"
       );
     return results[0].total;
   } catch (error) {
@@ -255,57 +248,15 @@ const getPendudukByUmur = async () => {
   }
 };
 
-const getPendudukByKepalaKeluarga = async (id_kepalakeluarga) => {
+const getAllKepalaKeluarga = async () => {
   try {
     const [results] = await db.promise().query(
       `
-      SELECT 
-        p.id,
-        p.nama,
-        p.nik,
-        p.alamat,
-        p.tanggalLahir,
-        p.jenisKelamin,
-        p.agama,
-        p.id_kepalakeluarga,
-        p.status,
-        kk.nama as namaKepalaKeluarga,
-        kk.nik as nikKepalaKeluarga
-      FROM penduduk p 
-      LEFT JOIN kepalakeluarga kk ON p.id_kepalakeluarga = kk.id 
-      WHERE p.id_kepalakeluarga = ?
-      ORDER BY p.nama ASC
-      `,
-      [id_kepalakeluarga]
-    );
-    return results;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const searchPendudukByKepalaKeluarga = async (searchTerm) => {
-  try {
-    const [results] = await db.promise().query(
+      SELECT id, nama, nik
+      FROM penduduk
+      WHERE status = 'Kepala Keluarga'
+      ORDER BY nama ASC
       `
-      SELECT 
-        p.id,
-        p.nama,
-        p.nik,
-        p.alamat,
-        p.tanggalLahir,
-        p.jenisKelamin,
-        p.agama,
-        p.id_kepalakeluarga,
-        p.status,
-        kk.nama as namaKepalaKeluarga,
-        kk.nik as nikKepalaKeluarga
-      FROM penduduk p 
-      LEFT JOIN kepalakeluarga kk ON p.id_kepalakeluarga = kk.id 
-      WHERE kk.nama LIKE ? OR kk.nik LIKE ?
-      ORDER BY kk.nama ASC, p.nama ASC
-      `,
-      [`%${searchTerm}%`, `%${searchTerm}%`]
     );
     return results;
   } catch (error) {
@@ -320,12 +271,12 @@ export default {
   addPenduduk,
   updateDataPenduduk,
   deleteDataPenduduk,
+  getAnggotaKeluargaByKepalaKeluarga,
+  getTotalPenduduk,
+  getTotalLakiLaki,
+  getTotalPerempuan,
+  getTotalKepalaKeluarga,
   getPendudukByAgama,
   getPendudukByUmur,
-  getTotalKepalaKeluarga,
-  getTotalLakiLaki,
-  getTotalPenduduk,
-  getTotalPerempuan,
-  getPendudukByKepalaKeluarga,
-  searchPendudukByKepalaKeluarga,
+  getAllKepalaKeluarga,
 };

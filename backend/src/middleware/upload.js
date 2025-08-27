@@ -18,14 +18,22 @@ if (!fs.existsSync(uploadPath)) {
 // Konfigurasi penyimpanan file
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Menggunakan path.resolve untuk path yang dinamis
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     const prefix = req.uploadPrefix || "file";
     const uniqueSuffix = Date.now();
-    const safeName = slugify(file.originalname, { lower: true, strict: true });
-    cb(null, `${prefix}-${uniqueSuffix}-${safeName}`);
+
+    // Dapatkan nama file tanpa ekstensi
+    const fileName = path.parse(file.originalname).name;
+
+    // Dapatkan ekstensi file (misal: .jpg, .png)
+    const fileExtension = path.parse(file.originalname).ext;
+
+    // Gunakan slugify hanya pada nama file, lalu tambahkan kembali ekstensinya
+    const safeName = slugify(fileName, { lower: true, strict: true });
+
+    cb(null, `${prefix}-${uniqueSuffix}-${safeName}${fileExtension}`);
   },
 });
 

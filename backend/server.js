@@ -12,7 +12,6 @@ const __dirname = path.dirname(__filename);
 
 const allowedOrigins = [
   "http://localhost:5173", // Vite dev server
-  "http://192.168.10.202:5173", //contoh url lan
   process.env.FRONTEND_URL,
 ];
 

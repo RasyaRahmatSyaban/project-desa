@@ -34,7 +34,6 @@ const addPenduduk = async (req, res) => {
     agama,
     id_kepalakeluarga,
     status,
-    isKepalaKeluarga,
   } = req.body;
 
   try {
@@ -46,8 +45,7 @@ const addPenduduk = async (req, res) => {
       jenisKelamin,
       agama,
       id_kepalakeluarga,
-      status,
-      isKepalaKeluarga
+      status
     );
 
     res.status(201).json({
@@ -71,7 +69,6 @@ const updateDataPenduduk = async (req, res) => {
     agama,
     id_kepalakeluarga,
     status,
-    isKepalaKeluarga,
   } = req.body;
   try {
     const result = await pendudukServices.updateDataPenduduk(
@@ -83,8 +80,7 @@ const updateDataPenduduk = async (req, res) => {
       jenisKelamin,
       agama,
       id_kepalakeluarga,
-      status,
-      isKepalaKeluarga
+      status
     );
     res.json(result);
   } catch (error) {
@@ -105,25 +101,10 @@ const deleteDataPenduduk = async (req, res) => {
   }
 };
 
-// const deleteSemuaKeluarga = async (req, res) => {
-//   const { nik } = req.params
-//   try {
-//     const result = await pendudukServices.deleteSemuaKeluarga(nik)
-
-//     if (!result.success) {
-//       return res.status(400).json(result)
-//     }
-
-//     res.json(result)
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: error.message })
-//   }
-// };
-
 const getTotalPenduduk = async (req, res) => {
   try {
-    const result = await pendudukServices.getTotalPenduduk();
-    res.json({ success: true, data: result });
+    const total = await pendudukServices.getTotalPenduduk();
+    res.json({ success: true, data: total });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -131,8 +112,8 @@ const getTotalPenduduk = async (req, res) => {
 
 const getTotalKepalaKeluarga = async (req, res) => {
   try {
-    const result = await pendudukServices.getTotalKepalaKeluarga();
-    res.json({ success: true, data: result });
+    const total = await pendudukServices.getTotalKepalaKeluarga();
+    res.json({ success: true, data: total });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -140,8 +121,8 @@ const getTotalKepalaKeluarga = async (req, res) => {
 
 const getTotalLakiLaki = async (req, res) => {
   try {
-    const result = await pendudukServices.getTotalLakiLaki();
-    res.json({ success: true, data: result });
+    const total = await pendudukServices.getTotalLakiLaki();
+    res.json({ success: true, data: total });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -149,8 +130,8 @@ const getTotalLakiLaki = async (req, res) => {
 
 const getTotalPerempuan = async (req, res) => {
   try {
-    const result = await pendudukServices.getTotalPerempuan();
-    res.json({ success: true, data: result });
+    const total = await pendudukServices.getTotalPerempuan();
+    res.json({ success: true, data: total });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -158,8 +139,8 @@ const getTotalPerempuan = async (req, res) => {
 
 const getPendudukByAgama = async (req, res) => {
   try {
-    const result = await pendudukServices.getPendudukByAgama();
-    res.json({ success: true, data: result });
+    const results = await pendudukServices.getPendudukByAgama();
+    res.json({ success: true, data: results });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -167,36 +148,16 @@ const getPendudukByAgama = async (req, res) => {
 
 const getPendudukByUmur = async (req, res) => {
   try {
-    const result = await pendudukServices.getPendudukByUmur();
-    res.json({ success: true, data: result });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-const getPendudukByKepalaKeluarga = async (req, res) => {
-  const { id_kepalakeluarga } = req.params;
-  try {
-    const results = await pendudukServices.getPendudukByKepalaKeluarga(
-      id_kepalakeluarga
-    );
+    const results = await pendudukServices.getPendudukByUmur();
     res.json({ success: true, data: results });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-const searchPendudukByKepalaKeluarga = async (req, res) => {
-  const { search } = req.query;
+const getAllKepalaKeluarga = async (req, res) => {
   try {
-    if (!search) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Parameter search diperlukan" });
-    }
-    const results = await pendudukServices.searchPendudukByKepalaKeluarga(
-      search
-    );
+    const results = await pendudukServices.getAllKepalaKeluarga();
     res.json({ success: true, data: results });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -215,6 +176,5 @@ export default {
   getTotalLakiLaki,
   getTotalPenduduk,
   getTotalPerempuan,
-  getPendudukByKepalaKeluarga,
-  searchPendudukByKepalaKeluarga,
+  getAllKepalaKeluarga,
 };

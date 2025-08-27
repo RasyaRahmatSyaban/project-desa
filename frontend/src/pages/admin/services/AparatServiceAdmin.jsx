@@ -48,7 +48,7 @@ secureApi.interceptors.response.use(
 // Fungsi untuk memeriksa struktur data yang diharapkan server
 const validateAparatData = (data) => {
   // Daftar field yang wajib ada
-  const requiredFields = ["nama", "jabatan", "nip"];
+  const requiredFields = ["nama", "jabatan"];
 
   // Periksa apakah semua field wajib ada
   const missingFields = requiredFields.filter((field) => !data[field]);
@@ -129,8 +129,8 @@ const AparatServiceAdmin = {
         formData.append("jabatan", aparatData.jabatan);
         formData.append("nip", aparatData.nip);
 
-        if (aparatData.telepon) {
-          formData.append("telepon", aparatData.telepon);
+        if(aparatData.nip){
+          formData.append("nip", aparatData.nip.trim());
         }
 
         formData.append("foto", aparatData.foto);
@@ -229,6 +229,8 @@ const AparatServiceAdmin = {
   },
   // Get image URL
   getImageUrl: (imagePath) => {
+
+    console.log(imagePath)
     if (!imagePath) return null;
 
     // Jika path sudah lengkap (eksternal), gunakan apa adanya

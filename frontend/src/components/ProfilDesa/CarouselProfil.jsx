@@ -279,27 +279,6 @@ export default function CarouselAparatur() {
           )}
         </button>
       </div>
-
-      {/* Title & Description */}
-      {aparatur[currentIndex] && (
-        <div className="text-center mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            {aparatur[currentIndex].jabatan || "Jabatan"}
-          </h2>
-          <p className="text-gray-600 mt-2">
-            {aparatur[currentIndex].nama || "Nama"}
-          </p>
-          {aparatur[currentIndex].nip && (
-            <p className="text-sm text-gray-500 mt-1">
-              NIP: {aparatur[currentIndex].nip}
-            </p>
-          )}
-          <p className="text-gray-500 mt-4 max-w-2xl mx-auto">
-            Aparatur desa yang bertugas melayani masyarakat dan memastikan
-            pelaksanaan program pembangunan desa berjalan dengan baik.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

@@ -188,8 +188,8 @@ const AparatAdmin = () => {
       setIsActionLoading(true);
 
       // Validasi form
-      if (!formData.nama || !formData.jabatan || !formData.nip) {
-        toast.info("Nama, jabatan, dan NIP wajib diisi!");
+      if (!formData.nama || !formData.jabatan ) {
+        toast.info("Nama, dan jabatan wajib diisi!");
         setIsActionLoading(false);
         return;
       }
@@ -198,7 +198,7 @@ const AparatAdmin = () => {
       const aparatData = {
         nama: formData.nama,
         jabatan: formData.jabatan,
-        nip: formData.nip,
+        nip: formData.nip ? formData.nip.trim() : "",
         foto: formData.foto,
       };
 
@@ -227,8 +227,8 @@ const AparatAdmin = () => {
       setIsActionLoading(true);
 
       // Validasi form
-      if (!formData.nama || !formData.jabatan || !formData.nip) {
-        toast.info("Nama, jabatan, dan NIP wajib diisi!");
+      if (!formData.nama || !formData.jabatan ) {
+        toast.info("Nama, dan jabatan wajib diisi!");
         setIsActionLoading(false);
         return;
       }
@@ -237,7 +237,7 @@ const AparatAdmin = () => {
       const aparatData = {
         nama: formData.nama,
         jabatan: formData.jabatan,
-        nip: formData.nip,
+        nip: formData.nip ? formData.nip.trim() : "",
         foto: formData.foto,
       };
 
@@ -506,12 +506,12 @@ const AparatAdmin = () => {
                     htmlFor="nip"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    NIP/NIK <span className="text-red-500">*</span>
+                    NIP/NIK
                   </label>
                   <input
                     id="nip"
                     type="text"
-                    value={formData.nip}
+                    value={formData.nip || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, nip: e.target.value })
                     }
@@ -675,12 +675,12 @@ const AparatAdmin = () => {
                     htmlFor="edit-nip"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    NIP/NIK <span className="text-red-500">*</span>
+                    NIP/NIK
                   </label>
                   <input
                     id="edit-nip"
                     type="text"
-                    value={formData.nip}
+                    value={formData.nip || ""}
                     onChange={(e) =>
                       setFormData({ ...formData, nip: e.target.value })
                     }

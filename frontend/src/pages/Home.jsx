@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import Bg from "../assets/Background.jpg";
+import Bg from "../assets/bg-bahontobungku.jpg";
 import Pengumuman from "../components/Pengumuman";
 import Card from "../components/CardTemlpate1";
 import { BookOpen, Bell, Users, ClipboardList } from "lucide-react";

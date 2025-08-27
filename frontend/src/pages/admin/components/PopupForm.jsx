@@ -6,8 +6,14 @@ import PendudukService from "../services/PendudukService";
 // Helper untuk format tanggal ke yyyy-MM-dd
 function toDateInputValue(dateStr) {
   if (!dateStr) return "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return dateStr;
+  }
+
+  // Kalau bukan, baru coba parse ke Date
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return "";
+
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
@@ -46,6 +52,17 @@ const PopupForm = ({
       handleInputChange({ target: { name: "selectedKK", value: "" } });
     }
   }, [kepalaKeluargaList, formData.nik]);
+
+  useEffect(() => {
+    if (formData.tanggalLahir) {
+      handleInputChange({
+        target: {
+          name: "tanggalLahir",
+          value: toDateInputValue(formData.tanggalLahir),
+        },
+      });
+    }
+  }, [formData.tanggalLahir]);
 
   // Handler untuk checkbox kepala keluarga
   const handleKepalaKeluargaChange = (e) => {
@@ -149,7 +166,7 @@ const PopupForm = ({
                 type="date"
                 id="tanggalLahir"
                 name="tanggalLahir"
-                value={toDateInputValue(formData.tanggalLahir)}
+                value={formData.tanggalLahir || ""}
                 onChange={handleInputChange}
                 className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-300 focus:outline-none"
                 required

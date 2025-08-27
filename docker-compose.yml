@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rasya123
       MYSQL_DATABASE: bahontobungku
-      MYSQL_USER: bahontobungku_user
+      MYSQL_USER: bahontobungku_admin
       MYSQL_PASSWORD: bahontobungku123
     ports:
       - "3306:3306"
@@ -20,6 +20,7 @@ services:
 
   backend:
     build: ./backend
+    image: backend-bahontobungku
     container_name: backend-bahontobungku
     restart: always
     environment:
@@ -41,6 +42,7 @@ services:
 
   frontend:
     build: ./frontend
+    image: frontend-bahontobungku
     container_name: frontend-bahontobungku
     restart: always
     environment:

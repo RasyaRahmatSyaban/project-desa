@@ -33,8 +33,6 @@ function getRoleFromToken() {
 }
 
 export default function ModernSidebarAdmin() {
-  // Ambil nama user dari localStorage, fallback ke 'Admin'
-  const userNama = localStorage.getItem("userNama") || "Admin";
   const [collapsed, setCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
@@ -108,7 +106,7 @@ export default function ModernSidebarAdmin() {
                   <FaUser />
                 </div>
                 <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-300">
-                  {userNama}
+                  Admin
                 </h2>
               </div>
             )}

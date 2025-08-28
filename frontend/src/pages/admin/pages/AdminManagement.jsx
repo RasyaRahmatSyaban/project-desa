@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import AdminFormPopup from "../components/AdminFormPopup";
 import { useNavigate } from "react-router-dom";
 import AdminService from "../services/AdminService";
 import TableAdmin from "../../../components/admin/TableAdmin";
@@ -29,9 +28,16 @@ export default function AdminManagement() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAdd, setShowAdd] = useState(false);
+  const [newUser, setNewUser] = useState({
+    nama: "",
+    email: "",
+    password: "",
+    role: "admin",
+  });
   const [transferId, setTransferId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [successMsg, setSuccessMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   // Redirect if not superadmin
@@ -48,7 +54,7 @@ export default function AdminManagement() {
     try {
       const data = await AdminService.getAllUsers();
       setUsers(data);
-    } catch {
+    } catch (err) {
       setError("Gagal memuat data admin.");
     } finally {
       setLoading(false);
@@ -74,7 +80,7 @@ export default function AdminManagement() {
       setSuccessMsg("User berhasil dihapus.");
       setConfirmDeleteId(null);
       fetchUsers();
-    } catch {
+    } catch (err) {
       setError("Gagal menghapus user.");
     }
   };
@@ -96,24 +102,26 @@ export default function AdminManagement() {
       setTimeout(() => {
         logout();
       }, 1200);
-    } catch {
+    } catch (err) {
       setError("Gagal transfer superadmin.");
     }
   };
 
-  const handleAddUser = async (formData) => {
+  const handleAddUser = async (e) => {
+    e.preventDefault();
     setError("");
     try {
       await AdminService.addUser(
-        formData.nama,
-        formData.email,
-        formData.password,
-        "admin"
+        newUser.nama,
+        newUser.email,
+        newUser.password,
+        newUser.role
       );
       setShowAdd(false);
+      setNewUser({ nama: "", email: "", password: "", role: "admin" });
       setSuccessMsg("User berhasil ditambahkan.");
       fetchUsers();
-    } catch {
+    } catch (err) {
       setError("Gagal menambah user. Email mungkin sudah terdaftar.");
     }
   };
@@ -141,16 +149,60 @@ export default function AdminManagement() {
         </div>
       )}
       <button
-        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-        onClick={() => setShowAdd(true)}
+        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+        onClick={() => setShowAdd(!showAdd)}
       >
         <FaPlus /> Tambah Admin
       </button>
-      <AdminFormPopup
-        isOpen={showAdd}
-        onClose={() => setShowAdd(false)}
-        onSubmit={handleAddUser}
-      />
+      {showAdd && (
+        <form
+          onSubmit={handleAddUser}
+          className="mb-4 flex gap-2 flex-wrap items-end"
+        >
+          <input
+            type="text"
+            placeholder="Nama"
+            value={newUser.nama}
+            onChange={(e) => setNewUser({ ...newUser, nama: e.target.value })}
+            className="border p-2 rounded"
+            required
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+            className="border p-2 rounded"
+            required
+          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={newUser.password}
+              onChange={(e) =>
+                setNewUser({ ...newUser, password: e.target.value })
+              }
+              className="border p-2 rounded pr-10"
+              required
+            />
+            <button
+              type="button"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+              onClick={() => setShowPassword((v) => !v)}
+              tabIndex={-1}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Simpan
+          </button>
+        </form>
+      )}
       {loading ? (
         <div>Loading...</div>
       ) : (

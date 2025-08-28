@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import LogoutAdminDialog from "./LogoutAdminDialog";
 
 export default function HeaderAdmin() {
-  // Ambil nama user dari localStorage, fallback ke 'Admin'
-  const userNama = localStorage.getItem("userNama") || "Admin";
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -82,7 +80,7 @@ export default function HeaderAdmin() {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <div className="flex flex-col items-end mr-2 md:block">
-              <span className="text-white font-medium">{userNama}</span>
+              <span className="text-white font-medium">Admin</span>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center text-indigo-900 p-1 ring-2 ring-indigo-300/30">
               <div className="w-full h-full rounded-full bg-indigo-900 flex items-center justify-center text-white">

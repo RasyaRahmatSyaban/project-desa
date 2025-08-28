@@ -82,7 +82,8 @@ export default function HeaderAdmin() {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <div className="flex flex-col items-end mr-2 md:block">
-              <span className="text-white font-medium">{userNama}</span>
+              <p className="text-white font-medium">{userNama}</p>
+              <p className="text-xs text-indigo-200 mt-0.5">{localStorage.getItem("userEmail") || "-"}</p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center text-indigo-900 p-1 ring-2 ring-indigo-300/30">
               <div className="w-full h-full rounded-full bg-indigo-900 flex items-center justify-center text-white">

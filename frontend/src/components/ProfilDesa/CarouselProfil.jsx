@@ -122,14 +122,11 @@ export default function CarouselAparatur() {
 
   return (
     <div
-      className="relative w-full max-w-7xl mx-auto pt-28 px-4 md:px-0"
+      className="relative w-5xl mx-auto pt-4 px-4 md:px-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className="relative h-[25rem] bg-gray-50 rounded-2xl overflow-hidden"
-        style={{ boxShadow: "0 10px 25px rgba(0, 0, 0, 0.05)" }}
-      >
+      <div className="relative h-[25rem] rounded-2xl overflow-hidden">
         {/* Slides */}
         <div className="absolute inset-0 flex items-center justify-center">
           {visibleSlides.map(({ index, position, key }) => {
@@ -160,8 +157,8 @@ export default function CarouselAparatur() {
 
             return (
               <div
-                key={key} // Menggunakan key yang unik berdasarkan posisi dan index
-                className="absolute transition-all duration-500 ease-in-out cursor-pointer"
+                key={key}
+                className="absolute cursor-pointer transition-opacity transition-filter duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
                 style={{
                   transform: `translateX(${translateX}px) scale(${scale})`,
                   zIndex,
@@ -240,44 +237,6 @@ export default function CarouselAparatur() {
             />
           ))}
         </div>
-
-        {/* Auto-play toggle */}
-        <button
-          onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-          className="absolute top-4 right-4 z-20 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors"
-          aria-label={isAutoPlaying ? "Pause autoplay" : "Start autoplay"}
-        >
-          {isAutoPlaying ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="6" y="4" width="4" height="16"></rect>
-              <rect x="14" y="4" width="4" height="16"></rect>
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-          )}
-        </button>
       </div>
     </div>
   );

@@ -333,219 +333,219 @@ export default function APBDes() {
         </div>
       </div>
 
-      {/* Chart 1 - Pie Chart */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Perbandingan Pendapatan dan Pengeluaran
-        </h3>
-        <div className="w-full max-w-md mx-auto">
-          <Pie
-            data={preparePieChartData()}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: "bottom",
-                },
-                tooltip: {
-                  callbacks: {
-                    label: (context) => {
-                      const value = context.raw;
-                      return `${context.label}: ${APBDesService.formatCurrency(
-                        value
-                      )}`;
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Chart 1 - Pie Chart */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Perbandingan Pendapatan dan Pengeluaran
+          </h3>
+          <div className="w-full max-w-md mx-auto">
+            <Pie
+              data={preparePieChartData()}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => {
+                        const value = context.raw;
+                        return `${
+                          context.label
+                        }: ${APBDesService.formatCurrency(value)}`;
+                      },
                     },
                   },
                 },
-              },
-            }}
-            height={250}
-          />
+              }}
+              height={250}
+            />
+          </div>
         </div>
-        <p className="text-right italic text-gray-500 mt-2">Learn more</p>
-      </div>
 
-      {/* Chart 2 - Bar Chart */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Pendapatan dan Pengeluaran Bulanan
-        </h3>
-        <div className="w-full max-w-4xl mx-auto">
-          <Bar
-            data={prepareBarChartData()}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: "top",
-                },
-                tooltip: {
-                  callbacks: {
-                    label: (context) => {
-                      const value = context.raw;
-                      return `${
-                        context.dataset.label
-                      }: ${APBDesService.formatCurrency(value)}`;
+        {/* Chart 2 - Bar Chart */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Pendapatan dan Pengeluaran Bulanan
+          </h3>
+          <div className="w-full max-w-4xl mx-auto">
+            <Bar
+              data={prepareBarChartData()}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "top",
+                  },
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => {
+                        const value = context.raw;
+                        return `${
+                          context.dataset.label
+                        }: ${APBDesService.formatCurrency(value)}`;
+                      },
                     },
                   },
                 },
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    callback: (value) => APBDesService.formatCurrency(value),
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: (value) => APBDesService.formatCurrency(value),
+                    },
                   },
                 },
-              },
-            }}
-            height={300}
-          />
+              }}
+              height={300}
+            />
+          </div>
         </div>
-        <p className="text-right italic text-gray-500 mt-2">Learn more</p>
-      </div>
 
-      {/* Tabel Pendapatan */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300 overflow-hidden">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-6"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Rincian Pendapatan
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="py-3 px-6 bg-[#5DE1C4]/10 text-left font-semibold text-gray-800 rounded-tl-lg">
-                  No
-                </th>
-                <th className="py-3 px-6 bg-[#5DE1C4]/10 text-left font-semibold text-gray-800">
-                  Bulan
-                </th>
-                <th className="py-3 px-6 bg-[#5DE1C4]/10 text-right font-semibold text-gray-800 rounded-tr-lg">
-                  Jumlah
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {detailData.pendapatan.length > 0 ? (
-                detailData.pendapatan.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
-                  >
-                    <td className="py-3 px-6 text-gray-700">{index + 1}</td>
-                    <td className="py-3 px-6 text-gray-700 font-medium">
-                      {APBDesService.getMonthName(item.bulan)}
-                    </td>
-                    <td className="py-3 px-6 text-right font-mono font-medium text-green-600">
-                      {APBDesService.formatCurrency(item.total)}
+        {/* Tabel Pendapatan */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300 overflow-hidden">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-6"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Rincian Pendapatan
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr>
+                  <th className="py-3 px-6 bg-[#5DE1C4]/10 text-left font-semibold text-gray-800 rounded-tl-lg">
+                    No
+                  </th>
+                  <th className="py-3 px-6 bg-[#5DE1C4]/10 text-left font-semibold text-gray-800">
+                    Bulan
+                  </th>
+                  <th className="py-3 px-6 bg-[#5DE1C4]/10 text-right font-semibold text-gray-800 rounded-tr-lg">
+                    Jumlah
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {detailData.pendapatan.length > 0 ? (
+                  detailData.pendapatan.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
+                    >
+                      <td className="py-3 px-6 text-gray-700">{index + 1}</td>
+                      <td className="py-3 px-6 text-gray-700 font-medium">
+                        {APBDesService.getMonthName(item.bulan)}
+                      </td>
+                      <td className="py-3 px-6 text-right font-mono font-medium text-green-600">
+                        {APBDesService.formatCurrency(item.total)}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="py-8 px-6 text-center text-gray-500 italic"
+                    >
+                      Tidak ada data pendapatan untuk tahun ini
                     </td>
                   </tr>
-                ))
-              ) : (
+                )}
+              </tbody>
+              <tfoot>
                 <tr>
                   <td
-                    colSpan={3}
-                    className="py-8 px-6 text-center text-gray-500 italic"
+                    colSpan={2}
+                    className="py-4 px-6 bg-[#5DE1C4]/10 text-right font-bold text-gray-800 rounded-bl-lg"
                   >
-                    Tidak ada data pendapatan untuk tahun ini
+                    Total Pendapatan:
+                  </td>
+                  <td className="py-4 px-6 bg-[#5DE1C4]/10 text-right font-bold font-mono text-green-600 rounded-br-lg">
+                    {APBDesService.formatCurrency(getTotalIncome())}
                   </td>
                 </tr>
-              )}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td
-                  colSpan={2}
-                  className="py-4 px-6 bg-[#5DE1C4]/10 text-right font-bold text-gray-800 rounded-bl-lg"
-                >
-                  Total Pendapatan:
-                </td>
-                <td className="py-4 px-6 bg-[#5DE1C4]/10 text-right font-bold font-mono text-green-600 rounded-br-lg">
-                  {APBDesService.formatCurrency(getTotalIncome())}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+              </tfoot>
+            </table>
+          </div>
         </div>
-      </div>
 
-      {/* Tabel Pengeluaran */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300 overflow-hidden">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-6"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Rincian Pengeluaran
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="py-3 px-6 bg-[#FE7C66]/10 text-left font-semibold text-gray-800 rounded-tl-lg">
-                  No
-                </th>
-                <th className="py-3 px-6 bg-[#FE7C66]/10 text-left font-semibold text-gray-800">
-                  Bulan
-                </th>
-                <th className="py-3 px-6 bg-[#FE7C66]/10 text-right font-semibold text-gray-800 rounded-tr-lg">
-                  Jumlah
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {detailData.pengeluaran.length > 0 ? (
-                detailData.pengeluaran.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
-                  >
-                    <td className="py-3 px-6 text-gray-700">{index + 1}</td>
-                    <td className="py-3 px-6 text-gray-700 font-medium">
-                      {APBDesService.getMonthName(item.bulan)}
-                    </td>
-                    <td className="py-3 px-6 text-right font-mono font-medium text-red-600">
-                      {APBDesService.formatCurrency(item.total)}
+        {/* Tabel Pengeluaran */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300 overflow-hidden">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-6"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Rincian Pengeluaran
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr>
+                  <th className="py-3 px-6 bg-[#FE7C66]/10 text-left font-semibold text-gray-800 rounded-tl-lg">
+                    No
+                  </th>
+                  <th className="py-3 px-6 bg-[#FE7C66]/10 text-left font-semibold text-gray-800">
+                    Bulan
+                  </th>
+                  <th className="py-3 px-6 bg-[#FE7C66]/10 text-right font-semibold text-gray-800 rounded-tr-lg">
+                    Jumlah
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {detailData.pengeluaran.length > 0 ? (
+                  detailData.pengeluaran.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
+                    >
+                      <td className="py-3 px-6 text-gray-700">{index + 1}</td>
+                      <td className="py-3 px-6 text-gray-700 font-medium">
+                        {APBDesService.getMonthName(item.bulan)}
+                      </td>
+                      <td className="py-3 px-6 text-right font-mono font-medium text-red-600">
+                        {APBDesService.formatCurrency(item.total)}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="py-8 px-6 text-center text-gray-500 italic"
+                    >
+                      Tidak ada data pengeluaran untuk tahun ini
                     </td>
                   </tr>
-                ))
-              ) : (
+                )}
+              </tbody>
+              <tfoot>
                 <tr>
                   <td
-                    colSpan={3}
-                    className="py-8 px-6 text-center text-gray-500 italic"
+                    colSpan={2}
+                    className="py-4 px-6 bg-[#FE7C66]/10 text-right font-bold text-gray-800 rounded-bl-lg"
                   >
-                    Tidak ada data pengeluaran untuk tahun ini
+                    Total Pengeluaran:
+                  </td>
+                  <td className="py-4 px-6 bg-[#FE7C66]/10 text-right font-bold font-mono text-red-600 rounded-br-lg">
+                    {APBDesService.formatCurrency(getTotalExpense())}
                   </td>
                 </tr>
-              )}
-            </tbody>
-            <tfoot>
-              <tr>
-                <td
-                  colSpan={2}
-                  className="py-4 px-6 bg-[#FE7C66]/10 text-right font-bold text-gray-800 rounded-bl-lg"
-                >
-                  Total Pengeluaran:
-                </td>
-                <td className="py-4 px-6 bg-[#FE7C66]/10 text-right font-bold font-mono text-red-600 rounded-br-lg">
-                  {APBDesService.formatCurrency(getTotalExpense())}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+              </tfoot>
+            </table>
+          </div>
         </div>
-      </div>
+      </section>
     </section>
   );
 }

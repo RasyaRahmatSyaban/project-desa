@@ -27,7 +27,7 @@ const GoogleMap = () => {
   };
 
   return (
-    <>
+    <div style={{ fontFamily: "poppins" }}>
       <Navbar />
       <div className="flex flex-col justify-center items-center mt-28">
         <iframe
@@ -243,7 +243,7 @@ const GoogleMap = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -145,9 +145,12 @@ const Information = () => {
   };
 
   return (
-    <div>
+    <div
+      className="flex flex-col min-h-screen"
+      style={{ fontFamily: "poppins" }}
+    >
       <Navbar />
-      <div className="my-4 md:mx-40 pt-20 px-4 md:px-0">
+      <div className="flex-grow my-4 md:mx-40 pt-20 px-4 md:px-0">
         <div>
           <div className="mb-8">
             <h1 className="text-2xl md:text-4xl font-bold text-center md:text-left">

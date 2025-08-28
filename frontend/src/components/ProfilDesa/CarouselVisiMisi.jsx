@@ -2,7 +2,10 @@
 
 export default function VisiMisiDesa() {
   return (
-    <section className="container mx-auto px-6 py-16 flex flex-col items-center">
+    <section
+      className="container mx-auto px-6 py-16 flex flex-col items-center"
+      style={{ fontFamily: "poppins" }}
+    >
       {/* Header */}
       <div className="w-4xl text-center mb-2">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-green-600 to-emerald-500 bg-clip-text text-transparent">

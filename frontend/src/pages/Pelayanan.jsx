@@ -85,12 +85,11 @@ export default function Pelayanan() {
 
   return (
     <>
+      <Navbar />
       <div
-        className="flex flex-col bg-gray-50 items-center min-h-screen"
+        className="flex flex-col bg-gray-50 items-center"
         style={{ fontFamily: "poppins" }}
       >
-        <Navbar />
-
         {/* Hero Section */}
         <div className="w-full bg-gradient-to-r from-[#6CABCA] to-white py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
@@ -134,7 +133,7 @@ export default function Pelayanan() {
         {/* Services Section */}
         <div
           id="layanan"
-          className="max-w-6xl mx-auto w-full px-4 md:px-8 py-12 md:pt-30"
+          className="max-w-6xl mx-auto w-full px-4 md:px-8 py-14 "
         >
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -238,7 +237,7 @@ export default function Pelayanan() {
         </div>
 
         {/* How It Works Section */}
-        <div id="panduan" className="w-full bg-gray-100 pt-30">
+        <div id="panduan" className="w-full bg-gray-100 py-8">
           <div className="max-w-6xl mx-auto px-4 md:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -294,7 +293,7 @@ export default function Pelayanan() {
         </div>
 
         {/* FAQ Section */}
-        <div className="max-w-6xl mx-auto w-full px-4 md:px-8 py-12 md:py-20">
+        <div className="w-6xl mx-auto px-4 md:px-8 py-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Pertanyaan Umum

@@ -48,7 +48,7 @@ function Navbar() {
   };
 
   return (
-    <>
+    <div style={{ fontFamily: "poppins" }}>
       <header
         className={`w-full fixed top-0 z-50 transition-all duration-300 backdrop-blur-md ${
           scrolled ? "bg-white/80 shadow-md" : "bg-white/40"
@@ -175,7 +175,7 @@ function Navbar() {
           <X size={28} />
         </button>
       </aside>
-    </>
+    </div>
   );
 }
 

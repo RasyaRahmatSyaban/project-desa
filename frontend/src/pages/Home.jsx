@@ -3,13 +3,13 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Bg from "../assets/bg-bahontobungku.jpg";
 import Pengumuman from "../components/Pengumuman";
-import Card from "../components/CardTemlpate1";
+import Card from "../components/CardTemplate";
 import { BookOpen, Bell, Users, ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
-    <div>
+    <div style={{ fontFamily: "poppins" }}>
       <Navbar />
       <div className="relative">
         {" "}

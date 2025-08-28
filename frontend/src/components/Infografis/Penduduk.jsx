@@ -78,7 +78,7 @@ export default function Penduduk() {
     {
       title: "Perempuan",
       count: stats.summary.totalPerempuan,
-      color: "#B9FF66",
+      color: "#13D813",
     },
   ];
 
@@ -226,11 +226,8 @@ export default function Penduduk() {
                     {item.title}
                   </div>
                   <div className="text-white font-bold text-2xl">
-                    {item.count} orang
+                    {item.count} Orang
                   </div>
-                  <button className="flex items-center gap-1 text-white hover:underline">
-                    Detail Statistik <ArrowUpRight size={16} />
-                  </button>
                 </div>
 
                 {/* Background Illustration */}
@@ -247,83 +244,82 @@ export default function Penduduk() {
         </div>
       </div>
 
-      {/* Chart 1 - Kelompok Umur */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Berdasarkan Kelompok Umur
-        </h3>
-        <div className="w-full max-w-4xl mx-auto">
-          <Bar
-            data={prepareUmurData()}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false,
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Chart 1 - Kelompok Umur */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Berdasarkan Kelompok Umur
+          </h3>
+          <div className="w-full max-w-4xl mx-auto">
+            <Bar
+              data={prepareUmurData()}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
                 },
-              },
-            }}
-            height={250}
-          />
+              }}
+              height={250}
+            />
+          </div>
         </div>
-        <p className="text-right italic text-gray-500 mt-2">Learn more</p>
-      </div>
 
-      {/* Chart 2 - Jenis Kelamin (Menggantikan Pekerjaan) */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Berdasarkan Jenis Kelamin
-        </h3>
-        <div className="w-full max-w-3xl mx-auto">
-          <Doughnut
-            data={prepareJenisKelaminData()}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: "bottom",
+        {/* Chart 2 - Jenis Kelamin (Menggantikan Pekerjaan) */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Berdasarkan Jenis Kelamin
+          </h3>
+          <div className="w-full max-w-3xl mx-auto">
+            <Doughnut
+              data={prepareJenisKelaminData()}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
                 },
-              },
-            }}
-            height={250}
-          />
+              }}
+              height={250}
+            />
+          </div>
         </div>
-        <p className="text-right italic text-gray-500 mt-2">Learn more</p>
-      </div>
 
-      {/* Chart 3 - Keyakinan */}
-      <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
-        <h3
-          className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
-          style={{ fontFamily: "Poppins" }}
-        >
-          Berdasarkan Keyakinan
-        </h3>
-        <div className="w-full max-w-3xl mx-auto">
-          <Pie
-            data={prepareAgamaData()}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: "bottom",
+        {/* Chart 3 - Keyakinan */}
+        <div className="bg-white shadow-lg rounded-3xl p-5 border border-gray-300">
+          <h3
+            className="font-bold text-xl bg-yellow-300 px-1 rounded mb-4"
+            style={{ fontFamily: "Poppins" }}
+          >
+            Berdasarkan Keyakinan
+          </h3>
+          <div className="w-full max-w-3xl mx-auto">
+            <Pie
+              data={prepareAgamaData()}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    position: "bottom",
+                  },
                 },
-              },
-            }}
-            height={250}
-          />
+              }}
+              height={250}
+            />
+          </div>
         </div>
-        <p className="text-right italic text-gray-500 mt-2">Learn more</p>
-      </div>
+      </section>
     </section>
   );
 }

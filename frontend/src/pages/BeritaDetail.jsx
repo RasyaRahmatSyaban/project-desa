@@ -71,7 +71,7 @@ const BeritaDetail = () => {
   }, [id]);
 
   return (
-    <div>
+    <div style={{ fontFamily: "poppins" }}>
       <Navbar />
       <div className="my-4 md:mx-40 pt-20 px-4 md:px-0">
         <div className="mb-6">

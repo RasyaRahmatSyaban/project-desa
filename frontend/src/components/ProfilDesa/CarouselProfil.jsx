@@ -125,6 +125,7 @@ export default function CarouselAparatur() {
       className="relative w-5xl mx-auto pt-4 px-4 md:px-0"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={{ fontFamily: "poppins" }}
     >
       <div className="relative h-[25rem] rounded-2xl overflow-hidden">
         {/* Slides */}

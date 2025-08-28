@@ -82,7 +82,7 @@ const FloatingChatbot = () => {
   };
 
   return (
-    <>
+    <div style={{ fontFamily: "poppins" }}>
       {/* Floating Button */}
       <button
         onClick={() => setOpen((v) => !v)}
@@ -285,7 +285,7 @@ const FloatingChatbot = () => {
           </form>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

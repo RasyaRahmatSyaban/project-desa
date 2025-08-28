@@ -17,7 +17,10 @@ export default function LogoutAdmin() {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-md text-center">
         <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
           <FaSignOutAlt className="text-red-500 text-2xl" />

@@ -21,7 +21,10 @@ const LogoutAdminDialog = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
         <div className="mb-6">
           <h3 className="text-xl font-bold text-gray-800">Konfirmasi Logout</h3>

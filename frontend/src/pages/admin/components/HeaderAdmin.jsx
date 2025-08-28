@@ -44,7 +44,10 @@ export default function HeaderAdmin() {
   });
 
   return (
-    <header className="w-full bg-gradient-to-r from-slate-800 via-indigo-900 to-purple-800 shadow-xl px-6 py-4 text-white">
+    <header
+      className="w-full bg-gradient-to-r from-slate-800 via-indigo-900 to-purple-800 shadow-xl px-6 py-4 text-white"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="flex items-center justify-between">
         {/* Left side - Title and decorative elements */}
         <div className="flex items-center space-x-4">
@@ -77,8 +80,7 @@ export default function HeaderAdmin() {
             onClick={() => setShowDropdown(!showDropdown)}
           >
             <div className="flex flex-col items-end mr-2 md:block">
-              <span className="text-white font-medium">Admin User</span>
-              <span className="text-indigo-200 text-xs">Administrator</span>
+              <span className="text-white font-medium">Admin</span>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center text-indigo-900 p-1 ring-2 ring-indigo-300/30">
               <div className="w-full h-full rounded-full bg-indigo-900 flex items-center justify-center text-white">

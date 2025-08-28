@@ -450,7 +450,10 @@ function SuratAdmin() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div
+      className="p-6 bg-gray-50 min-h-screen"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-purple-100 p-2 rounded-lg">
@@ -887,14 +890,16 @@ function SuratAdmin() {
                       {/* File name section with text truncation */}
                       <div className="flex items-center min-w-0 flex-1">
                         <FaFilePdf className="flex-shrink-0 mr-2 text-red-500" />
-                        <p 
+                        <p
                           className="font-medium truncate min-w-0"
-                          title={currentItem.file.split("/").pop() || "Dokumen Surat"}
+                          title={
+                            currentItem.file.split("/").pop() || "Dokumen Surat"
+                          }
                         >
                           {currentItem.file.split("/").pop() || "Dokumen Surat"}
                         </p>
                       </div>
-                      
+
                       {/* Download button */}
                       <button
                         onClick={() => handleDownload(currentItem.file)}
@@ -917,7 +922,9 @@ function SuratAdmin() {
                 ) : pdfError ? (
                   <div className="flex flex-col items-center justify-center py-8 text-red-500 text-center">
                     <FaExclamationTriangle className="text-4xl mb-4" />
-                    <p className="px-2">Terjadi kesalahan saat memuat dokumen.</p>
+                    <p className="px-2">
+                      Terjadi kesalahan saat memuat dokumen.
+                    </p>
                     <p className="text-sm mt-2 px-2">
                       File mungkin tidak tersedia atau tidak dapat diakses.
                     </p>

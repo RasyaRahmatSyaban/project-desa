@@ -85,7 +85,7 @@ export default function ModernSidebarAdmin() {
   }, []);
 
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen" style={{ fontFamily: "poppins" }}>
       {/* Sidebar */}
       <aside
         id="sidebar"
@@ -103,7 +103,7 @@ export default function ModernSidebarAdmin() {
             {!collapsed && (
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                  <span className="font-bold text-white">A</span>
+                  <FaUser />
                 </div>
                 <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-300">
                   Admin
@@ -120,27 +120,6 @@ export default function ModernSidebarAdmin() {
                 <FaChevronLeft size={14} />
               )}
             </button>
-          </div>
-        </div>
-
-        {/* User Profile */}
-        <div
-          className={`p-4 border-b border-indigo-800/30 ${
-            collapsed ? "text-center" : ""
-          }`}
-        >
-          <div className="flex flex-col items-center mb-2">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center text-white mb-2 p-1 ring-2 ring-indigo-300/30">
-              <div className="w-full h-full rounded-full bg-indigo-900 flex items-center justify-center">
-                <FaUser />
-              </div>
-            </div>
-            {!collapsed && (
-              <div className="text-center">
-                <h3 className="font-medium text-white">Admin User</h3>
-                <p className="text-xs text-indigo-200">Administrator</p>
-              </div>
-            )}
           </div>
         </div>
 

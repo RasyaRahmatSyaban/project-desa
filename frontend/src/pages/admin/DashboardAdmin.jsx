@@ -4,7 +4,7 @@ import HeaderAdmin from "./components/HeaderAdmin";
 
 export default function DashboardAdmin() {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" style={{ fontFamily: "poppins" }}>
       <SidebarAdmin />
       <div className="flex-1 flex flex-col">
         <HeaderAdmin />

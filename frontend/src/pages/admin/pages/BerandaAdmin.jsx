@@ -121,7 +121,7 @@ const BerandaAdmin = () => {
     const maxValue = Math.max(...data.map((item) => item[valueKey]));
 
     return (
-      <div className="w-full h-40">
+      <div className="w-full h-40" style={{ fontFamily: "poppins" }}>
         <div className="flex h-full items-end justify-around">
           {data.map((item, index) => {
             const height = (item[valueKey] / maxValue) * 100;

@@ -55,7 +55,11 @@ const SuratForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4"
+      style={{ fontFamily: "poppins" }}
+    >
       <div>
         <label
           htmlFor="jenis"

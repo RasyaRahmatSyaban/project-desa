@@ -136,7 +136,7 @@ export default function AdminManagement() {
   }));
 
   return (
-    <div className="p-6">
+    <div className="p-6" style={{ fontFamily: "poppins" }}>
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <FaUserShield /> Manajemen Admin
       </h1>

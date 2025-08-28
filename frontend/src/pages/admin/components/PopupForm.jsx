@@ -79,7 +79,10 @@ const PopupForm = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 mb-6">
+    <div
+      className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 mb-6"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">

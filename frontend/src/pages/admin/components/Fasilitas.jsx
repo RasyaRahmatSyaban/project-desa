@@ -181,7 +181,7 @@ export default function FasilitasWrapper() {
   );
 
   return (
-    <>
+    <div style={{ fontFamily: "poppins" }}>
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-white rounded-2xl shadow-md p-6">
@@ -690,6 +690,6 @@ export default function FasilitasWrapper() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

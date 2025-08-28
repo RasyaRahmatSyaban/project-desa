@@ -36,7 +36,10 @@ const DanaMasukForm = ({ onSubmit, onCancel, initialData, isEditing }) => {
   };
 
   return (
-    <div className="fixed inset-0 backdrop-blur-md bg-black/30 flex items-center justify-center z-50">
+    <div
+      className="fixed inset-0 backdrop-blur-md bg-black/30 flex items-center justify-center z-50"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="bg-white/95 backdrop-filter rounded-2xl shadow-xl p-6 w-full max-w-md border border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">

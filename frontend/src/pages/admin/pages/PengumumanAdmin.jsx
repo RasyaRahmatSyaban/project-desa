@@ -64,8 +64,12 @@ const PengumumanAdmin = () => {
         id: item.id,
         judul: item.judul,
         isi: item.isi,
-        tanggalMulai: item.tanggalMulai ? new Date(item.tanggalMulai).toISOString() : null,
-        tanggalSelesai: item.tanggalSelesai ? new Date(item.tanggalSelesai).toISOString() : null,
+        tanggalMulai: item.tanggalMulai
+          ? new Date(item.tanggalMulai).toISOString()
+          : null,
+        tanggalSelesai: item.tanggalSelesai
+          ? new Date(item.tanggalSelesai).toISOString()
+          : null,
         status:
           new Date(item.tanggalSelesai) < new Date() ? "Kadaluarsa" : "Aktif",
       }));
@@ -87,7 +91,8 @@ const PengumumanAdmin = () => {
   // Filter data based on active tab and search query
   const filteredData = pengumumanData.filter((item) => {
     const matchesSearch =
-      item.judul.toLowerCase().includes(searchQuery.toLowerCase()) || item.isi.toLowerCase().includes(searchQuery.toLowerCase());
+      item.judul.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.isi.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesFilter =
       activeTab === "semua" ||
@@ -126,8 +131,12 @@ const PengumumanAdmin = () => {
       setFormData({
         judul: item.judul,
         isi: item.isi,
-        tanggalMulai: item.tanggalMulai ? new Date(item.tanggalMulai).toISOString().split("T")[0] : "",
-        tanggalSelesai: item.tanggalSelesai ? new Date(item.tanggalSelesai).toISOString().split("T")[0] : "",
+        tanggalMulai: item.tanggalMulai
+          ? new Date(item.tanggalMulai).toISOString().split("T")[0]
+          : "",
+        tanggalSelesai: item.tanggalSelesai
+          ? new Date(item.tanggalSelesai).toISOString().split("T")[0]
+          : "",
         // Include UI fields
         status: item.status,
       });
@@ -195,12 +204,8 @@ const PengumumanAdmin = () => {
     }
 
     try {
-
       // Call API
-      await PengumumanServiceAdmin.updatePengumuman(
-        currentItem.id,
-        formData
-      );
+      await PengumumanServiceAdmin.updatePengumuman(currentItem.id, formData);
 
       // Refresh data
       await fetchAllPengumuman();
@@ -284,7 +289,10 @@ const PengumumanAdmin = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div
+      className="p-6 bg-gray-50 min-h-screen"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-purple-100 p-2 rounded-lg">
@@ -479,27 +487,25 @@ const PengumumanAdmin = () => {
                         <td className="px-4 py-3 text-sm text-gray-800">
                           <div className="flex items-center gap-2">
                             <FaCalendarAlt className="text-gray-400" />
-                            {new Date(pengumuman.tanggalMulai).toLocaleDateString(
-                              "id-ID",
-                              {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                              }
-                            )}
+                            {new Date(
+                              pengumuman.tanggalMulai
+                            ).toLocaleDateString("id-ID", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
                           </div>
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
                           <div className="flex items-center gap-2">
                             <FaCalendarAlt className="text-gray-400" />
-                            {new Date(pengumuman.tanggalSelesai).toLocaleDateString(
-                              "id-ID",
-                              {
-                                day: "numeric",
-                                month: "short",
-                                year: "numeric",
-                              }
-                            )}
+                            {new Date(
+                              pengumuman.tanggalSelesai
+                            ).toLocaleDateString("id-ID", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
                           </div>
                         </td>
                         <td className="px-4 py-3 text-sm">

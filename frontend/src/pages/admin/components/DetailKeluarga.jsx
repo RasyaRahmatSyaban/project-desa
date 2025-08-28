@@ -132,7 +132,7 @@ const DetailKeluarga = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" style={{ fontFamily: "poppins" }}>
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">

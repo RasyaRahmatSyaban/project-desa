@@ -126,7 +126,8 @@ const BeritaAdmin = () => {
   // Filter data based on active tab and search query
   const filteredData = beritaData.filter((item) => {
     const matchesSearch =
-      (item.judul?.toLowerCase() || "").includes(searchQuery.toLowerCase()) || (item.penulis?.toLowerCase() || "").includes(searchQuery.toLowerCase());
+      (item.judul?.toLowerCase() || "").includes(searchQuery.toLowerCase()) ||
+      (item.penulis?.toLowerCase() || "").includes(searchQuery.toLowerCase());
 
     const matchesFilter =
       activeTab === "semua" ||
@@ -413,22 +414,6 @@ const BeritaAdmin = () => {
     }
   };
 
-  // Get category badge color
-  const getCategoryColor = (category) => {
-    switch (category?.toLowerCase()) {
-      case "kesehatan":
-        return "bg-red-100 text-red-800";
-      case "pendidikan":
-        return "bg-blue-100 text-blue-800";
-      case "infrastruktur":
-        return "bg-orange-100 text-orange-800";
-      case "pertanian":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   // Format date
   const formatDate = (dateString) => {
     if (!dateString) return "-";
@@ -453,7 +438,10 @@ const BeritaAdmin = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div
+      className="p-6 bg-gray-50 min-h-screen"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-purple-100 p-2 rounded-lg">

@@ -6,9 +6,10 @@ const getAllAparatur = async () => {
       SELECT * FROM aparatur 
       ORDER BY 
         CASE 
-          WHEN jabatan LIKE '%Kepala%' THEN 1
+          WHEN JABATAN LIKE 'Kepala Desa' THEN 1
           WHEN jabatan LIKE '%Sekretaris%' THEN 2
-          WHEN jabatan LIKE '%Bendahara%' THEN 3
+          WHEN jabatan LIKE '%Kepala%' THEN 3
+          WHEN jabatan LIKE '%Bendahara%' THEN 4
           ELSE 99
         END,
         nama ASC

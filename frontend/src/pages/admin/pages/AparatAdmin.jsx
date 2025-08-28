@@ -188,7 +188,7 @@ const AparatAdmin = () => {
       setIsActionLoading(true);
 
       // Validasi form
-      if (!formData.nama || !formData.jabatan ) {
+      if (!formData.nama || !formData.jabatan) {
         toast.info("Nama, dan jabatan wajib diisi!");
         setIsActionLoading(false);
         return;
@@ -227,7 +227,7 @@ const AparatAdmin = () => {
       setIsActionLoading(true);
 
       // Validasi form
-      if (!formData.nama || !formData.jabatan ) {
+      if (!formData.nama || !formData.jabatan) {
         toast.info("Nama, dan jabatan wajib diisi!");
         setIsActionLoading(false);
         return;
@@ -281,20 +281,27 @@ const AparatAdmin = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div
+      className="p-6 bg-gray-50 min-h-screen"
+      style={{ fontFamily: "poppins" }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-blue-100 p-2 rounded-lg">
             <FaUser className="text-blue-500 text-xl" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Manajemen Aparat Desa</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Manajemen Aparat Desa
+          </h1>
         </div>
 
         {/* Aparat Table */}
         <div className="bg-white rounded-2xl shadow-md p-6">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h2 className="text-xl font-bold text-gray-800">Daftar Aparat Desa</h2>
+              <h2 className="text-xl font-bold text-gray-800">
+                Daftar Aparat Desa
+              </h2>
               <p className="text-gray-600 text-sm">
                 Kelola data aparat dan pejabat desa
               </p>
@@ -350,7 +357,7 @@ const AparatAdmin = () => {
                       Jabatan
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                      NIP/NIK
+                      NIP
                     </th>
                     <th className="px-4 py-3 text-right text-sm font-medium text-gray-600 rounded-tr-lg">
                       Aksi
@@ -389,8 +396,16 @@ const AparatAdmin = () => {
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
                           <div className="flex items-center gap-2">
-                            <FaIdCard className="text-gray-400" />
-                            <span className="font-mono">{aparat.nip}</span>
+                            <span>
+                              {aparat.nip ? (
+                                <div className="flex items-center gap-2">
+                                  <FaIdCard className="text-gray-400" />
+                                  <span>{aparat.nip}</span>
+                                </div>
+                              ) : (
+                                "Tidak Memiliki NIP"
+                              )}
+                            </span>
                           </div>
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -419,7 +434,9 @@ const AparatAdmin = () => {
                         colSpan={6}
                         className="px-4 py-8 text-center text-gray-500"
                       >
-                        {searchQuery ? "Tidak ada aparat yang ditemukan dengan pencarian tersebut." : "Belum ada data aparat desa."}
+                        {searchQuery
+                          ? "Tidak ada aparat yang ditemukan dengan pencarian tersebut."
+                          : "Belum ada data aparat desa."}
                       </td>
                     </tr>
                   )}
@@ -506,7 +523,7 @@ const AparatAdmin = () => {
                     htmlFor="nip"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    NIP/NIK
+                    NIP
                   </label>
                   <input
                     id="nip"
@@ -522,14 +539,14 @@ const AparatAdmin = () => {
               </div>
 
               {formData.fotoPreview && (
-                    <div className="relative w-40 h-16">
-                      <img
-                        src={formData.fotoPreview || "/placeholder.svg"}
-                        alt="Preview"
-                        className="w-32 h-32 object-cover rounded-md border-2 border-gray-200"
-                      />
-                    </div>
-                  )}
+                <div className="relative w-40 h-16">
+                  <img
+                    src={formData.fotoPreview || "/placeholder.svg"}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-md border-2 border-gray-200"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end gap-2">
@@ -675,7 +692,7 @@ const AparatAdmin = () => {
                     htmlFor="edit-nip"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    NIP/NIK
+                    NIP
                   </label>
                   <input
                     id="edit-nip"

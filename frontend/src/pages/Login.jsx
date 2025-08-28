@@ -25,6 +25,8 @@ export const login = async (email, password) => {
       localStorage.setItem("token", response.data.data.token);
       // Simpan juga email untuk digunakan saat update
       localStorage.setItem("userEmail", email);
+
+      localStorage.setItem("userNama", response.data.data.nama);
       return { success: true, token: response.data.data.token };
     } else {
       throw new Error("Token tidak ditemukan dalam response!");

@@ -224,7 +224,7 @@ export default function CarouselAparatur() {
         </button>
 
         {/* Indicators */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20 bg-white/80 rounded-full px-3 py-2 shadow-sm">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20 px-3 py-0.5">
           {aparatur.map((_, index) => (
             <button
               key={`indicator-${index}`} // Key unik untuk setiap indicator

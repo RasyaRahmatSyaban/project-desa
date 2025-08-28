@@ -34,7 +34,7 @@ const resetPasswordController = async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ message: "Email harus diisi!" });
 
-    const response = await service.resetPassword(email);
+    const response = await authServices.resetPassword(email);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -83,12 +83,10 @@ const deleteUser = async (req, res) => {
         .status(400)
         .json({ success: false, message: "ID user harus diisi!" });
     const result = await authServices.deleteUser(id);
-    res
-      .status(200)
-      .json({
-        success: result,
-        message: result ? "User dihapus." : "User tidak ditemukan.",
-      });
+    res.status(200).json({
+      success: result,
+      message: result ? "User dihapus." : "User tidak ditemukan.",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

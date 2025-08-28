@@ -13,6 +13,8 @@ router.put("/update", authAdmin, authController.update);
 // Route tambah user/admin baru (hanya admin)
 router.post("/add", authAdmin, authController.addUser);
 
+router.post("/reset-password", authController.resetPasswordController);
+
 // Admin management routes (superadmin only)
 router.get("/all", authAdmin, authController.getAllUsers);
 router.delete("/:id", authAdmin, authController.deleteUser);

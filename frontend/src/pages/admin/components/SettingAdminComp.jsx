@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaCog,
   FaUser,
@@ -11,59 +11,59 @@ import {
   FaEye,
   FaEyeSlash,
 } from "react-icons/fa";
-import { update } from "../../user/authService";
+// import { update } from "../../user/authService"; // Tidak digunakan lagi
+import AdminService from "../services/AdminService";
 
 const SettingAdminComp = () => {
-  // State untuk data user
   const [userData, setUserData] = useState({
     nama: "",
+    email: "",
     password: "",
   });
 
-  // UI states
+  const [loadingUser, setLoadingUser] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Add these state variables after the existing state declarations
   const [showResetConfirmModal, setShowResetConfirmModal] = useState(false);
   const [showSaveConfirmModal, setShowSaveConfirmModal] = useState(false);
 
-  // Handle form submission
+  // Fetch user saat mount
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await AdminService.getCurrentUser();
+        setUserData({
+          nama: res.nama || "",
+          email: res.email || "",
+          password: "", // Selalu kosong untuk keamanan
+        });
+      } catch (err) {
+        setError("Gagal memuat data user");
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
 
-    // Validasi data
-    if (!userData.nama || userData.nama.trim() === "") {
-      setError("Nama tidak boleh kosong");
-      return;
-    }
-
-    if (!userData.password || userData.password.trim() === "") {
-      setError("Password tidak boleh kosong");
+    if (
+      (!userData.nama || userData.nama.trim() === "") &&
+      (!userData.password || userData.password.trim() === "")
+    ) {
+      setError("Isi minimal salah satu field (nama atau password)");
       return;
     }
 
     setShowSaveConfirmModal(true);
-  };
-
-  // Reset form to empty
-  const handleReset = () => {
-    setShowResetConfirmModal(true);
-  };
-
-  // Add these new functions after handleReset
-  const confirmReset = () => {
-    setUserData({
-      nama: "",
-      password: "",
-    });
-    setShowResetConfirmModal(false);
-    setSuccessMessage("Form telah direset");
-    setShowSuccessModal(true);
   };
 
   const confirmSave = async () => {
@@ -71,13 +71,39 @@ const SettingAdminComp = () => {
     setShowSaveConfirmModal(false);
 
     try {
-      // Call the update function from authService
-      const response = await update(userData);
+      // Pastikan email ada
+      const email = userData.email?.trim();
+      if (!email) {
+        setError("Email tidak boleh kosong");
+        setIsLoading(false);
+        return;
+      }
+
+      // Ambil field nama & password
+      const nama = userData.nama?.trim() || "";
+      const password = userData.password?.trim() || "";
+
+      // Siapkan payload untuk dikirim
+      const payload = { email };
+
+      if (nama) payload.nama = nama;
+      if (password) payload.password = password;
+
+      // Cek kalau tidak ada perubahan selain email
+      if (Object.keys(payload).length === 1) {
+        setError("Tidak ada perubahan untuk disimpan");
+        setIsLoading(false);
+        return;
+      }
+
+      // Panggil API update
+      await AdminService.update(payload);
+
       setSuccessMessage("Pengaturan berhasil disimpan");
       setShowSuccessModal(true);
 
-      // Reset password field after successful update
-      setUserData({ ...userData, password: "" });
+      // Reset password setelah berhasil save (biar tidak tersimpan di state)
+      setUserData((prev) => ({ ...prev, password: "" }));
     } catch (err) {
       setError(err.message || "Terjadi kesalahan saat menyimpan pengaturan");
     } finally {
@@ -85,12 +111,43 @@ const SettingAdminComp = () => {
     }
   };
 
+  const handleReset = () => {
+    setShowResetConfirmModal(true);
+  };
+
+  const confirmReset = async () => {
+    try {
+      // Reload data dari backend untuk reset nama
+      const res = await AdminService.getCurrentUser();
+      setUserData({
+        nama: res.nama || "",
+        email: res.email || "",
+        password: "", // Password selalu kosong
+      });
+    } catch (err) {
+      // Fallback jika gagal reload data
+      setUserData({
+        nama: "",
+        email: "",
+        password: "",
+      });
+    }
+
+    setShowResetConfirmModal(false);
+    setError("");
+  };
+
+  if (loadingUser) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>Memuat data user...</p>
+      </div>
+    );
+  }
+
   return (
-    <div
-      className="p-6 bg-gray-50 min-h-screen"
-      style={{ fontFamily: "poppins" }}
-    >
-      <div className="max-w-7xl mx-auto">
+    <div className="p-6 min-h-screen" style={{ fontFamily: "poppins" }}>
+      <div className="w-full mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-purple-100 p-2 rounded-lg">
             <FaCog className="text-purple-500 text-xl" />
@@ -99,7 +156,7 @@ const SettingAdminComp = () => {
         </div>
 
         {/* Settings Card */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
+        <div className="rounded-2xl p-6">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h2 className="text-xl font-bold text-gray-800">
@@ -159,7 +216,7 @@ const SettingAdminComp = () => {
                 <input
                   id="email"
                   type="email"
-                  value={localStorage.getItem("userEmail") || ""}
+                  value={userData.email}
                   disabled
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-gray-100"
                   placeholder="Email Anda (tidak dapat diubah)"
@@ -189,7 +246,7 @@ const SettingAdminComp = () => {
                     setUserData({ ...userData, password: e.target.value })
                   }
                   className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                  placeholder="Masukkan password baru"
+                  placeholder="Kosongkan jika tidak ingin mengubah password"
                 />
                 <button
                   type="button"
@@ -204,7 +261,7 @@ const SettingAdminComp = () => {
                 </button>
               </div>
               <p className="mt-1 text-sm text-gray-500">
-                Password baru untuk login
+                Isi hanya jika ingin mengubah password
               </p>
             </div>
 
@@ -239,7 +296,7 @@ const SettingAdminComp = () => {
 
       {/* Success Modal */}
       {showSuccessModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
             <div className="mb-6 text-center">
               <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
@@ -283,8 +340,8 @@ const SettingAdminComp = () => {
                 Konfirmasi Reset
               </h3>
               <p className="text-gray-600 text-sm">
-                Apakah Anda yakin ingin mereset form? Tindakan ini tidak dapat
-                dibatalkan.
+                Apakah Anda yakin ingin mereset form? Nama akan dikembalikan ke
+                data asli dan password akan dikosongkan.
               </p>
             </div>
 

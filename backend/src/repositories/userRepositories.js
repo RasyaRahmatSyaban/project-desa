@@ -50,8 +50,6 @@ const transferSuperadmin = async (fromId, toId) => {
 };
 
 const updateUserByEmail = async (nama, email, password) => {
-  const user = await getUserByEmail(email);
-  if (!user) throw new Error("User dengan email tersebut tidak ditemukan!");
   const [result] = await db
     .promise()
     .query("UPDATE user SET nama = ?, password = ? WHERE email = ?", [

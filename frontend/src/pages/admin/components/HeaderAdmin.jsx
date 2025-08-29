@@ -7,7 +7,7 @@ import LogoutAdminDialog from "./LogoutAdminDialog";
 
 export default function HeaderAdmin() {
   // Ambil nama user dari localStorage, fallback ke 'Admin'
-  const userNama = localStorage.getItem("userNama") || "Admin";
+  const userNama = localStorage.getItem("userNama");
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -81,9 +81,11 @@ export default function HeaderAdmin() {
             className="flex items-center gap-3 hover:bg-indigo-800/50 p-2 rounded-xl transition-colors border border-transparent hover:border-indigo-700"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <div className="flex flex-col items-end mr-2 md:block">
+            <div className="flex flex-col items-end text-end mr-2 md:block">
               <p className="text-white font-medium">{userNama}</p>
-              <p className="text-xs text-indigo-200 mt-0.5">{localStorage.getItem("userEmail") || "-"}</p>
+              <p className="text-sm font-medium text-indigo-200 mt-0.5">
+                {localStorage.getItem("userEmail") || "-"}
+              </p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 flex items-center justify-center text-indigo-900 p-1 ring-2 ring-indigo-300/30">
               <div className="w-full h-full rounded-full bg-indigo-900 flex items-center justify-center text-white">
@@ -94,11 +96,6 @@ export default function HeaderAdmin() {
 
           {showDropdown && (
             <div className="absolute right-0 mt-2 w-56 bg-indigo-950 rounded-xl shadow-lg py-2 z-10 border border-indigo-800/30">
-              <div className="px-4 py-2 border-b border-indigo-800/30">
-                <p className="text-sm font-medium text-white">Masuk sebagai</p>
-                <p className="text-xs text-indigo-300">admin@example.com</p>
-              </div>
-
               <div className="py-1">
                 <button
                   onClick={navigateToSettings}

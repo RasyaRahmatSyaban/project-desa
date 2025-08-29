@@ -22,7 +22,8 @@ const login = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { nama, email, password } = req.body;
+    const { nama, password } = req.body;
+    const email = req.user.email;
     const result = await authServices.updateAdmin(nama, email, password);
     res.status(200).json({ success: true, message: result.message });
   } catch (error) {
@@ -66,6 +67,18 @@ const getAllUsers = async (req, res) => {
     const users = await authServices.getAllUsers();
     res.status(200).json({ success: true, data: users });
   } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const getUserByEmail = async (req, res) => {
+  try {
+    const email = req.user.email;
+    const user = await authServices.getUserByEmail(email);
+    console.log("user:", user); // Debug user result
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    console.error("Error:", error); // Debug error
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -120,6 +133,7 @@ export default {
   resetPasswordController,
   addUser,
   getAllUsers,
+  getUserByEmail,
   deleteUser,
   transferSuperadmin,
 };

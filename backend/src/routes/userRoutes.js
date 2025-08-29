@@ -17,6 +17,7 @@ router.post("/reset-password", authController.resetPasswordController);
 
 // Admin management routes (superadmin only)
 router.get("/all", authAdmin, authController.getAllUsers);
+router.get("/current-user", authAdmin, authController.getUserByEmail);
 router.delete("/:id", authAdmin, authController.deleteUser);
 router.post(
   "/transfer-superadmin",

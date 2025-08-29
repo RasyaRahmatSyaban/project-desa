@@ -33,17 +33,26 @@ const loginAdmin = async (email, password) => {
 };
 
 const updateAdmin = async (nama, email, password) => {
-  const hashedPw = await passHelpers.hashPw(password);
+  const user = await userRepositories.getUserByEmail(email);
+  if (!user) throw new Error("Email tidak ditemukan");
+
+  let hashedPw = user.password;
+  if (password) {
+    if (!password.startsWith("$2")) {
+      hashedPw = await passHelpers.hashPw(password);
+    } else {
+      hashedPw = password;
+    }
+  }
 
   const updated = await userRepositories.updateUserByEmail(
-    nama,
+    nama || user.nama,
     email,
     hashedPw
   );
   if (!updated) throw new Error("Gagal memperbarui data admin!");
 
-  const user = await userRepositories.getUserByEmail(email);
-  return new UserDTO(user.id, user.nama, user.email, null);
+  return new UserDTO(user.id, nama || user.nama, user.email, null, null);
 };
 
 const resetPassword = async (email) => {
@@ -63,13 +72,26 @@ const registerUser = async (nama, email, password, role = "admin") => {
   if (!nama || !email || !password) throw new Error("Semua field wajib diisi!");
   const hashedPw = await passHelpers.hashPw(password);
   const userId = await userRepositories.addUser(nama, email, hashedPw, role);
-  return new UserDTO(userId, nama, email, null, role, null);
+  return new UserDTO(userId, nama, email, null, null, role, null);
 };
 
 const getAllUsers = async () => {
   const users = await userRepositories.getAllUsers();
   return users.map(
-    (u) => new UserDTO(u.id, u.nama, u.email, null, u.role, u.last_login)
+    (u) => new UserDTO(u.id, u.nama, u.email, null, null, u.role, u.last_login)
+  );
+};
+
+const getUserByEmail = async (email) => {
+  const users = await userRepositories.getUserByEmail(email);
+  return new UserDTO(
+    null,
+    users.nama,
+    users.email,
+    users.password,
+    null,
+    users.role,
+    null
   );
 };
 
@@ -87,6 +109,7 @@ export default {
   resetPassword,
   registerUser,
   getAllUsers,
+  getUserByEmail,
   deleteUser,
   transferSuperadmin,
 };

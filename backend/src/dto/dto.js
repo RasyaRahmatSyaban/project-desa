@@ -1,8 +1,9 @@
 class UserDTO {
-  constructor(id, nama, email, token, role, last_login) {
+  constructor(id, nama, email, password, token, role, last_login) {
     this.id = id;
     this.nama = nama;
     this.email = email;
+    this.password = password;
     this.token = token;
     this.role = role;
     this.last_login = last_login;

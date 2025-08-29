@@ -10,12 +10,8 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const allowedOrigins = [
-  "http://localhost:5173", // Vite dev server
-  process.env.FRONTEND_URL,
-];
+const allowedOrigins = [process.env.FRONTEND_URL];
 
-console.log("ini env", process.env.FRONTEND_URL);
 // Update CORS configuration to include your ngrok URLs
 app.use(
   cors({

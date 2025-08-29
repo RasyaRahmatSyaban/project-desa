@@ -139,8 +139,6 @@ export default function ArsipSurat() {
 
   // Handle preview - PERBAIKAN UTAMA
   const handlePreview = async (item) => {
-    console.log("Preview clicked for item:", item); // Debug log
-
     setPdfLoading(true);
     setPdfError(false);
     setPdfUrl(null);
@@ -148,15 +146,9 @@ export default function ArsipSurat() {
 
     try {
       if (item.file) {
-        console.log("File name:", item.file); // Debug log
-
-        // Get the file URL
         const fileUrl = SuratService.getFileUrl(item.file);
-        console.log("File URL:", fileUrl); // Debug log
 
-        // Check if file exists
         const fileExists = await SuratService.checkFileExists(item.file);
-        console.log("File exists:", fileExists); // Debug log
 
         if (fileExists) {
           setPdfUrl(fileUrl);
@@ -166,7 +158,6 @@ export default function ArsipSurat() {
           setPdfError(true);
         }
       } else {
-        console.log("No file attached to this item");
         setPdfError(true);
       }
     } catch (error) {

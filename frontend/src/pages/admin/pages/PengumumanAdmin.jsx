@@ -180,8 +180,6 @@ const PengumumanAdmin = () => {
         return;
       }
 
-      console.log("Data dikirim (add):", formData);
-
       // Call API
       await PengumumanServiceAdmin.addPengumuman(formData);
 

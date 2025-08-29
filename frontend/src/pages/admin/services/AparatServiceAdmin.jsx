@@ -129,7 +129,7 @@ const AparatServiceAdmin = {
         formData.append("jabatan", aparatData.jabatan);
         formData.append("nip", aparatData.nip);
 
-        if(aparatData.nip){
+        if (aparatData.nip) {
           formData.append("nip", aparatData.nip.trim());
         }
 
@@ -210,10 +210,8 @@ const AparatServiceAdmin = {
         // Request to delete the associated file (optional, karena server mungkin menangani ini)
         try {
           await secureApi.delete(`/aparatur/delete-file/${filename}`);
-          console.log(`File ${filename} deleted successfully`);
         } catch (fileError) {
           console.error(`Error deleting file ${filename}:`, fileError);
-          // Continue even if file deletion fails
         }
 
         return response.data;
@@ -229,8 +227,6 @@ const AparatServiceAdmin = {
   },
   // Get image URL
   getImageUrl: (imagePath) => {
-
-    console.log(imagePath)
     if (!imagePath) return null;
 
     // Jika path sudah lengkap (eksternal), gunakan apa adanya

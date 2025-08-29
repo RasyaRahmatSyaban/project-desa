@@ -75,7 +75,6 @@ const getUserByEmail = async (req, res) => {
   try {
     const email = req.user.email;
     const user = await authServices.getUserByEmail(email);
-    console.log("user:", user); // Debug user result
     res.status(200).json({ success: true, data: user });
   } catch (error) {
     console.error("Error:", error); // Debug error

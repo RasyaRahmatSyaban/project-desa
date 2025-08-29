@@ -192,7 +192,7 @@ const BeritaService = {
     const filename = extractFilename(imagePath);
 
     // Construct the URL to the image
-    return `${API_URL}/storage/${filename}`;
+    return `${API_URL}/uploads/${filename}`;
   },
 };
 

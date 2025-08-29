@@ -71,9 +71,12 @@ const BeritaDetail = () => {
   }, [id]);
 
   return (
-    <div style={{ fontFamily: "poppins" }}>
+    <div
+      className="flex flex-col min-h-screen"
+      style={{ fontFamily: "poppins" }}
+    >
       <Navbar />
-      <div className="my-4 md:mx-40 pt-20 px-4 md:px-0">
+      <main className="flex-grow my-4 md:mx-40 pt-20 px-4 md:px-0">
         <div className="mb-6">
           <button
             onClick={() => navigate("/Information")}
@@ -138,7 +141,7 @@ const BeritaDetail = () => {
             <p className="text-gray-500">Berita tidak ditemukan</p>
           </div>
         )}
-      </div>
+      </main>
       <Footer />
     </div>
   );

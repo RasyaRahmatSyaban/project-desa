@@ -701,10 +701,10 @@ export default function APBDes() {
 
   return (
     <div
-      className="p-6 space-y-8 bg-gray-50 min-h-screen"
+      className="space-y-8 bg-gray-50 min-h-screen"
       style={{ fontFamily: "poppins" }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Manajemen APBDes</h1>

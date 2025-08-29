@@ -269,20 +269,20 @@ export default function Media() {
     >
       <Navbar />
 
-      <div className="container mx-auto px-4 py-8 flex-grow">
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <h1 className="text-4xl md:text-9xl font-bold bg-gradient-to-r from-[#6CABCA] to-[#315263] bg-clip-text text-transparent mb-2 py-5">
-              Media Digital Desa
-            </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto pt-5">
-              Dokumentasi kegiatan dan momen penting desa dalam bentuk foto dan
-              video
-            </p>
-          </div>
+      <div className="w-full flex-grow">
+        {/* Header */}
+        <div className="w-full px-8 md:px-18 lg:px-32 py-8 text-center">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-[#6CABCA] to-[#315263] bg-clip-text text-transparent mb-2 py-5">
+            Media Digital Desa
+          </h1>
+          <p className="text-gray-600 max-w-2xl text-lg md:text-xl lg:text-2xl mx-auto pt-5">
+            Dokumentasi kegiatan dan momen penting desa dalam bentuk foto dan
+            video
+          </p>
+        </div>
 
-          {/* Summary Cards */}
+        {/* Summary Cards */}
+        <div className="w-full px-8 md:px-18 lg:px-32">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-2xl shadow-md p-6">
               <div className="flex justify-between items-center mb-4">
@@ -327,395 +327,300 @@ export default function Media() {
           </div>
 
           {/* Filter and Search */}
-          <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-              {/* Year Selection */}
-              <div className="flex items-center gap-2">
-                <FaCalendarAlt className="text-[#6CABCA]" />
-                <span className="text-gray-700 font-medium">Pilih Tahun:</span>
-                <select
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6CABCA] focus:border-[#6CABCA]"
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  value={selectedYear}
+          <div className="w-full mb-6">
+            <div className="bg-white rounded-2xl shadow-md p-6">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                {/* Year Selection */}
+                <div className="flex items-center gap-2">
+                  <FaCalendarAlt className="text-[#6CABCA]" />
+                  <span className="text-gray-700 font-medium">
+                    Pilih Tahun:
+                  </span>
+                  <select
+                    className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6CABCA] focus:border-[#6CABCA]"
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    value={selectedYear}
+                  >
+                    {years.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Search */}
+                <div className="relative">
+                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Cari media..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6CABCA] focus:border-[#6CABCA] w-full md:w-64"
+                  />
+                </div>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  onClick={() => setActiveTab("semua")}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                    activeTab === "semua"
+                      ? "bg-[#B9FF66] text-gray-800 font-medium shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
+                  <FaPhotoVideo
+                    className={
+                      activeTab === "semua" ? "text-gray-800" : "text-[#B9FF66]"
+                    }
+                  />
+                  <span>Semua Media</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("foto")}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                    activeTab === "foto"
+                      ? "bg-[#FE7C66] text-white font-medium shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <FaImage
+                    className={
+                      activeTab === "foto" ? "text-white" : "text-[#FE7C66]"
+                    }
+                  />
+                  <span>Foto</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("video")}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                    activeTab === "video"
+                      ? "bg-[#5DE1C4] text-white font-medium shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <FaVideo
+                    className={
+                      activeTab === "video" ? "text-white" : "text-[#5DE1C4]"
+                    }
+                  />
+                  <span>Video</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("dokumen")}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                    activeTab === "dokumen"
+                      ? "bg-[#6CABCA] text-white font-medium shadow-sm"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <FaFileAlt
+                    className={
+                      activeTab === "dokumen" ? "text-white" : "text-[#6CABCA]"
+                    }
+                  />
+                  <span>Dokumen</span>
+                </button>
               </div>
-
-              {/* Search */}
-              <div className="relative">
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Cari media..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6CABCA] focus:border-[#6CABCA] w-full md:w-64"
-                />
-              </div>
-            </div>
-
-            {/* Filter Tabs */}
-            <div className="mt-4 flex flex-wrap gap-2">
-              <button
-                onClick={() => setActiveTab("semua")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                  activeTab === "semua"
-                    ? "bg-[#B9FF66] text-gray-800 font-medium shadow-sm"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <FaPhotoVideo
-                  className={
-                    activeTab === "semua" ? "text-gray-800" : "text-[#B9FF66]"
-                  }
-                />
-                <span>Semua Media</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("foto")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                  activeTab === "foto"
-                    ? "bg-[#FE7C66] text-white font-medium shadow-sm"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <FaImage
-                  className={
-                    activeTab === "foto" ? "text-white" : "text-[#FE7C66]"
-                  }
-                />
-                <span>Foto</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("video")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                  activeTab === "video"
-                    ? "bg-[#5DE1C4] text-white font-medium shadow-sm"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <FaVideo
-                  className={
-                    activeTab === "video" ? "text-white" : "text-[#5DE1C4]"
-                  }
-                />
-                <span>Video</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("dokumen")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all ${
-                  activeTab === "dokumen"
-                    ? "bg-[#6CABCA] text-white font-medium shadow-sm"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                <FaFileAlt
-                  className={
-                    activeTab === "dokumen" ? "text-white" : "text-[#6CABCA]"
-                  }
-                />
-                <span>Dokumen</span>
-              </button>
             </div>
           </div>
 
           {/* Gallery Grid */}
-          <div className="bg-white rounded-2xl shadow-md p-6">
-            <div className="flex justify-between items-center mb-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-800">
-                  Gallery Media {selectedYear && `Tahun ${selectedYear}`}
-                </h2>
-                <p className="text-gray-600 text-sm">
-                  Dokumentasi kegiatan dan momen penting desa
-                </p>
+          <div className="w-full">
+            <div className="bg-white rounded-2xl shadow-md p-6">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    Gallery Media {selectedYear && `Tahun ${selectedYear}`}
+                  </h2>
+                  <p className="text-gray-600 text-sm">
+                    Dokumentasi kegiatan dan momen penting desa
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {isLoading ? (
-              <div className="flex justify-center items-center py-12">
-                <FaSpinner className="animate-spin text-4xl text-[#6CABCA]" />
-              </div>
-            ) : error ? (
-              <div className="flex flex-col justify-center items-center py-12">
-                <FaExclamationTriangle className="text-4xl text-yellow-500 mb-2" />
-                <p className="text-gray-600">{error}</p>
-                <button
-                  onClick={fetchMediaData}
-                  className="mt-4 px-4 py-2 bg-[#6CABCA] text-white rounded-lg hover:bg-opacity-90 transition"
-                >
-                  Coba Lagi
-                </button>
-              </div>
-            ) : filteredData.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {paginatedData.map((media) => (
-                    <div
-                      key={media.id}
-                      className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                    >
-                      {/* Media Title */}
-                      <div className="p-3 border-b">
-                        <h3 className="font-medium text-gray-800 truncate">
-                          {media.nama}
-                        </h3>
-                        <div className="flex justify-between items-center mt-1">
-                          <div className="flex items-center gap-1 text-xs text-gray-500">
-                            <FaCalendarAlt />
-                            <span>
-                              {MediaService.formatDate(media.created_at)}
-                            </span>
+              {isLoading ? (
+                <div className="flex justify-center items-center py-12">
+                  <FaSpinner className="animate-spin text-4xl text-[#6CABCA]" />
+                </div>
+              ) : error ? (
+                <div className="flex flex-col justify-center items-center py-12">
+                  <FaExclamationTriangle className="text-4xl text-yellow-500 mb-2" />
+                  <p className="text-gray-600">{error}</p>
+                  <button
+                    onClick={fetchMediaData}
+                    className="mt-4 px-4 py-2 bg-[#6CABCA] text-white rounded-lg hover:bg-opacity-90 transition"
+                  >
+                    Coba Lagi
+                  </button>
+                </div>
+              ) : filteredData.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {paginatedData.map((media) => (
+                      <div
+                        key={media.id}
+                        className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+                      >
+                        {/* Media Title */}
+                        <div className="p-3 border-b">
+                          <h3 className="font-medium text-gray-800 truncate">
+                            {media.nama}
+                          </h3>
+                          <div className="flex justify-between items-center mt-1">
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                              <FaCalendarAlt />
+                              <span>
+                                {MediaService.formatDate(media.tgl_upload)}
+                              </span>
+                            </div>
+                            <div className="text-xs font-semibold text-gray-500">
+                              {media.tipe.charAt(0).toUpperCase() +
+                                media.tipe.slice(1)}
+                            </div>
                           </div>
-                          <div className="flex items-center gap-1 text-xs">
+                        </div>
+
+                        {/* Media Thumbnail */}
+                        <div
+                          className="relative w-full aspect-w-16 aspect-h-9 bg-gray-200 overflow-hidden cursor-pointer"
+                          onClick={() => handlePreview(media)}
+                        >
+                          <div className="flex items-center justify-center w-full h-full">
                             {media.tipe === "foto" ? (
-                              <span className="bg-gray-100 bg-opacity-20 text-[#FE7C66] px-2 py-0.5 rounded-full flex items-center gap-1">
-                                <FaImage /> Foto
-                              </span>
+                              <img
+                                src={
+                                  MediaService.getMediaUrl(media.file) ||
+                                  "/placeholder.svg?height=400&width=600"
+                                }
+                                alt={media.nama}
+                                className="w-full h-full object-cover"
+                              />
                             ) : media.tipe === "video" ? (
-                              <span className="bg-gray-100 bg-opacity-20 text-[#5DE1C4] px-2 py-0.5 rounded-full flex items-center gap-1">
-                                <FaVideo /> Video
-                              </span>
+                              <div className="relative w-full h-full">
+                                <img
+                                  src={
+                                    getVideoThumbnail(media) ||
+                                    "/placeholder-video.svg"
+                                  }
+                                  alt="Video Thumbnail"
+                                  className="w-full h-full object-cover opacity-80"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                                    <FaPlay className="text-[#6CABCA] text-2xl" />
+                                  </div>
+                                </div>
+                              </div>
                             ) : (
-                              <span className="bg-gray-100 bg-opacity-20 text-[#6CABCA] px-2 py-0.5 rounded-full flex items-center gap-1">
-                                <FaFileAlt /> Dokumen
-                              </span>
+                              <div className="flex flex-col items-center justify-center w-full h-full text-gray-400">
+                                <FaFileAlt className="text-5xl mb-2" />
+                                <span className="text-sm">Dokumen</span>
+                              </div>
                             )}
                           </div>
                         </div>
-                      </div>
 
-                      {/* Media Thumbnail */}
-                      <div className="relative aspect-[4/3] overflow-hidden">
-                        {media.tipe === "foto" ? (
-                          <img
-                            src={
-                              MediaService.getMediaUrl(media.file) ||
-                              "/placeholder.svg?height=300&width=400" ||
-                              "/placeholder.svg" ||
-                              "/placeholder.svg" ||
-                              "/placeholder.svg" ||
-                              "/placeholder.svg"
+                        {/* Media Actions */}
+                        <div className="p-3 flex justify-between items-center">
+                          <button
+                            onClick={() => handlePreview(media)}
+                            className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#6CABCA] transition"
+                          >
+                            <FaEye />
+                            <span>Lihat</span>
+                          </button>
+                          <a
+                            href={MediaService.getMediaUrl(media.file)}
+                            download={media.nama}
+                            className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#6CABCA] transition"
+                            onClick={(e) =>
+                              handleDownload(
+                                e,
+                                MediaService.getMediaUrl(media.file),
+                                media.nama
+                              )
                             }
-                            alt={media.nama}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src =
-                                "/placeholder.svg?height=300&width=400";
-                            }}
-                          />
-                        ) : media.tipe === "video" ? (
-                          <>
-                            <img
-                              src={
-                                getVideoThumbnail(media) || "/placeholder.svg"
-                              }
-                              alt={media.nama}
-                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src =
-                                  "/placeholder.svg?height=300&width=400";
-                              }}
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="bg-black bg-opacity-50 rounded-full p-3 text-white">
-                                <FaPlay />
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100">
-                            <FaFileAlt className="text-[#6CABCA] text-5xl mb-2" />
-                            <span className="text-sm text-gray-600">
-                              Dokumen PDF
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handlePreview(media)}
-                              className="bg-white p-2 rounded-full shadow-md hover:bg-[#6CABCA] hover:text-white transition-colors"
-                              title="Lihat Detail"
-                            >
-                              <FaEye />
-                            </button>
-                            <button
-                              onClick={(e) =>
-                                handleDownload(
-                                  e,
-                                  MediaService.getMediaUrl(media.file),
-                                  media.file.split("/").pop()
-                                )
-                              }
-                              className="bg-white p-2 rounded-full shadow-md hover:bg-[#B9FF66] hover:text-gray-800 transition-colors"
-                              title="Unduh"
-                            >
-                              <FaDownload />
-                            </button>
-                          </div>
+                          >
+                            <FaDownload />
+                            <span>Unduh</span>
+                          </a>
                         </div>
                       </div>
+                    ))}
+                  </div>
 
-                      {/* Media Description */}
-                      <div className="p-3">
-                        <p className="text-sm text-gray-600 line-clamp-2">
-                          {media.deskripsi}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex justify-center mt-8">
-                    <div className="flex items-center gap-2">
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex justify-center items-center mt-8 space-x-2">
                       <button
-                        onClick={() =>
-                          handlePageChange(Math.max(currentPage - 1, 1))
-                        }
+                        onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className="px-3 py-1 rounded-md bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-50"
                       >
-                        &laquo; Prev
+                        Sebelumnya
                       </button>
-
-                      {Array.from({ length: totalPages }).map((_, index) => (
+                      {Array.from({ length: totalPages }, (_, i) => (
                         <button
-                          key={index}
-                          onClick={() => handlePageChange(index + 1)}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                            currentPage === index + 1
-                              ? "bg-[#6CABCA] text-white"
-                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          key={i}
+                          onClick={() => handlePageChange(i + 1)}
+                          className={`px-4 py-2 border rounded-lg ${
+                            currentPage === i + 1
+                              ? "bg-[#6CABCA] text-white border-[#6CABCA]"
+                              : "bg-white text-gray-600 hover:bg-gray-100"
                           }`}
                         >
-                          {index + 1}
+                          {i + 1}
                         </button>
                       ))}
-
                       <button
-                        onClick={() =>
-                          handlePageChange(
-                            Math.min(currentPage + 1, totalPages)
-                          )
-                        }
+                        onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className="px-3 py-1 rounded-md bg-gray-100 text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 border rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-50"
                       >
-                        Next &raquo;
+                        Berikutnya
                       </button>
                     </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="text-center py-12">
-                <FaPhotoVideo className="text-gray-300 text-5xl mx-auto mb-3" />
-                <p className="text-gray-500">Tidak ada media yang ditemukan</p>
-                <p className="text-gray-400 text-sm">
-                  Coba ubah filter atau kata kunci pencarian
-                </p>
-              </div>
-            )}
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-600">
+                    Tidak ada media yang ditemukan untuk pencarian ini.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Preview Modal - Dengan background blur dan max-height */}
-      {showPreviewModal && currentItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto py-8">
-          {/* Backdrop with blur */}
+      {/* Preview Modal */}
+      {showPreviewModal && (
+        <div
+          className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-75 flex items-center justify-center p-4"
+          onClick={() => setShowPreviewModal(false)}
+        >
           <div
-            className="fixed inset-0 backdrop-blur-sm bg-black/40"
-            onClick={() => setShowPreviewModal(false)}
-          ></div>
-
-          {/* Modal content */}
-          <div
-            className="relative w-full max-w-5xl mx-4 bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+            className="relative bg-white rounded-lg p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
-              <h3 className="text-xl font-bold text-gray-800 truncate">
-                {currentItem.tipe === "foto" ? (
-                  <>
-                    <FaImage className="inline-block mr-2 text-[#FE7C66]" />{" "}
-                    Foto: {currentItem.nama}
-                  </>
-                ) : currentItem.tipe === "video" ? (
-                  <>
-                    <FaVideo className="inline-block mr-2 text-[#5DE1C4]" />{" "}
-                    Video: {currentItem.nama}
-                  </>
-                ) : (
-                  <>
-                    <FaFileAlt className="inline-block mr-2 text-[#6CABCA]" />{" "}
-                    Dokumen: {currentItem.nama}
-                  </>
-                )}
+            <button
+              onClick={() => setShowPreviewModal(false)}
+              className="absolute -top-3 -right-3 rounded-full p-2 shadow-lg hover:bg-gray-200 transition"
+            >
+              <FaTimesCircle className="text-2xl" />
+            </button>
+            <div className="mb-4">
+              <h3 className="text-xl font-bold text-gray-800">
+                {currentItem.nama}
               </h3>
-              <button
-                onClick={() => setShowPreviewModal(false)}
-                className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
-              >
-                <FaTimesCircle className="text-gray-600" />
-              </button>
+              <p className="text-sm text-gray-500">{currentItem.deskripsi}</p>
             </div>
-
-            {/* Content - scrollable */}
-            <div className="p-6 overflow-auto">
-              {/* Media Content */}
-              <div className="mb-4">{renderMediaContent()}</div>
-
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-700 mb-4">{currentItem.deskripsi}</p>
-
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                  <p className="flex items-center gap-1">
-                    <FaCalendarAlt className="text-[#6CABCA]" />
-                    <span className="font-medium">Tanggal:</span>{" "}
-                    {MediaService.formatDate(currentItem.created_at)}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer - sticky */}
-            <div className="mt-auto p-4 border-t bg-white sticky bottom-0">
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={() => setShowPreviewModal(false)}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Tutup
-                </button>
-                <button
-                  onClick={(e) =>
-                    handleDownload(
-                      e,
-                      MediaService.getMediaUrl(currentItem.file),
-                      currentItem.file.split("/").pop()
-                    )
-                  }
-                  className="px-4 py-2 bg-[#B9FF66] text-gray-800 rounded-lg hover:bg-opacity-90 transition-colors flex items-center gap-2"
-                >
-                  <FaDownload />
-                  <span>Unduh</span>
-                </button>
-              </div>
-            </div>
+            {renderMediaContent()}
           </div>
         </div>
       )}

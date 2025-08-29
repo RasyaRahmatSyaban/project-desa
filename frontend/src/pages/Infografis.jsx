@@ -49,7 +49,7 @@ const HeroSection = ({ activeTab, setActiveTab }) => {
     }`;
 
   return (
-    <section className="relative bg-white h-auto px-2 md:px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-12 pt-12 md:pt-20">
+    <section className="relative bg-white md:mx-30 h-auto grid grid-cols-1 md:grid-cols-2 items-center gap-12 pt-12 md:pt-20">
       {/* ICON */}
       <div className="flex justify-center md:justify-around ">
         <img
@@ -60,9 +60,9 @@ const HeroSection = ({ activeTab, setActiveTab }) => {
       </div>
 
       {/* KETERANGAN DAN BUTTON */}
-      <div className="text-center max-w-lg z-10">
+      <div className="text-center w-full z-10">
         <h2
-          className="text-[28px] md:text-4xl font-bold md:leading-snug leading-none bg-gradient-to-t from-gray-600 to-gray-300 bg-clip-text text-transparent"
+          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold md:leading-snug leading-none text-black"
           style={{ fontFamily: "poppins" }}
         >
           Halaman ini menyajikan informasi dalam bentuk visual infografis

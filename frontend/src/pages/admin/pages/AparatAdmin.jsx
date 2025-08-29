@@ -285,7 +285,7 @@ const AparatAdmin = () => {
       className="p-6 bg-gray-50 min-h-screen"
       style={{ fontFamily: "poppins" }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full mx-auto">
         <div className="flex items-center gap-3 mb-6">
           <div className="bg-blue-100 p-2 rounded-lg">
             <FaUser className="text-blue-500 text-xl" />

@@ -92,7 +92,7 @@ export default function Pelayanan() {
       >
         {/* Hero Section */}
         <div className="w-full bg-gradient-to-r from-[#6CABCA] to-white py-16 md:py-24">
-          <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="w-full mx-auto px-8 md:px-18 lg:px-32">
             <div className="flex flex-col-reverse md:flex-row items-center justify-between">
               <div className="md:w-1/2 mb-8 md:mb-0">
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight mb-4">
@@ -131,10 +131,7 @@ export default function Pelayanan() {
         </div>
 
         {/* Services Section */}
-        <div
-          id="layanan"
-          className="max-w-6xl mx-auto w-full px-4 md:px-8 py-14 "
-        >
+        <div id="layanan" className="w-full py-14 px-8 md:px-18 lg:px-32">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Layanan Administrasi Desa
@@ -238,7 +235,7 @@ export default function Pelayanan() {
 
         {/* How It Works Section */}
         <div id="panduan" className="w-full bg-gray-100 py-8">
-          <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <div className="w-full px-8 md:px-18 lg:px-32">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
                 Cara Menggunakan Layanan
@@ -293,7 +290,7 @@ export default function Pelayanan() {
         </div>
 
         {/* FAQ Section */}
-        <div className="w-6xl mx-auto px-4 md:px-8 py-12">
+        <div className="w-full px-8 md:px-18 lg:px-32 py-12">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
               Pertanyaan Umum

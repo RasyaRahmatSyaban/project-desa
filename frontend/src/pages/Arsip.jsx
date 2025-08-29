@@ -12,6 +12,7 @@ import {
   FaSpinner,
   FaFilePdf,
   FaExclamationTriangle,
+  FaTimesCircle, // Tambahkan import ini
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -20,11 +21,7 @@ import toast from "../components/Toast";
 
 export default function ArsipSurat() {
   const [suratData, setSuratData] = useState({});
-  const [availableYears, setAvailableYears] = useState([
-    "2025",
-    "2024",
-    "2023",
-  ]);
+  const [availableYears, setAvailableYears] = useState([]);
   const [selectedYear, setSelectedYear] = useState("");
   const [activeTab, setActiveTab] = useState("semua");
   const [searchQuery, setSearchQuery] = useState("");
@@ -112,7 +109,7 @@ export default function ArsipSurat() {
     } else {
       setIsLoading(false);
     }
-  }, [selectedYear]);
+  }, [selectedYear, suratData]);
 
   // Get current year's data
   const currentYearData = suratData[selectedYear] || [];
@@ -140,20 +137,26 @@ export default function ArsipSurat() {
     (item) => item.jenis === "Surat Keluar"
   ).length;
 
-  // Handle preview
+  // Handle preview - PERBAIKAN UTAMA
   const handlePreview = async (item) => {
+    console.log("Preview clicked for item:", item); // Debug log
+
     setPdfLoading(true);
     setPdfError(false);
     setPdfUrl(null);
+    setCurrentItem(item); // Set current item terlebih dahulu
 
     try {
       if (item.file) {
+        console.log("File name:", item.file); // Debug log
+
         // Get the file URL
         const fileUrl = SuratService.getFileUrl(item.file);
-        "File URL for preview:", fileUrl;
+        console.log("File URL:", fileUrl); // Debug log
 
         // Check if file exists
         const fileExists = await SuratService.checkFileExists(item.file);
+        console.log("File exists:", fileExists); // Debug log
 
         if (fileExists) {
           setPdfUrl(fileUrl);
@@ -163,7 +166,7 @@ export default function ArsipSurat() {
           setPdfError(true);
         }
       } else {
-        ("No file attached to this item");
+        console.log("No file attached to this item");
         setPdfError(true);
       }
     } catch (error) {
@@ -171,10 +174,8 @@ export default function ArsipSurat() {
       setPdfError(true);
     } finally {
       setPdfLoading(false);
+      setShowPreviewModal(true); // Tampilkan modal setelah proses selesai
     }
-
-    setCurrentItem(item);
-    setShowPreviewModal(true);
   };
 
   // Handle file download
@@ -212,25 +213,24 @@ export default function ArsipSurat() {
       >
         <Navbar />
 
-        <div className="container mx-auto px-4 py-8 flex-grow">
-          <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="mb-8 text-center">
-              <h1 className="text-4xl md:text-9xl font-bold bg-gradient-to-r from-[#6CABCA] to-[#315263] bg-clip-text text-transparent mb-2 py-5">
-                Arsip Surat Desa
-              </h1>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Akses dan unduh dokumen surat resmi desa untuk keperluan
-                informasi dan transparansi publik
-              </p>
-            </div>
+        <div className="w-full flex-grow">
+          {/* Header */}
+          <div className="w-full px-8 md:px-18 lg:px-32 py-8 text-center">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-[#6CABCA] to-[#315263] bg-clip-text text-transparent mb-2 py-5">
+              Arsip Surat Desa
+            </h1>
+            <p className="text-gray-600 max-w-2xl text-lg md:text-xl lg:text-2xl mx-auto pt-5">
+              Akses dan unduh dokumen surat menyurat desa dengan mudah.
+            </p>
+          </div>
 
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Summary Cards */}
+          <div className="w-full px-8 md:px-18 lg:px-32">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <div className="bg-white rounded-2xl shadow-md p-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-semibold text-gray-800">
-                    Total Surat
+                    Total Dokumen
                   </h3>
                   <div className="bg-gray-100 bg-opacity-20 p-2 rounded-lg">
                     <FaFileAlt className="text-[#B9FF66] text-xl" />
@@ -240,7 +240,7 @@ export default function ArsipSurat() {
                   {currentYearData.length}
                 </div>
                 <p className="text-sm text-gray-600">
-                  Surat tersedia tahun {selectedYear}
+                  Dokumen tersedia ({selectedYear})
                 </p>
               </div>
 
@@ -256,7 +256,9 @@ export default function ArsipSurat() {
                 <div className="text-3xl font-bold text-gray-900 mb-1">
                   {countMasuk}
                 </div>
-                <p className="text-sm text-gray-600">Surat masuk tersedia</p>
+                <p className="text-sm text-gray-600">
+                  Surat masuk ({selectedYear})
+                </p>
               </div>
 
               <div className="bg-white rounded-2xl shadow-md p-6">
@@ -271,12 +273,16 @@ export default function ArsipSurat() {
                 <div className="text-3xl font-bold text-gray-900 mb-1">
                   {countKeluar}
                 </div>
-                <p className="text-sm text-gray-600">Surat keluar tersedia</p>
+                <p className="text-sm text-gray-600">
+                  Surat keluar ({selectedYear})
+                </p>
               </div>
             </div>
+          </div>
 
-            {/* Filter and Search */}
-            <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
+          {/* Filter and Search */}
+          <div className="w-full px-8 md:px-18 lg:px-32 mb-6">
+            <div className="bg-white rounded-2xl shadow-md p-6">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 {/* Year Selection */}
                 <div className="flex items-center gap-2">
@@ -288,7 +294,6 @@ export default function ArsipSurat() {
                     className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#6CABCA] focus:border-[#6CABCA]"
                     onChange={(e) => setSelectedYear(e.target.value)}
                     value={selectedYear}
-                    disabled={isLoading}
                   >
                     {availableYears.map((year) => (
                       <option key={year} value={year}>
@@ -307,7 +312,6 @@ export default function ArsipSurat() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6CABCA] focus:border-[#6CABCA] w-full md:w-64"
-                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -321,7 +325,6 @@ export default function ArsipSurat() {
                       ? "bg-[#B9FF66] text-gray-800 font-medium shadow-sm"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
-                  disabled={isLoading}
                 >
                   <FaFileAlt
                     className={
@@ -337,7 +340,6 @@ export default function ArsipSurat() {
                       ? "bg-[#FE7C66] text-white font-medium shadow-sm"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
-                  disabled={isLoading}
                 >
                   <FaEnvelopeOpen
                     className={
@@ -353,7 +355,6 @@ export default function ArsipSurat() {
                       ? "bg-[#5DE1C4] text-white font-medium shadow-sm"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
-                  disabled={isLoading}
                 >
                   <FaEnvelope
                     className={
@@ -364,127 +365,120 @@ export default function ArsipSurat() {
                 </button>
               </div>
             </div>
+          </div>
 
-            {/* Document List */}
+          {/* Surat Table */}
+          <div className="w-full px-8 md:px-18 lg:px-32">
             <div className="bg-white rounded-2xl shadow-md p-6">
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h2 className="text-xl font-bold text-gray-800">
-                    Daftar Surat Tahun {selectedYear}
+                    Daftar Surat ({selectedYear})
                   </h2>
                   <p className="text-gray-600 text-sm">
-                    Akses dan unduh dokumen surat resmi desa
+                    Total {filteredData.length} surat ditemukan
                   </p>
                 </div>
               </div>
 
               {isLoading ? (
-                <div className="text-center py-8">
-                  <FaSpinner className="animate-spin text-4xl text-[#6CABCA] mx-auto mb-4" />
-                  <p className="mt-2 text-gray-600">Memuat data...</p>
+                <div className="flex justify-center items-center py-12">
+                  <FaSpinner className="animate-spin text-4xl text-[#6CABCA]" />
                 </div>
               ) : error ? (
-                <div className="text-center py-8 text-red-500">
-                  <p>{error}</p>
+                <div className="flex flex-col justify-center items-center py-12">
+                  <FaExclamationTriangle className="text-4xl text-yellow-500 mb-2" />
+                  <p className="text-gray-600">{error}</p>
                   <button
-                    onClick={() => {
-                      // Refetch data for the selected year
-                      setSuratData((prevData) => {
-                        const newData = { ...prevData };
-                        delete newData[selectedYear];
-                        return newData;
-                      });
-                    }}
-                    className="mt-2 px-4 py-2 bg-[#6CABCA] text-white rounded-lg hover:bg-opacity-90 transition-colors"
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-[#6CABCA] text-white rounded-lg hover:bg-opacity-90 transition"
                   >
                     Coba Lagi
                   </button>
                 </div>
-              ) : (
+              ) : filteredData.length > 0 ? (
                 <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 rounded-tl-lg">
-                          No. Surat
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Jenis
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                          Judul
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Nomor & Tanggal
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                          Tanggal
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Judul / Perihal
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
-                          Perihal
-                        </th>
-                        <th className="px-4 py-3 text-right text-sm font-medium text-gray-600 rounded-tr-lg">
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Aksi
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {filteredData.length > 0 ? (
-                        filteredData.map((surat) => (
-                          <tr key={surat.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-                              {surat.nomor}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-800">
-                              <div className="flex items-center gap-2">
-                                {getSuratIcon(surat.jenis)}
-                                <span>{surat.jenis}</span>
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-800">
-                              {surat.judul}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-800">
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {filteredData.map((surat) => (
+                        <tr key={surat.id}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center gap-2 text-sm font-medium">
+                              {getSuratIcon(surat.jenis)}
+                              {surat.jenis}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">
+                              {surat.nomor || "-"}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
                               {formatDate(surat.tanggal)}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-800">
-                              {surat.perihal}
-                            </td>
-                            <td className="px-4 py-3 text-right">
-                              <div className="flex justify-end gap-2">
-                                <button
-                                  onClick={() => handlePreview(surat)}
-                                  className="p-1.5 bg-gray-100 bg-opacity-20 rounded-md hover:bg-gray-200 hover:bg-opacity-30 transition-colors"
-                                  title="Lihat Detail"
-                                >
-                                  <FaEye className="text-[#6CABCA]" />
-                                </button>
-                                {surat.file && (
-                                  <button
-                                    onClick={() => handleDownload(surat.file)}
-                                    className="p-1.5 bg-gray-100 bg-opacity-20 rounded-md hover:bg-gray-200 hover:bg-opacity-30 transition-colors"
-                                    title="Unduh"
-                                  >
-                                    <FaDownload className="text-[#6CABCA]" />
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td
-                            colSpan={6}
-                            className="px-4 py-8 text-center text-gray-500"
-                          >
-                            <FaFileAlt className="text-gray-300 text-5xl mx-auto mb-3" />
-                            <p>Tidak ada surat yang ditemukan</p>
-                            <p className="text-gray-400 text-sm">
-                              Coba ubah filter atau kata kunci pencarian
-                            </p>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 max-w-sm truncate">
+                            <div className="text-sm font-medium text-gray-900">
+                              {surat.judul || "-"}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {surat.perihal || "-"}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex gap-2">
+                              {/* PERBAIKAN: Pass object surat, bukan surat.file */}
+                              <button
+                                onClick={() => handlePreview(surat)}
+                                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition"
+                              >
+                                <FaEye className="mr-1" /> Lihat
+                              </button>
+                              <button
+                                onClick={() => handleDownload(surat.file)}
+                                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-[#6CABCA] hover:bg-[#5892b1] transition"
+                              >
+                                <FaDownload className="mr-1" /> Unduh
+                              </button>
+                            </div>
                           </td>
                         </tr>
-                      )}
+                      ))}
                     </tbody>
                   </table>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-600">
+                    Tidak ada surat yang ditemukan untuk tahun ini.
+                  </p>
                 </div>
               )}
             </div>
@@ -492,129 +486,63 @@ export default function ArsipSurat() {
         </div>
 
         {/* Preview Modal */}
-        {showPreviewModal && currentItem && (
-          <div className="fixed inset-0 backdrop-blur-sm bg-gray-700/30 flex items-center justify-center z-50 transition-all duration-300">
-            <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                  {getSuratIcon(currentItem.jenis)}{" "}
-                  {currentItem.judul || currentItem.perihal}
+        {showPreviewModal && (
+          <div
+            className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-75 flex items-center justify-center p-4"
+            onClick={() => setShowPreviewModal(false)}
+          >
+            <div
+              className="relative bg-white rounded-lg p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowPreviewModal(false)}
+                className="absolute -top-3 -right-3 bg-white text-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-200 transition"
+              >
+                <FaTimesCircle className="text-2xl" />
+              </button>
+              <div className="mb-4">
+                <h3 className="text-xl font-bold text-gray-800">
+                  {currentItem?.judul || "Pratinjau Dokumen"}
                 </h3>
-                <button
-                  onClick={() => setShowPreviewModal(false)}
-                  className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gray-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                <p className="text-sm text-gray-500">
+                  Nomor: {currentItem?.nomor || "-"}
+                </p>
               </div>
 
-              <div className="border-t border-b border-gray-200 py-4 mb-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-gray-500">Nomor Surat</p>
-                    <p className="font-medium">{currentItem.nomor}</p>
+              {/* PDF Viewer */}
+              <div className="relative w-full h-[70vh] bg-gray-100 rounded-lg overflow-hidden">
+                {pdfLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
+                    <FaSpinner className="animate-spin text-4xl text-white" />
                   </div>
-                  <div>
-                    <p className="text-gray-500">Jenis</p>
-                    <p className="font-medium">{currentItem.jenis}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Tanggal</p>
-                    <p className="font-medium">
-                      {formatDate(currentItem.tanggal)}
+                ) : pdfError ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100">
+                    <FaExclamationTriangle className="text-red-500 text-5xl mb-4" />
+                    <p className="text-gray-700 mb-4">
+                      Dokumen tidak dapat dimuat atau tidak tersedia.
                     </p>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() =>
+                          window.open(
+                            SuratService.getFileUrl(currentItem?.file),
+                            "_blank"
+                          )
+                        }
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                      >
+                        Buka di Tab Baru
+                      </button>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-500">Perihal</p>
-                    <p className="font-medium">{currentItem.perihal}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Preview Dokumen
-                </h4>
-                <div className="bg-gray-100 rounded-lg p-4 flex flex-col gap-4 max-w-full overflow-hidden">
-                  {pdfLoading ? (
-                    <div className="flex flex-col items-center justify-center py-8">
-                      <FaSpinner className="animate-spin text-4xl text-[#6CABCA] mb-4" />
-                      <p className="text-center">Memuat dokumen...</p>
-                    </div>
-                  ) : currentItem.file && pdfUrl ? (
-                    <div className="flex flex-col gap-4 min-w-0">
-                      <div className="flex items-center justify-between gap-3 min-w-0">
-                        {/* File name section with text truncation */}
-                        <div className="flex items-center min-w-0 flex-1">
-                          <FaFilePdf className="flex-shrink-0 mr-2 text-red-500" />
-                          <p 
-                            className="font-medium truncate min-w-0"
-                            title={currentItem.file.split("/").pop() || "Dokumen Surat"}
-                          >
-                            {currentItem.file.split("/").pop() || "Dokumen Surat"}
-                          </p>
-                        </div>
-                        
-                        {/* Download button */}
-                        <button
-                          onClick={() => handleDownload(currentItem.file)}
-                          className="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-1 flex-shrink-0 text-sm"
-                        >
-                          <FaDownload className="text-white w-3 h-3" />
-                          <span className="hidden sm:inline">Unduh</span>
-                        </button>
-                      </div>
-
-                      {/* PDF Viewer */}
-                      <div className="h-[400px] w-full border border-gray-200 rounded-lg overflow-hidden bg-white">
-                        <iframe
-                          src={pdfUrl}
-                          className="w-full h-full"
-                          title={currentItem.judul || currentItem.perihal}
-                        >
-                          Browser Anda tidak mendukung tampilan PDF.
-                        </iframe>
-                      </div>
-                    </div>
-                  ) : pdfError ? (
-                    <div className="flex flex-col items-center justify-center py-8 text-red-500 text-center">
-                      <FaExclamationTriangle className="text-4xl mb-4" />
-                      <p className="px-2">Terjadi kesalahan saat memuat dokumen.</p>
-                      <p className="text-sm mt-2 px-2">
-                        File mungkin tidak tersedia atau tidak dapat diakses.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full py-8 text-center">
-                      <FaFileAlt className="text-gray-300 text-5xl mb-3" />
-                      <p className="text-gray-500 px-2">
-                        Dokumen tidak tersedia untuk ditampilkan
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end gap-2">
-                <button
-                  onClick={() => setShowPreviewModal(false)}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Tutup
-                </button>
+                ) : (
+                  <iframe
+                    src={pdfUrl}
+                    className="w-full h-full"
+                    title={currentItem?.judul}
+                  />
+                )}
               </div>
             </div>
           </div>

@@ -3,15 +3,9 @@ import AdminFormPopup from "../components/AdminFormPopup";
 import { useNavigate } from "react-router-dom";
 import AdminService from "../services/AdminService";
 import TableAdmin from "../../../components/admin/TableAdmin";
-import {
-  FaUserShield,
-  FaTrash,
-  FaExchangeAlt,
-  FaPlus,
-  FaEye,
-  FaEyeSlash,
-} from "react-icons/fa";
+import { FaUserShield, FaPlus, FaTrash, FaExchangeAlt } from "react-icons/fa";
 import { logout } from "../../user/authService";
+import toast from "../../../components/Toast";
 
 function getRoleFromToken() {
   const token = localStorage.getItem("token");
@@ -27,14 +21,11 @@ function getRoleFromToken() {
 export default function AdminManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [showAdd, setShowAdd] = useState(false);
   const [transferId, setTransferId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
 
-  // Redirect if not superadmin
   useEffect(() => {
     const role = getRoleFromToken();
     if (role !== "superadmin") {
@@ -44,12 +35,11 @@ export default function AdminManagement() {
 
   const fetchUsers = async () => {
     setLoading(true);
-    setError("");
     try {
       const data = await AdminService.getAllUsers();
       setUsers(data);
-    } catch {
-      setError("Gagal memuat data admin.");
+    } catch (e) {
+      toast.error("Gagal memuat data admin.");
     } finally {
       setLoading(false);
     }
@@ -62,7 +52,7 @@ export default function AdminManagement() {
   const handleDelete = async (idx) => {
     const user = users[idx];
     if (user.role === "superadmin") {
-      setError("Tidak bisa menghapus superadmin.");
+      toast.error("Tidak bisa menghapus superadmin.");
       return;
     }
     setConfirmDeleteId(user.id);
@@ -71,18 +61,18 @@ export default function AdminManagement() {
   const confirmDelete = async () => {
     try {
       await AdminService.deleteUser(confirmDeleteId);
-      setSuccessMsg("User berhasil dihapus.");
+      toast.success("User berhasil dihapus.");
       setConfirmDeleteId(null);
       fetchUsers();
-    } catch {
-      setError("Gagal menghapus user.");
+    } catch (e) {
+      toast.error("Gagal menghapus user.");
     }
   };
 
   const handleTransfer = (idx) => {
     const user = users[idx];
     if (user.role === "superadmin") {
-      setError("User ini sudah superadmin.");
+      toast.info("User ini sudah superadmin.");
       return;
     }
     setTransferId(user.id);
@@ -91,18 +81,17 @@ export default function AdminManagement() {
   const confirmTransfer = async () => {
     try {
       await AdminService.transferSuperadmin(transferId);
-      setSuccessMsg("Superadmin berhasil dipindahkan. Anda akan logout...");
+      toast.success("Superadmin berhasil dipindahkan. Anda akan logout...");
       setTransferId(null);
       setTimeout(() => {
         logout();
       }, 1200);
-    } catch {
-      setError("Gagal transfer superadmin.");
+    } catch (e) {
+      toast.error("Gagal transfer superadmin.");
     }
   };
 
   const handleAddUser = async (formData) => {
-    setError("");
     try {
       await AdminService.addUser(
         formData.nama,
@@ -111,10 +100,10 @@ export default function AdminManagement() {
         "admin"
       );
       setShowAdd(false);
-      setSuccessMsg("User berhasil ditambahkan.");
+      toast.success("User berhasil ditambahkan.");
       fetchUsers();
-    } catch {
-      setError("Gagal menambah user. Email mungkin sudah terdaftar.");
+    } catch (e) {
+      toast.error("Gagal menambah user. Email mungkin sudah terdaftar.");
     }
   };
 
@@ -132,27 +121,25 @@ export default function AdminManagement() {
       <h1 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <FaUserShield /> Manajemen Admin
       </h1>
-      {error && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>
-      )}
-      {successMsg && (
-        <div className="mb-4 p-2 bg-green-100 text-green-700 rounded">
-          {successMsg}
-        </div>
-      )}
+
       <button
-        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
-        onClick={() => setShowAdd(true)}
+        className="mb-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 transition-colors"
+        onClick={() => {
+          console.log("Tombol Tambah Admin diklik. Menampilkan popup.");
+          setShowAdd(true);
+        }}
       >
         <FaPlus /> Tambah Admin
       </button>
+
       <AdminFormPopup
         isOpen={showAdd}
         onClose={() => setShowAdd(false)}
         onSubmit={handleAddUser}
       />
+
       {loading ? (
-        <div>Loading...</div>
+        <div className="text-center text-gray-500">Memuat data...</div>
       ) : (
         <TableAdmin
           columns={columns}
@@ -161,21 +148,25 @@ export default function AdminManagement() {
           onTransfer={handleTransfer}
         />
       )}
+
       {/* Confirm Delete Modal */}
       {confirmDeleteId && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <p>Yakin ingin menghapus user ini?</p>
-            <div className="flex gap-2 mt-4">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 z-[100] flex items-center justify-center">
+          <div className="bg-white p-6 rounded-xl shadow-2xl">
+            <p className="mb-4 text-center">
+              Yakin ingin menghapus user ini? Aksi ini **tidak dapat
+              dibatalkan**.
+            </p>
+            <div className="flex justify-center gap-3">
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-red-600 text-white rounded"
+                className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Ya, Hapus
               </button>
               <button
                 onClick={() => setConfirmDeleteId(null)}
-                className="px-4 py-2 bg-gray-300 rounded"
+                className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
               >
                 Batal
               </button>
@@ -183,21 +174,25 @@ export default function AdminManagement() {
           </div>
         </div>
       )}
+
       {/* Confirm Transfer Modal */}
       {transferId && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 z-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <p>Yakin ingin memindahkan superadmin ke user ini?</p>
-            <div className="flex gap-2 mt-4">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 z-[100] flex items-center justify-center">
+          <div className="bg-white p-6 rounded-xl shadow-2xl">
+            <p className="mb-4 text-center">
+              Yakin ingin memindahkan superadmin ke user ini? Anda akan
+              **otomatis logout**.
+            </p>
+            <div className="flex justify-center gap-3">
               <button
                 onClick={confirmTransfer}
-                className="px-4 py-2 bg-blue-600 text-white rounded"
+                className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Ya, Transfer
               </button>
               <button
                 onClick={() => setTransferId(null)}
-                className="px-4 py-2 bg-gray-300 rounded"
+                className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
               >
                 Batal
               </button>

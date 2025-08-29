@@ -94,7 +94,7 @@ const PendudukService = {
 
   deletePenduduk: async (nik) => {
     try {
-      const response = await api.delete(`/penduduk/${nik}`);
+      const response = await api.delete(`/penduduk/delete/${nik}`);
       return response.data;
     } catch (error) {
       console.error(`Error deleting penduduk with NIK ${nik}:`, error);

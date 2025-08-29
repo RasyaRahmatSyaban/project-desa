@@ -35,6 +35,9 @@ export default function Penduduk() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [isActionLoading, setIsActionLoading] = useState(false);
   const [formData, setFormData] = useState({
     id: 0,
     nama: "",
@@ -191,19 +194,28 @@ export default function Penduduk() {
     }
   };
 
-  const handleDelete = async (nik) => {
-    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-      try {
-        await PendudukService.deletePenduduk(nik);
-        await fetchData();
-        toast.success("Data berhasil dihapus!");
-      } catch (error) {
-        console.error("Error deleting data:", error);
-        toast.error(
-          error.response?.data?.message ||
-            "Terjadi kesalahan saat menghapus data"
-        );
-      }
+  const handleDelete = (nik) => {
+    setItemToDelete(nik);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+
+    setIsActionLoading(true);
+    try {
+      await PendudukService.deletePenduduk(itemToDelete);
+      await fetchData();
+      toast.success("Data berhasil dihapus!");
+    } catch (error) {
+      console.error("Error deleting data:", error);
+      toast.error(
+        error.response?.data?.message || "Terjadi kesalahan saat menghapus data"
+      );
+    } finally {
+      setIsActionLoading(false);
+      setShowDeleteModal(false);
+      setItemToDelete(null);
     }
   };
 
@@ -485,120 +497,167 @@ export default function Penduduk() {
   }
 
   return (
-    <div
-      className="space-y-8 bg-gray-50 min-h-screen"
-      style={{ fontFamily: "poppins" }}
-    >
-      <div className="w-full mx-auto">
-        {activeSection === "dashboard" && (
-          <>
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800">
-                Data Kependudukan
-              </h1>
-              <div className="flex gap-2">
+    <>
+      <div
+        className="space-y-8 bg-gray-50 min-h-screen"
+        style={{ fontFamily: "poppins" }}
+      >
+        <div className="w-full mx-auto">
+          {activeSection === "dashboard" && (
+            <>
+              <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800">
+                  Data Kependudukan
+                </h1>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveSection("manage")}
+                    className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaListAlt size={16} />
+                    <span>Kelola Data</span>
+                  </button>
+                </div>
+              </div>
+              {renderSummaryCards()}
+              <div className="mt-8 space-y-6">
+                {renderTable(
+                  "Total Penduduk",
+                  totalPenduduk,
+                  <FaUsers className="text-blue-500" size={20} />
+                )}
+                {renderTable(
+                  "Jumlah Penduduk Berdasarkan Usia",
+                  pendudukUsia,
+                  <FaUsers className="text-green-500" size={20} />
+                )}
+                {renderTable(
+                  "Jumlah Penduduk Berdasarkan Jenis Kelamin",
+                  [
+                    { kategori: "Laki-laki", total: totalPenduduk[0].total },
+                    { kategori: "Perempuan", total: totalPenduduk[1].total },
+                  ],
+                  <FaUsers className="text-purple-500" size={20} />
+                )}
+                {renderTable(
+                  "Jumlah Penduduk Berdasarkan Keyakinan",
+                  pendudukKeyakinan,
+                  <FaPray className="text-orange-500" size={20} />
+                )}
+              </div>
+            </>
+          )}
+
+          {activeSection === "manage" && (
+            <>
+              <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-800">
+                  Kelola Data Penduduk
+                </h1>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setActiveSection("dashboard")}
+                    className="flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaHome size={16} />
+                    <span>Dashboard</span>
+                  </button>
+                  <button
+                    onClick={() => openForm()}
+                    className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <FaUserPlus size={16} />
+                    <span>Tambah Penduduk</span>
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-6">
+                {showForm ? (
+                  <PopupForm
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleSubmit={handleSubmit}
+                    resetForm={resetForm}
+                    isEditing={isEditing}
+                    kepalaKeluargaList={kepalaKeluargaList}
+                  />
+                ) : (
+                  renderDataList()
+                )}
+              </div>
+            </>
+          )}
+
+          {activeSection === "detail" && (
+            <>
+              <div className="flex items-center gap-4 mb-8">
                 <button
                   onClick={() => setActiveSection("manage")}
-                  className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  <FaListAlt size={16} />
-                  <span>Kelola Data</span>
-                </button>
-              </div>
-            </div>
-            {renderSummaryCards()}
-            <div className="mt-8 space-y-6">
-              {renderTable(
-                "Total Penduduk",
-                totalPenduduk,
-                <FaUsers className="text-blue-500" size={20} />
-              )}
-              {renderTable(
-                "Jumlah Penduduk Berdasarkan Usia",
-                pendudukUsia,
-                <FaUsers className="text-green-500" size={20} />
-              )}
-              {renderTable(
-                "Jumlah Penduduk Berdasarkan Jenis Kelamin",
-                [
-                  { kategori: "Laki-laki", total: totalPenduduk[0].total },
-                  { kategori: "Perempuan", total: totalPenduduk[1].total },
-                ],
-                <FaUsers className="text-purple-500" size={20} />
-              )}
-              {renderTable(
-                "Jumlah Penduduk Berdasarkan Keyakinan",
-                pendudukKeyakinan,
-                <FaPray className="text-orange-500" size={20} />
-              )}
-            </div>
-          </>
-        )}
-
-        {activeSection === "manage" && (
-          <>
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800">
-                Kelola Data Penduduk
-              </h1>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setActiveSection("dashboard")}
-                  className="flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
                 >
                   <FaHome size={16} />
-                  <span>Dashboard</span>
+                  Kembali ke Manajemen
                 </button>
-                <button
-                  onClick={() => openForm()}
-                  className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  <FaUserPlus size={16} />
-                  <span>Tambah Penduduk</span>
-                </button>
+                <h1 className="text-3xl font-bold text-gray-800">
+                  Detail Keluarga
+                </h1>
               </div>
-            </div>
-            <div className="space-y-6">
-              {showForm ? (
-                <PopupForm
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                  handleSubmit={handleSubmit}
-                  resetForm={resetForm}
-                  isEditing={isEditing}
-                  kepalaKeluargaList={kepalaKeluargaList}
-                />
-              ) : (
-                renderDataList()
-              )}
-            </div>
-          </>
-        )}
-
-        {activeSection === "detail" && (
-          <>
-            <div className="flex items-center gap-4 mb-8">
-              <button
-                onClick={() => setActiveSection("manage")}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-              >
-                <FaHome size={16} />
-                Kembali ke Manajemen
-              </button>
-              <h1 className="text-3xl font-bold text-gray-800">
-                Detail Keluarga
-              </h1>
-            </div>
-            <DetailKeluarga
-              selectedNik={selectedNik}
-              pendudukData={pendudukData}
-              onBack={() => setActiveSection("manage")}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          </>
-        )}
+              <DetailKeluarga
+                selectedNik={selectedNik}
+                pendudukData={pendudukData}
+                onBack={() => setActiveSection("manage")}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+      {showDeleteModal && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-gray-700/30 flex items-center justify-center z-50 transition-all duration-300">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md border border-gray-200 animate-modalFadeIn">
+            <div className="mb-6">
+              <p className="text-gray-600 text-md font-medium text-center">
+                Apakah Anda yakin ingin menghapus penduduk{" "}
+                <span className="font-bold">
+                  {(() => {
+                    const penduduk = pendudukData.find(
+                      (p) => p.nik === itemToDelete
+                    );
+                    return penduduk
+                      ? `${penduduk.nama} - ${penduduk.nik} `
+                      : itemToDelete;
+                  })()}
+                </span>
+                ? <br />
+              </p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                disabled={isActionLoading}
+              >
+                Batal
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex items-center gap-2"
+                disabled={isActionLoading}
+              >
+                {isActionLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    <span>Menghapus...</span>
+                  </>
+                ) : (
+                  <span>Hapus</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

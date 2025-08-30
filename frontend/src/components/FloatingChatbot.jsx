@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import csIcon from "../assets/cs.png";
-import ChatbotService from "../services/admin/ChatbotService";
+import ChatbotService from "../services/user/ChatbotService";
 
 const FloatingChatbot = () => {
   const [open, setOpen] = useState(false);

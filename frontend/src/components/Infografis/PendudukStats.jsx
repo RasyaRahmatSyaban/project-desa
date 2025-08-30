@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import PendudukPublicService from "../../services/public/penduduk";
+import PendudukService from "../../services/user/PendudukService";
 
 export default function PendudukStats() {
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ export default function PendudukStats() {
       setLoading(true);
       setError(null);
       try {
-        const { summary, byAgama, byUmur } = await PendudukPublicService.getAllStats();
+        const { summary, byAgama, byUmur } = await PendudukService.getAllStats();
         setSummary(summary || {});
         setByAgama(Array.isArray(byAgama) ? byAgama : []);
         setByUmur(Array.isArray(byUmur) ? byUmur : []);

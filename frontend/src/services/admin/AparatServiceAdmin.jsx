@@ -63,14 +63,15 @@ const validateAparatData = (data) => {
 // Fungsi untuk mengekstrak nama file dari path
 const extractFilename = (path) => {
   if (!path) return null;
+  const str = typeof path === "string" ? path : String(path);
 
   // Jika path berisi 'uploads/', ekstrak hanya nama filenya
-  if (path.includes("uploads/")) {
-    return path.split("/").pop();
+  if (str.includes("uploads/")) {
+    return str.split("/").pop();
   }
 
-  // Jika tidak, kembalikan path asli
-  return path;
+  // Jika tidak, kembalikan path asli (dalam bentuk string)
+  return str;
 };
 
 const AparatServiceAdmin = {
@@ -122,31 +123,22 @@ const AparatServiceAdmin = {
       // Validasi data sebelum dikirim
       validateAparatData(aparatData);
 
-      // Jika ada file foto, gunakan FormData
+      // Backend expects multipart/form-data (upload.single("foto")) even when no foto is provided
+      const formData = new FormData();
+      formData.append("nama", aparatData.nama);
+      formData.append("jabatan", aparatData.jabatan);
+      if (aparatData.nip) formData.append("nip", aparatData.nip.trim());
       if (aparatData.foto instanceof File) {
-        const formData = new FormData();
-        formData.append("nama", aparatData.nama);
-        formData.append("jabatan", aparatData.jabatan);
-        formData.append("nip", aparatData.nip);
-
-        if (aparatData.nip) {
-          formData.append("nip", aparatData.nip.trim());
-        }
-
         formData.append("foto", aparatData.foto);
-
-        const response = await axios.post(`${API_URL}/aparatur`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        return response.data;
-      } else {
-        // Jika tidak ada file foto
-        const response = await secureApi.post("/aparatur", aparatData);
-        return response.data;
       }
+
+      const response = await axios.post(`${API_URL}/aparatur`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
     } catch (error) {
       console.error("Error adding aparat:", error);
       throw error;
@@ -159,35 +151,23 @@ const AparatServiceAdmin = {
       // Validasi data sebelum dikirim
       validateAparatData(aparatData);
 
-      // Jika ada file foto, gunakan FormData
+      // Always use multipart/form-data to satisfy upload.single("foto") middleware
+      const formData = new FormData();
+      formData.append("nama", aparatData.nama);
+      formData.append("jabatan", aparatData.jabatan);
+      if (aparatData.nip) formData.append("nip", aparatData.nip.trim());
+      if (aparatData.telepon) formData.append("telepon", aparatData.telepon);
       if (aparatData.foto instanceof File) {
-        const formData = new FormData();
-        formData.append("nama", aparatData.nama);
-        formData.append("jabatan", aparatData.jabatan);
-        formData.append("nip", aparatData.nip);
-
-        if (aparatData.telepon) {
-          formData.append("telepon", aparatData.telepon);
-        }
-
         formData.append("foto", aparatData.foto);
-
-        const response = await axios.put(
-          `${API_URL}/aparatur/${id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        return response.data;
-      } else {
-        // Jika tidak ada file foto baru
-        const response = await secureApi.put(`/aparatur/${id}`, aparatData);
-        return response.data;
       }
+
+      const response = await axios.put(`${API_URL}/aparatur/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      return response.data;
     } catch (error) {
       console.error(`Error updating aparat with id ${id}:`, error);
       throw error;
@@ -228,14 +208,16 @@ const AparatServiceAdmin = {
   // Get image URL
   getImageUrl: (imagePath) => {
     if (!imagePath) return null;
+    const str = typeof imagePath === "string" ? imagePath : String(imagePath);
 
     // Jika path sudah lengkap (eksternal), gunakan apa adanya
-    if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-      return imagePath;
+    if (str.startsWith("http://") || str.startsWith("https://")) {
+      return str;
     }
 
     // Ekstrak nama file jika path berisi 'uploads/'
-    const filename = extractFilename(imagePath);
+    const filename = extractFilename(str);
+    if (!filename) return null;
 
     // Construct the URL to the image
     return `${API_URL}/uploads/${filename}`;

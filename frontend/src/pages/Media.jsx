@@ -17,7 +17,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import MediaService from "../services/admin/MediaServiceAdm";
+import MediaService from "../services/user/MediaServices";
 
 export default function Media() {
   // State untuk data

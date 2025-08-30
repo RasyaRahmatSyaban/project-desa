@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 /* eslint-enable no-unused-vars */
-import PengumumanService from "../services/admin/PengumumanService";
+import PengumumanService from "../services/user/PengumumanService";
 
 export default function Pengumuman() {
   const [announcements, setAnnouncements] = useState([]);

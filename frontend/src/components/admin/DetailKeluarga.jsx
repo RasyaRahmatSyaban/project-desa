@@ -37,7 +37,17 @@ const DetailKeluarga = ({
   const loadKeluargaData = async () => {
     setIsLoading(true);
     try {
-      const selectedPerson = pendudukData.find((p) => p.nik === selectedNik);
+      // Gunakan data dari props jika tersedia; jika tidak, ambil dari service admin
+      const allPenduduk =
+        Array.isArray(pendudukData) && pendudukData.length > 0
+          ? pendudukData
+          : await PendudukService.getAllPenduduk();
+
+      // Pastikan orang terpilih tersedia, fallback ke API by NIK jika tidak ada pada list
+      const selectedPerson =
+        allPenduduk.find((p) => p.nik === selectedNik) ||
+        (await PendudukService.getPendudukByNik(selectedNik));
+
       if (!selectedPerson) {
         setIsLoading(false);
         return;
@@ -54,7 +64,7 @@ const DetailKeluarga = ({
         kepalaKeluargaData = selectedPerson;
       } else {
         // Jika orang yang dipilih adalah anggota, cari kepala keluarga berdasarkan ID
-        kepalaKeluargaData = pendudukData.find(
+        kepalaKeluargaData = allPenduduk.find(
           (p) => p.id === selectedPerson.id_kepalakeluarga
         );
       }
@@ -63,7 +73,7 @@ const DetailKeluarga = ({
       if (kepalaKeluargaData) {
         // Anggota keluarga adalah semua yang id_kepalakeluarga-nya sama dengan id kepala keluarga
         // ATAU mereka adalah kepala keluarga itu sendiri
-        familyMembers = pendudukData.filter(
+        familyMembers = allPenduduk.filter(
           (p) =>
             p.id_kepalakeluarga === kepalaKeluargaData.id ||
             p.id === kepalaKeluargaData.id

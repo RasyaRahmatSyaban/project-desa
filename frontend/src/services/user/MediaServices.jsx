@@ -16,7 +16,20 @@ const MediaServiceUser = {
   getAllMedia: async () => {
     try {
       const response = await api.get("/media");
-      return response.data.data || [];
+      const data = response.data.data || [];
+      // Tambahkan created_at jika tidak ada (meniru perilaku admin service)
+      return data.map((item) => {
+        if (!item.created_at && item.file) {
+          const filenameParts = item.file.split(".");
+          const possibleTimestamp = Number.parseInt(filenameParts[0]);
+          if (!isNaN(possibleTimestamp)) {
+            item.created_at = new Date(possibleTimestamp).toISOString();
+          } else {
+            item.created_at = new Date().toISOString();
+          }
+        }
+        return item;
+      });
     } catch (error) {
       console.error("Error fetching media:", error);
       return [];
@@ -26,7 +39,17 @@ const MediaServiceUser = {
   getMediaById: async (id) => {
     try {
       const response = await api.get(`/media/${id}`);
-      return response.data.data;
+      const item = response.data.data;
+      if (item && !item.created_at && item.file) {
+        const filenameParts = item.file.split(".");
+        const possibleTimestamp = Number.parseInt(filenameParts[0]);
+        if (!isNaN(possibleTimestamp)) {
+          item.created_at = new Date(possibleTimestamp).toISOString();
+        } else {
+          item.created_at = new Date().toISOString();
+        }
+      }
+      return item;
     } catch (error) {
       console.error(`Error fetching media with id ${id}:`, error);
       return null;
@@ -42,8 +65,11 @@ const MediaServiceUser = {
       return filename;
     }
 
-    // Return the complete URL
-    return `${API_URL}/${filename}`;
+    // Ekstrak nama file dari path jika ada (selaras dengan admin service)
+    const filenameOnly = filename.split("/").pop();
+
+    // Return the complete URL ke uploads
+    return `${API_URL}/uploads/${filenameOnly}`;
   },
 
   // Utility function untuk format tanggal
@@ -67,6 +93,41 @@ const MediaServiceUser = {
       console.error("Error formatting date:", dateString, err);
       return dateString;
     }
+  },
+
+  // Ekstrak tahun dari item media (selaras dengan admin)
+  extractYear: (item) => {
+    if (item?.created_at) {
+      const date = new Date(item.created_at);
+      if (!isNaN(date.getTime())) {
+        return date.getFullYear().toString();
+      }
+      if (typeof item.created_at === "string" && item.created_at.length >= 4) {
+        return item.created_at.substring(0, 4);
+      }
+    }
+
+    if (item?.file) {
+      const filenameParts = item.file.split(".");
+      const possibleTimestamp = Number.parseInt(filenameParts[0]);
+      if (!isNaN(possibleTimestamp)) {
+        return new Date(possibleTimestamp).getFullYear().toString();
+      }
+    }
+
+    return new Date().getFullYear().toString();
+  },
+
+  // Generate thumbnail untuk video (selaras dengan admin)
+  getVideoThumbnail: (item) => {
+    if (!item || !item.file) return "/placeholder.svg?height=300&width=400";
+
+    if (item.thumbnail) {
+      const thumbnailUrl = MediaServiceUser.getMediaUrl(item.thumbnail);
+      return thumbnailUrl;
+    }
+
+    return "/placeholder.svg?height=300&width=400";
   },
 };
 

@@ -13,7 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { ArrowUpRight } from "lucide-react";
-import PendudukService from "../../services/user/PendudukService";
+import PendudukServiceUser from "../../services/user/PendudukServiceUser";
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +48,7 @@ export default function Penduduk() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await PendudukService.getAllStats();
+      const data = await PendudukServiceUser.getAllStats();
       setStats(data);
     } catch (err) {
       console.error("Error fetching data:", err);

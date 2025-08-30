@@ -13,7 +13,7 @@ import {
   FaArrowLeft,
   FaNewspaper,
 } from "react-icons/fa";
-import BeritaService from "../services/user/BeritaService";
+import BeritaServiceUser from "../services/user/BeritaServiceUser";
 
 const BeritaDetail = () => {
   const { id } = useParams();
@@ -41,7 +41,7 @@ const BeritaDetail = () => {
         }
 
         // If not in localStorage or ID doesn't match, fetch from API
-        const data = await BeritaService.getBeritaById(id);
+        const data = await BeritaServiceUser.getBeritaById(id);
         if (!data) {
           setError("Berita tidak ditemukan");
         } else {
@@ -103,7 +103,7 @@ const BeritaDetail = () => {
               <div className="flex flex-wrap gap-3 mt-4">
                 <span className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">
                   <FaCalendarAlt className="inline mr-2" />
-                  {BeritaService.formatDate(berita.tanggalTerbit)}
+                  {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
                 </span>
                 <span className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">
                   <FaUser className="inline mr-2" />
@@ -120,7 +120,7 @@ const BeritaDetail = () => {
               {berita.foto ? (
                 <img
                   src={
-                    BeritaService.getImageUrl(berita.foto) || "/placeholder.svg"
+                    BeritaServiceUser.getImageUrl(berita.foto) || "/placeholder.svg"
                   }
                   alt={berita.judul}
                   className="w-full h-64 md:h-96 object-cover rounded-xl"

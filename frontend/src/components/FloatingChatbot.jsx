@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import csIcon from "../assets/cs.png";
-import ChatbotService from "../services/user/ChatbotService";
+import ChatbotServiceUser from "../services/user/ChatbotServiceUser";
 
 const FloatingChatbot = () => {
   const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ const FloatingChatbot = () => {
     setInput("");
     setLoading(true);
     try {
-      const response = await ChatbotService.chat(
+      const response = await ChatbotServiceUser.chat(
         newMessages.map(({ role, content }) => ({ role, content }))
       );
       if (!response.body) throw new Error("No response body");

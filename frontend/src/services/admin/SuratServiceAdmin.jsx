@@ -91,7 +91,7 @@ const findFileField = (item) => {
   return null;
 };
 
-const SuratService = {
+const SuratServiceAdmin = {
   // GET methods - accessible by both admin and user
   getAllSurat: async () => {
     try {
@@ -214,7 +214,7 @@ const SuratService = {
   // Get surat by year - for user page
   getSuratByYear: async (year) => {
     try {
-      const allSurat = await SuratService.getAllSurat();
+      const allSurat = await SuratServiceAdmin.getAllSurat();
 
       // Filter by year
       return allSurat.filter((surat) => {
@@ -250,7 +250,7 @@ const SuratService = {
   // Get available years - for user page
   getAvailableYears: async () => {
     try {
-      const allSurat = await SuratService.getAllSurat();
+      const allSurat = await SuratServiceAdmin.getAllSurat();
 
       // Extract unique years with better date handling
       const years = allSurat.reduce((acc, surat) => {
@@ -473,7 +473,7 @@ const SuratService = {
       }
 
       // First, get the surat to find the file path
-      const suratList = await SuratService.getSuratMasuk();
+      const suratList = await SuratServiceAdmin.getSuratMasuk();
       const surat = suratList.find((item) => item.id === id);
 
       // If there's a file, request its deletion
@@ -515,7 +515,7 @@ const SuratService = {
       }
 
       // First, get the surat to find the file path
-      const suratList = await SuratService.getSuratKeluar();
+      const suratList = await SuratServiceAdmin.getSuratKeluar();
       const surat = suratList.find((item) => item.id === id);
 
       // If there's a file, request its deletion
@@ -570,7 +570,7 @@ const SuratService = {
     if (!fileName) return null;
 
     try {
-      const fileUrl = SuratService.getFileUrl(fileName);
+      const fileUrl = SuratServiceAdmin.getFileUrl(fileName);
 
       // Fetch the file as a blob
       const response = await fetch(fileUrl);
@@ -608,7 +608,7 @@ const SuratService = {
     if (!fileName) return false;
 
     try {
-      const fileUrl = SuratService.getFileUrl(fileName);
+      const fileUrl = SuratServiceAdmin.getFileUrl(fileName);
       const response = await fetch(fileUrl, { method: "HEAD" });
       return response.ok;
     } catch (error) {
@@ -618,4 +618,4 @@ const SuratService = {
   },
 };
 
-export default SuratService;
+export default SuratServiceAdmin;

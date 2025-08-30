@@ -15,7 +15,7 @@ import {
   FaFilePdf,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import SuratService from "../../services/admin/SuratServiceAdmin";
+import SuratServiceAdmin  from "../../services/admin/SuratServiceAdmin";
 import SuratForm from "../../components/admin/SuratForm";
 import toast from "../../components/Toast";
 
@@ -82,7 +82,7 @@ function SuratAdmin() {
     setError(null);
     try {
       ("Fetching all surat...");
-      const data = await SuratService.getAllSurat();
+      const data = await SuratServiceAdmin.getAllSurat();
       "Fetched data:", data;
       setSuratData(data);
     } catch (err) {
@@ -97,7 +97,7 @@ function SuratAdmin() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await SuratService.getSuratMasuk();
+      const data = await SuratServiceAdmin.getSuratMasuk();
       setSuratData(data);
     } catch (err) {
       setError("Gagal memuat data surat masuk.");
@@ -111,7 +111,7 @@ function SuratAdmin() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await SuratService.getSuratKeluar();
+      const data = await SuratServiceAdmin.getSuratKeluar();
       setSuratData(data);
     } catch (err) {
       setError("Gagal memuat data surat keluar.");
@@ -224,11 +224,11 @@ function SuratAdmin() {
       try {
         if (item.file) {
           // Get the file URL
-          const fileUrl = SuratService.getFileUrl(item.file);
+          const fileUrl = SuratServiceAdmin.getFileUrl(item.file);
           "File URL for preview:", fileUrl;
 
           // Check if file exists
-          const fileExists = await SuratService.checkFileExists(item.file);
+          const fileExists = await SuratServiceAdmin.checkFileExists(item.file);
 
           if (fileExists) {
             setPdfUrl(fileUrl);
@@ -261,7 +261,7 @@ function SuratAdmin() {
     }
 
     try {
-      const success = await SuratService.downloadFile(fileName);
+      const success = await SuratServiceAdmin.downloadFile(fileName);
       if (!success) {
         toast.error("Terjadi kesalahan saat mengunduh file");
       }
@@ -308,11 +308,11 @@ function SuratAdmin() {
       if (formData.jenis === "Surat Masuk") {
         formDataObj.append("pengirim", formData.pengirim);
         formDataObj.append("tanggalTerima", formData.tanggal);
-        result = await SuratService.addSuratMasuk(formDataObj);
+        result = await SuratServiceAdmin.addSuratMasuk(formDataObj);
       } else {
         formDataObj.append("penerima", formData.pengirim); // UI field pengirim digunakan untuk penerima
         formDataObj.append("tanggalKirim", formData.tanggal);
-        result = await SuratService.addSuratKeluar(formDataObj);
+        result = await SuratServiceAdmin.addSuratKeluar(formDataObj);
       }
 
       // Refresh data based on current active tab
@@ -359,11 +359,11 @@ function SuratAdmin() {
       if (formData.jenis === "Surat Masuk") {
         formDataObj.append("pengirim", formData.pengirim);
         formDataObj.append("tanggalTerima", formData.tanggal);
-        await SuratService.updateSuratMasuk(currentItem.id, formDataObj);
+        await SuratServiceAdmin.updateSuratMasuk(currentItem.id, formDataObj);
       } else {
         formDataObj.append("penerima", formData.pengirim);
         formDataObj.append("tanggalKirim", formData.tanggal);
-        await SuratService.updateSuratKeluar(currentItem.id, formDataObj);
+        await SuratServiceAdmin.updateSuratKeluar(currentItem.id, formDataObj);
       }
 
       // Refresh data based on current active tab
@@ -397,9 +397,9 @@ function SuratAdmin() {
       setIsActionLoading(true);
 
       if (currentItem.jenis === "Surat Masuk") {
-        await SuratService.deleteSuratMasuk(currentItem.id);
+        await SuratServiceAdmin.deleteSuratMasuk(currentItem.id);
       } else {
-        await SuratService.deleteSuratKeluar(currentItem.id);
+        await SuratServiceAdmin.deleteSuratKeluar(currentItem.id);
       }
 
       // Refresh data based on current active tab

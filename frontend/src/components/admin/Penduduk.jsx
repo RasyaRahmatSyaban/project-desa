@@ -19,7 +19,7 @@ import {
 
 import PopupForm from "./PopupForm.jsx";
 import DetailKeluarga from "./DetailKeluarga.jsx";
-import PendudukService from "../../services/admin/PendudukService";
+import PendudukServiceAdmin from "../../services/admin/PendudukServiceAdmin.jsx";
 import toast from "../Toast.jsx";
 
 export default function Penduduk() {
@@ -63,9 +63,9 @@ export default function Penduduk() {
     setIsLoading(true);
     setError(null);
     try {
-      const pendudukList = await PendudukService.getAllPenduduk();
+      const pendudukList = await PendudukServiceAdmin.getAllPenduduk();
       setPendudukData(pendudukList);
-      const stats = await PendudukService.getAllStats();
+      const stats = await PendudukServiceAdmin.getAllStats();
       setTotalPenduduk([
         { kategori: "Laki-laki", total: stats.summary.totalLakiLaki },
         { kategori: "Perempuan", total: stats.summary.totalPerempuan },
@@ -116,7 +116,7 @@ export default function Penduduk() {
 
   const fetchKepalaKeluarga = async () => {
     try {
-      const list = await PendudukService.getAllKepalaKeluarga();
+      const list = await PendudukServiceAdmin.getAllKepalaKeluarga();
       setKepalaKeluargaList(list);
     } catch (e) {
       setKepalaKeluargaList([]);
@@ -151,9 +151,9 @@ export default function Penduduk() {
 
     try {
       if (isEditing) {
-        await PendudukService.updatePenduduk(formData.existingNik, formData);
+        await PendudukServiceAdmin.updatePenduduk(formData.existingNik, formData);
       } else {
-        await PendudukService.addPenduduk(formData);
+        await PendudukServiceAdmin.addPenduduk(formData);
       }
       await fetchData();
       resetForm();
@@ -204,7 +204,7 @@ export default function Penduduk() {
 
     setIsActionLoading(true);
     try {
-      await PendudukService.deletePenduduk(itemToDelete);
+      await PendudukServiceAdmin.deletePenduduk(itemToDelete);
       await fetchData();
       toast.success("Data berhasil dihapus!");
     } catch (error) {

@@ -55,7 +55,7 @@ const findFileField = (item) => {
   return null;
 };
 
-const SuratService = {
+const SuratServiceUser = {
   // Combine surat masuk and keluar for public view
   getAllSurat: async () => {
     try {
@@ -107,7 +107,7 @@ const SuratService = {
   // Filter surat by year (string)
   getSuratByYear: async (year) => {
     try {
-      const allSurat = await SuratService.getAllSurat();
+      const allSurat = await SuratServiceUser.getAllSurat();
       return allSurat.filter((surat) => {
         if (!surat.tanggal) return false;
         let suratYear;
@@ -134,7 +134,7 @@ const SuratService = {
   // List available years descending
   getAvailableYears: async () => {
     try {
-      const allSurat = await SuratService.getAllSurat();
+      const allSurat = await SuratServiceUser.getAllSurat();
       const years = allSurat.reduce((acc, surat) => {
         if (!surat.tanggal) return acc;
         let year;
@@ -180,7 +180,7 @@ const SuratService = {
   downloadFile: async (fileName) => {
     if (!fileName) return null;
     try {
-      const fileUrl = SuratService.getFileUrl(fileName);
+      const fileUrl = SuratServiceUser.getFileUrl(fileName);
       const response = await fetch(fileUrl);
       if (!response.ok) {
         throw new Error(`Failed to fetch file: ${response.status} ${response.statusText}`);
@@ -205,7 +205,7 @@ const SuratService = {
   checkFileExists: async (fileName) => {
     if (!fileName) return false;
     try {
-      const fileUrl = SuratService.getFileUrl(fileName);
+      const fileUrl = SuratServiceUser.getFileUrl(fileName);
       const response = await fetch(fileUrl, { method: "HEAD" });
       return response.ok;
     } catch (error) {
@@ -215,4 +215,4 @@ const SuratService = {
   },
 };
 
-export default SuratService;
+export default SuratServiceUser;

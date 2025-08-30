@@ -11,7 +11,7 @@ const api = axios.create({
   },
 });
 
-const APBDesService = {
+const APBDesServiceUser = {
   // Read-only endpoints
   getAllDanaMasuk: async () => {
     try {
@@ -97,4 +97,4 @@ const APBDesService = {
   },
 };
 
-export default APBDesService;
+export default APBDesServiceUser;

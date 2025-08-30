@@ -14,7 +14,7 @@ import {
   FaEdit,
   FaTrash,
 } from "react-icons/fa";
-import PendudukService from "../../services/admin/PendudukService";
+import PendudukServiceAdmin from "../../services/admin/PendudukServiceAdmin";
 
 const DetailKeluarga = ({
   selectedNik,
@@ -41,12 +41,12 @@ const DetailKeluarga = ({
       const allPenduduk =
         Array.isArray(pendudukData) && pendudukData.length > 0
           ? pendudukData
-          : await PendudukService.getAllPenduduk();
+          : await PendudukServiceAdmin.getAllPenduduk();
 
       // Pastikan orang terpilih tersedia, fallback ke API by NIK jika tidak ada pada list
       const selectedPerson =
         allPenduduk.find((p) => p.nik === selectedNik) ||
-        (await PendudukService.getPendudukByNik(selectedNik));
+        (await PendudukServiceAdmin.getPendudukByNik(selectedNik));
 
       if (!selectedPerson) {
         setIsLoading(false);

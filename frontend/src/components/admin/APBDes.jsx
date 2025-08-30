@@ -22,7 +22,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import APBDesService from "../../services/admin/APBDesService";
+import APBDesServiceAdmin from "../../services/admin/APBDesServiceAdmin";
 import DanaMasukForm from "./DanaMasukForm";
 import DanaKeluarForm from "./DanaKeluarForm";
 import toast from "../Toast";
@@ -65,8 +65,8 @@ export default function APBDes() {
     try {
       // Fetch dana masuk and dana keluar
       const [masukData, keluarData] = await Promise.all([
-        APBDesService.getAllDanaMasuk(),
-        APBDesService.getAllDanaKeluar(),
+        APBDesServiceAdmin.getAllDanaMasuk(),
+        APBDesServiceAdmin.getAllDanaKeluar(),
       ]);
 
       setDanaMasuk(masukData);
@@ -117,7 +117,7 @@ export default function APBDes() {
   // Handle form submissions
   const handleAddDanaMasuk = async (formData) => {
     try {
-      await APBDesService.addDanaMasuk(formData);
+      await APBDesServiceAdmin.addDanaMasuk(formData);
       setShowDanaMasukForm(false);
       fetchData();
     } catch (error) {
@@ -130,7 +130,7 @@ export default function APBDes() {
 
   const handleUpdateDanaMasuk = async (id, formData) => {
     try {
-      await APBDesService.updateDanaMasuk(id, formData);
+      await APBDesServiceAdmin.updateDanaMasuk(id, formData);
       setShowDanaMasukForm(false);
       setEditingItem(null);
       fetchData();
@@ -146,7 +146,7 @@ export default function APBDes() {
   const handleDeleteDanaMasuk = async (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        await APBDesService.deleteDanaMasuk(id);
+        await APBDesServiceAdmin.deleteDanaMasuk(id);
         fetchData();
       } catch (error) {
         console.error("Error deleting dana masuk:", error);
@@ -160,7 +160,7 @@ export default function APBDes() {
 
   const handleAddDanaKeluar = async (formData) => {
     try {
-      await APBDesService.addDanaKeluar(formData);
+      await APBDesServiceAdmin.addDanaKeluar(formData);
       setShowDanaKeluarForm(false);
       fetchData();
     } catch (error) {
@@ -173,7 +173,7 @@ export default function APBDes() {
 
   const handleUpdateDanaKeluar = async (id, formData) => {
     try {
-      await APBDesService.updateDanaKeluar(id, formData);
+      await APBDesServiceAdmin.updateDanaKeluar(id, formData);
       setShowDanaKeluarForm(false);
       setEditingItem(null);
       fetchData();
@@ -189,7 +189,7 @@ export default function APBDes() {
   const handleDeleteDanaKeluar = async (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
-        await APBDesService.deleteDanaKeluar(id);
+        await APBDesServiceAdmin.deleteDanaKeluar(id);
         fetchData();
       } catch (error) {
         console.error("Error deleting dana keluar:", error);

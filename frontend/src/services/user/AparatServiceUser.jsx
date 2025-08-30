@@ -46,7 +46,7 @@ const extractFilename = (path) => {
   return path;
 };
 
-const AparatService = {
+const AparatServiceUser = {
   // GET methods
   getAllAparat: async () => {
     try {
@@ -93,10 +93,10 @@ const AparatService = {
       nama: item.nama || "",
       jabatan: item.jabatan || "",
       nip: item.nip || item.nik || "",
-      foto: item.foto ? AparatService.getImageUrl(item.foto) : "",
+      foto: item.foto ? AparatServiceUser.getImageUrl(item.foto) : "",
       telepon: item.telepon || "",
     }));
   },
 };
 
-export default AparatService;
+export default AparatServiceUser;

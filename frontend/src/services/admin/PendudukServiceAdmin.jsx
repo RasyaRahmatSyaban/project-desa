@@ -23,7 +23,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-const PendudukService = {
+const PendudukServiceAdmin = {
   // Admin endpoints (requires authentication)
   getAllPenduduk: async () => {
     try {
@@ -177,10 +177,10 @@ const PendudukService = {
   getStatsSummary: async () => {
     try {
       const [total, kepalaKeluarga, lakiLaki, perempuan] = await Promise.all([
-        PendudukService.getTotalPenduduk(),
-        PendudukService.getTotalKepalaKeluarga(),
-        PendudukService.getTotalLakiLaki(),
-        PendudukService.getTotalPerempuan(),
+        PendudukServiceAdmin.getTotalPenduduk(),
+        PendudukServiceAdmin.getTotalKepalaKeluarga(),
+        PendudukServiceAdmin.getTotalLakiLaki(),
+        PendudukServiceAdmin.getTotalPerempuan(),
       ]);
 
       return {
@@ -203,9 +203,9 @@ const PendudukService = {
   getAllStats: async () => {
     try {
       const [summary, byAgama, byUmur] = await Promise.all([
-        PendudukService.getStatsSummary(),
-        PendudukService.getPendudukByAgama(),
-        PendudukService.getPendudukByUmur(),
+        PendudukServiceAdmin.getStatsSummary(),
+        PendudukServiceAdmin.getPendudukByAgama(),
+        PendudukServiceAdmin.getPendudukByUmur(),
       ]);
 
       return {
@@ -220,4 +220,4 @@ const PendudukService = {
   },
 };
 
-export default PendudukService;
+export default PendudukServiceAdmin;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
-import { logout } from "../../services/user/authService";
+import { logout } from "../../services/user/AuthServiceUser";
 
 const LogoutAdminDialog = ({ onClose }) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);

@@ -17,7 +17,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import MediaService from "../services/user/MediaServices";
+import MediaServiceUser from "../services/user/MediaServiceUser";
 
 export default function Media() {
   // State untuk data
@@ -51,14 +51,14 @@ export default function Media() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await MediaService.getAllMedia();
+      const data = await MediaServiceUser.getAllMedia();
       setMediaData(data);
 
       // Extract unique years from data
       if (data.length > 0) {
         // Pendekatan baru untuk ekstraksi tahun menggunakan fungsi helper
         const uniqueYears = [
-          ...new Set(data.map((item) => MediaService.extractYear(item))),
+          ...new Set(data.map((item) => MediaServiceUser.extractYear(item))),
         ].sort((a, b) => b - a); // Sort years in descending order
 
         setYears(uniqueYears);
@@ -80,7 +80,7 @@ export default function Media() {
     let matchesYear = true;
     if (selectedYear) {
       // Gunakan fungsi helper untuk ekstraksi tahun
-      const itemYear = MediaService.extractYear(item);
+      const itemYear = MediaServiceUser.extractYear(item);
       matchesYear = itemYear === selectedYear;
     }
 
@@ -129,7 +129,7 @@ export default function Media() {
 
   // Get video thumbnail
   const getVideoThumbnail = useCallback((item) => {
-    return MediaService.getVideoThumbnail(item);
+    return MediaServiceUser.getVideoThumbnail(item);
   }, []);
 
   // Handle download - perbaikan untuk langsung mengunduh file
@@ -156,7 +156,7 @@ export default function Media() {
   // Render media content based on type
   const renderMediaContent = () => {
     if (!currentItem) return null;
-    const mediaUrl = MediaService.getMediaUrl(currentItem.file);
+    const mediaUrl = MediaServiceUser.getMediaUrl(currentItem.file);
 
     if (currentItem.tipe === "foto") {
       return (
@@ -474,7 +474,7 @@ export default function Media() {
                             <div className="flex items-center gap-1 text-xs text-gray-500">
                               <FaCalendarAlt />
                               <span>
-                                {MediaService.formatDate(media.tgl_upload)}
+                                {MediaServiceUser.formatDate(media.tgl_upload)}
                               </span>
                             </div>
                             <div className="text-xs font-semibold text-gray-500">
@@ -493,7 +493,7 @@ export default function Media() {
                             {media.tipe === "foto" ? (
                               <img
                                 src={
-                                  MediaService.getMediaUrl(media.file) ||
+                                  MediaServiceUser.getMediaUrl(media.file) ||
                                   "/placeholder.svg?height=400&width=600"
                                 }
                                 alt={media.nama}
@@ -534,13 +534,13 @@ export default function Media() {
                             <span>Lihat</span>
                           </button>
                           <a
-                            href={MediaService.getMediaUrl(media.file)}
+                            href={MediaServiceUser.getMediaUrl(media.file)}
                             download={media.nama}
                             className="flex items-center gap-1 text-sm text-gray-600 hover:text-[#6CABCA] transition"
                             onClick={(e) =>
                               handleDownload(
                                 e,
-                                MediaService.getMediaUrl(media.file),
+                                MediaServiceUser.getMediaUrl(media.file),
                                 media.nama
                               )
                             }

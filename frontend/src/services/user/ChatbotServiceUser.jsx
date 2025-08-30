@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-const ChatbotService = {
+const ChatbotServiceUser = {
   // Public chat endpoint with streaming response
   chat: async (messages) => {
     return fetch(`${API_URL}/chatbot`, {
@@ -11,4 +11,4 @@ const ChatbotService = {
   },
 };
 
-export default ChatbotService;
+export default ChatbotServiceUser;

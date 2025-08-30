@@ -23,7 +23,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import DashboardService from "../../services/admin/DashboardService";
+import DashboardServiceAdmin from "../../services/admin/DashboardServiceAdmin";
 
 const BerandaAdmin = () => {
   // State for dashboard data
@@ -51,7 +51,7 @@ const BerandaAdmin = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await DashboardService.getDashboardSummary();
+      const data = await DashboardServiceAdmin.getDashboardSummary();
       setDashboardData(data);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);

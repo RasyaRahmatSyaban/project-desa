@@ -23,7 +23,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-const MediaService = {
+const MediaServiceAdmin = {
   // GET methods - Dapat diakses oleh admin dan user
   getAllMedia: async () => {
     try {
@@ -310,4 +310,4 @@ const MediaService = {
   },
 };
 
-export default MediaService;
+export default MediaServiceAdmin;

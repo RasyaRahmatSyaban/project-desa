@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AdminService from "../../services/admin/AdminService";
 import TableAdmin from "../../components/admin/TableAdmin";
 import { FaUserShield, FaPlus, FaTrash, FaExchangeAlt } from "react-icons/fa";
-import { logout } from "../../services/user/authService";
+import { logout } from "../../services/user/AuthServiceUser";
 import toast from "../../components/Toast";
 
 function getRoleFromToken() {

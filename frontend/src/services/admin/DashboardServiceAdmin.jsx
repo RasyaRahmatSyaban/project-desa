@@ -1,10 +1,10 @@
 import BeritaServiceAdmin from "./BeritaServiceAdmin";
 import PelayananServiceAdmin from "./PelayananServiceAdmin";
 import PengumumanServiceAdmin from "./PengumumanServiceAdmin";
-import SuratService from "./SuratServiceAdmin";
-import MediaServiceAdmin from "./MediaServiceAdm";
+import SuratServiceAdmin from "./SuratServiceAdmin";
+import MediaServiceAdmin from "./MediaServiceAdmin";
 
-const DashboardService = {
+const DashboardServiceAdmin = {
   // Fetch all summary data for dashboard
   getDashboardSummary: async () => {
     try {
@@ -14,7 +14,7 @@ const DashboardService = {
           BeritaServiceAdmin.getAllBerita(),
           PelayananServiceAdmin.getAllPelayanan(),
           PengumumanServiceAdmin.getAllPengumuman(),
-          SuratService.getAllSurat(),
+          SuratServiceAdmin.getAllSurat(),
           MediaServiceAdmin.getAllMedia(),
         ]);
 
@@ -212,4 +212,4 @@ function generatealerts(pengumumanData, beritaData) {
   return alerts;
 }
 
-export default DashboardService;
+export default DashboardServiceAdmin;

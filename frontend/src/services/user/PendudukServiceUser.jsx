@@ -10,7 +10,7 @@ const api = axios.create({
   },
 });
 
-const PendudukService = {
+const PendudukServiceUser = {
   // Public endpoints (no authentication required)
   getTotalPenduduk: async () => {
     try {
@@ -76,10 +76,10 @@ const PendudukService = {
   getStatsSummary: async () => {
     try {
       const [total, kepalaKeluarga, lakiLaki, perempuan] = await Promise.all([
-        PendudukService.getTotalPenduduk(),
-        PendudukService.getTotalKepalaKeluarga(),
-        PendudukService.getTotalLakiLaki(),
-        PendudukService.getTotalPerempuan(),
+        PendudukServiceUser.getTotalPenduduk(),
+        PendudukServiceUser.getTotalKepalaKeluarga(),
+        PendudukServiceUser.getTotalLakiLaki(),
+        PendudukServiceUser.getTotalPerempuan(),
       ]);
 
       return {
@@ -102,9 +102,9 @@ const PendudukService = {
   getAllStats: async () => {
     try {
       const [summary, byAgama, byUmur] = await Promise.all([
-        PendudukService.getStatsSummary(),
-        PendudukService.getPendudukByAgama(),
-        PendudukService.getPendudukByUmur(),
+        PendudukServiceUser.getStatsSummary(),
+        PendudukServiceUser.getPendudukByAgama(),
+        PendudukServiceUser.getPendudukByUmur(),
       ]);
 
       return {
@@ -119,4 +119,4 @@ const PendudukService = {
   },
 };
 
-export default PendudukService;
+export default PendudukServiceUser;

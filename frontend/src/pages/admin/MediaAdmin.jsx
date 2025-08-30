@@ -15,7 +15,7 @@ import {
   FaTimesCircle,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import MediaService from "../../services/admin/MediaServiceAdm";
+import MediaServiceAdmin from "../../services/admin/MediaServiceAdmin";
 import toast from "../../components/Toast";
 
 const MediaAdmin = () => {
@@ -61,7 +61,7 @@ const MediaAdmin = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await MediaService.getAllMedia();
+      const data = await MediaServiceAdmin.getAllMedia();
       setMediaData(data);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -326,7 +326,7 @@ const MediaAdmin = () => {
       }
 
       // Send to API
-      const result = await MediaService.addMedia(mediaFormData);
+      const result = await MediaServiceAdmin.addMedia(mediaFormData);
       "Media added successfully:", result;
 
       // Refresh data
@@ -441,7 +441,7 @@ const MediaAdmin = () => {
       }
 
       // Send to API
-      await MediaService.updateMedia(currentItem.id, mediaFormData);
+      await MediaServiceAdmin.updateMedia(currentItem.id, mediaFormData);
       ("Media updated successfully");
 
       // Refresh data
@@ -456,7 +456,7 @@ const MediaAdmin = () => {
   const confirmDelete = async () => {
     try {
       // Send to API
-      await MediaService.deleteMedia(currentItem.id);
+      await MediaServiceAdmin.deleteMedia(currentItem.id);
       ("Media deleted successfully");
 
       // Refresh data
@@ -485,7 +485,7 @@ const MediaAdmin = () => {
   const renderMediaContent = () => {
     if (!currentItem) return null;
 
-    const mediaUrl = MediaService.getMediaUrl(currentItem.file);
+    const mediaUrl = MediaServiceAdmin.getMediaUrl(currentItem.file);
 
     const mediaTypeMap = {
       foto: (
@@ -521,7 +521,7 @@ const MediaAdmin = () => {
             controls
             autoPlay
             className="w-full max-h-[70vh]"
-            poster={MediaService.getVideoThumbnail(currentItem)}
+            poster={MediaServiceAdmin.getVideoThumbnail(currentItem)}
             onLoadedData={() => setMediaLoading(false)}
             onError={() => {
               setMediaLoading(false);
@@ -1147,7 +1147,7 @@ const MediaAdmin = () => {
                       <div className="mt-1 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
                         <img
                           src={
-                            MediaService.getMediaUrl(currentItem.thumbnail) ||
+                            MediaServiceAdmin.getMediaUrl(currentItem.thumbnail) ||
                             "/placeholder.svg"
                           }
                           alt="Thumbnail"
@@ -1266,7 +1266,7 @@ const MediaAdmin = () => {
                     <p className="text-gray-500">Tanggal Dibuat</p>
                     <p className="font-medium">
                       {currentItem?.created_at
-                        ? MediaService.formatDate(currentItem.created_at)
+                        ? MediaServiceAdmin.formatDate(currentItem.created_at)
                         : "-"}
                     </p>
                   </div>
@@ -1287,7 +1287,7 @@ const MediaAdmin = () => {
                   onClick={(e) =>
                     handleDownload(
                       e,
-                      MediaService.getMediaUrl(currentItem?.file),
+                      MediaServiceAdmin.getMediaUrl(currentItem?.file),
                       currentItem?.file.split("/").pop()
                     )
                   }

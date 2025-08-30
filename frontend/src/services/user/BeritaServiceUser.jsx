@@ -46,7 +46,7 @@ const extractFilename = (path) => {
   return path;
 };
 
-const BeritaService = {
+const BeritaServiceUser = {
   // GET methods
   getAllBerita: async () => {
     try {
@@ -87,10 +87,10 @@ const BeritaService = {
 
       if (status) {
         // Jika status ditentukan, ambil berita dengan status tersebut
-        allBerita = await BeritaService.getBeritaByStatus(status);
+        allBerita = await BeritaServiceUser.getBeritaByStatus(status);
       } else {
         // Jika tidak, ambil semua berita yang dipublikasikan
-        allBerita = await BeritaService.getPublishedBerita();
+        allBerita = await BeritaServiceUser.getPublishedBerita();
       }
 
       // Sort by date (newest first)
@@ -135,7 +135,7 @@ const BeritaService = {
   // Get latest berita (for featured slider) - only published
   getLatestBerita: async (limit = 3) => {
     try {
-      const publishedBerita = await BeritaService.getPublishedBerita();
+      const publishedBerita = await BeritaServiceUser.getPublishedBerita();
 
       // Sort by date (newest first) and take the specified limit
       return publishedBerita
@@ -196,4 +196,4 @@ const BeritaService = {
   },
 };
 
-export default BeritaService;
+export default BeritaServiceUser;

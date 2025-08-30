@@ -30,7 +30,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-const APBDesService = {
+const APBDesServiceAdmin = {
   // Dana Masuk (Income) endpoints
   getAllDanaMasuk: async () => {
     try {
@@ -168,8 +168,8 @@ const APBDesService = {
     try {
       // Get all dana masuk and dana keluar to extract available years
       const [danaMasuk, danaKeluar] = await Promise.all([
-        APBDesService.getAllDanaMasuk(),
-        APBDesService.getAllDanaKeluar(),
+        APBDesServiceAdmin.getAllDanaMasuk(),
+        APBDesServiceAdmin.getAllDanaKeluar(),
       ]);
 
       // Extract unique years
@@ -214,4 +214,4 @@ const APBDesService = {
   },
 };
 
-export default APBDesService;
+export default APBDesServiceAdmin;

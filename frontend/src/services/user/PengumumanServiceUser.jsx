@@ -11,7 +11,7 @@ const api = axios.create({
   },
 });
 
-const PengumumanService = {
+const PengumumanServiceUser = {
   // Get all active announcements
   getActivePengumuman: async () => {
     try {
@@ -41,4 +41,4 @@ const PengumumanService = {
   },
 };
 
-export default PengumumanService;
+export default PengumumanServiceUser;

@@ -13,8 +13,8 @@ import {
   FaCopy,
   FaSpinner,
 } from "react-icons/fa";
-import PelayananServiceAdmin from "../services/PelayananServiceAdmin";
-import toast from "../../../components/Toast";
+import PelayananServiceAdmin from "../../services/admin/PelayananServiceAdmin";
+import toast from "../../components/Toast";
 
 const PelayananAdmin = () => {
   // State untuk data

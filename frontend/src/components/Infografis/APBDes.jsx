@@ -12,7 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import { ArrowUpRight } from "lucide-react";
-import APBDesService from "../../pages/admin/services/APBDesService";
+import APBDesService from "../../services/admin/APBDesService";
 
 ChartJS.register(
   CategoryScale,

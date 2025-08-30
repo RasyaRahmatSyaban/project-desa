@@ -19,8 +19,8 @@ import {
 
 import PopupForm from "./PopupForm.jsx";
 import DetailKeluarga from "./DetailKeluarga.jsx";
-import PendudukService from "../services/PendudukService";
-import toast from "../../../components/Toast.jsx";
+import PendudukService from "../../services/admin/PendudukService";
+import toast from "../Toast.jsx";
 
 export default function Penduduk() {
   const [pendudukData, setPendudukData] = useState([]);

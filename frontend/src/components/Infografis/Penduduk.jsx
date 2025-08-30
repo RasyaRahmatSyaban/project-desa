@@ -13,7 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { ArrowUpRight } from "lucide-react";
-import PendudukService from "../../pages/admin/services/PendudukService";
+import PendudukService from "../../services/admin/PendudukService";
 
 ChartJS.register(
   CategoryScale,

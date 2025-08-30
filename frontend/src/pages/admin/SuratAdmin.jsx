@@ -15,9 +15,9 @@ import {
   FaFilePdf,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import SuratService from "../services/SuratServiceAdmin";
-import SuratForm from "../components/SuratForm";
-import toast from "../../../components/Toast";
+import SuratService from "../../services/admin/SuratServiceAdmin";
+import SuratForm from "../../components/admin/SuratForm";
+import toast from "../../components/Toast";
 
 function SuratAdmin() {
   const [suratData, setSuratData] = useState([]);

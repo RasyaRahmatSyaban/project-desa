@@ -15,8 +15,8 @@ import {
   FaClock,
   FaSpinner,
 } from "react-icons/fa";
-import PengumumanServiceAdmin from "../services/PengumumanServiceAdmin";
-import toast from "../../../components/Toast";
+import PengumumanServiceAdmin from "../../services/admin/PengumumanServiceAdmin";
+import toast from "../../components/Toast";
 
 const PengumumanAdmin = () => {
   // State for data

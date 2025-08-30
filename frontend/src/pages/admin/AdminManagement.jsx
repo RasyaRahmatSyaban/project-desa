@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import AdminFormPopup from "../components/AdminFormPopup";
+import AdminFormPopup from "../../components/admin/AdminFormPopup";
 import { useNavigate } from "react-router-dom";
-import AdminService from "../services/AdminService";
-import TableAdmin from "../../../components/admin/TableAdmin";
+import AdminService from "../../services/admin/AdminService";
+import TableAdmin from "../../components/admin/TableAdmin";
 import { FaUserShield, FaPlus, FaTrash, FaExchangeAlt } from "react-icons/fa";
-import { logout } from "../../user/authService";
-import toast from "../../../components/Toast";
+import { logout } from "../../services/user/authService";
+import toast from "../../components/Toast";
 
 function getRoleFromToken() {
   const token = localStorage.getItem("token");

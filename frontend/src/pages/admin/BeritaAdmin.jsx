@@ -18,8 +18,8 @@ import {
   FaExchangeAlt,
   FaTrashAlt,
 } from "react-icons/fa";
-import BeritaServiceAdmin from "../services/BeritaServiceAdmin";
-import toast from "../../../components/Toast";
+import BeritaServiceAdmin from "../../services/admin/BeritaServiceAdmin";
+import toast from "../../components/Toast";
 
 const BeritaAdmin = () => {
   // State untuk data

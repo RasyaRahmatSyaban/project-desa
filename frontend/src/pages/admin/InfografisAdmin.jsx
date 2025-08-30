@@ -7,9 +7,9 @@ import {
   FaBuilding,
   FaChartPie,
 } from "react-icons/fa";
-import Penduduk from "../components/Penduduk";
-import APBDes from "../components/APBDes";
-import Fasilitas from "../components/Fasilitas";
+import Penduduk from "../../components/admin/Penduduk";
+import APBDes from "../../components/admin/APBDes";
+import Fasilitas from "../../components/admin/Fasilitas";
 
 export default function InfografisAdmin() {
   const [activeTab, setActiveTab] = useState("penduduk");

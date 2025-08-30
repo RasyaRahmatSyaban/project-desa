@@ -15,7 +15,7 @@ import {
   FaChevronRight,
   FaNewspaper,
 } from "react-icons/fa";
-import BeritaService from "./user/BeritaService";
+import BeritaService from "../services/user/BeritaService";
 
 const Information = () => {
   // State for slide

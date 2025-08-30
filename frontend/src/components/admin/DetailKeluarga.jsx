@@ -14,7 +14,7 @@ import {
   FaEdit,
   FaTrash,
 } from "react-icons/fa";
-import PendudukService from "../services/PendudukService";
+import PendudukService from "../../services/admin/PendudukService";
 
 const DetailKeluarga = ({
   selectedNik,

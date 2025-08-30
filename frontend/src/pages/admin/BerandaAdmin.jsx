@@ -23,7 +23,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import DashboardService from "../services/DashboardService";
+import DashboardService from "../../services/admin/DashboardService";
 
 const BerandaAdmin = () => {
   // State for dashboard data

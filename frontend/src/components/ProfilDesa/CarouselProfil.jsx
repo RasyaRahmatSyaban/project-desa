@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import AparatServiceAdmin from "../../pages/admin/services/AparatServiceAdmin"; // Sesuaikan path
+import AparatServiceAdmin from "../../services/admin/AparatServiceAdmin"; // Sesuaikan path
 
 export default function CarouselAparatur() {
   const [aparatur, setAparatur] = useState([]);

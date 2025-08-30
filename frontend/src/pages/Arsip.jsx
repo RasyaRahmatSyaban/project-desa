@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import SuratService from "../pages/admin/services/SuratServiceAdmin";
+import SuratService from "../services/admin/SuratServiceAdmin";
 import toast from "../components/Toast";
 
 export default function ArsipSurat() {

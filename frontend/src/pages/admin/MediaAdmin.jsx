@@ -15,8 +15,8 @@ import {
   FaTimesCircle,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import MediaService from "../services/MediaServiceAdm";
-import toast from "../../../components/Toast";
+import MediaService from "../../services/admin/MediaServiceAdm";
+import toast from "../../components/Toast";
 
 const MediaAdmin = () => {
   // State untuk data

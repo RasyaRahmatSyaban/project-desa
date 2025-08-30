@@ -1,5 +1,5 @@
-import HeaderAdmin from "../components/HeaderAdmin";
-import SettingAdminComp from "../components/SettingAdminComp";
+import HeaderAdmin from "../../components/admin/HeaderAdmin";
+import SettingAdminComp from "../../components/admin/SettingAdminComp";
 import { useNavigate } from "react-router-dom";
 
 export default function SettingAdmin() {

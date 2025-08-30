@@ -12,7 +12,7 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 // import { update } from "../../user/authService"; // Tidak digunakan lagi
-import AdminService from "../services/AdminService";
+import AdminService from "../../services/admin/AdminService";
 
 const SettingAdminComp = () => {
   const [userData, setUserData] = useState({

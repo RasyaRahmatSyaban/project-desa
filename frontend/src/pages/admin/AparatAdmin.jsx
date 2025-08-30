@@ -15,8 +15,8 @@ import {
   FaExchangeAlt,
   FaTrashAlt,
 } from "react-icons/fa";
-import AparatServiceAdmin from "../services/AparatServiceAdmin";
-import toast from "../../../components/Toast";
+import AparatServiceAdmin from "../../services/admin/AparatServiceAdmin";
+import toast from "../../components/Toast";
 
 const AparatAdmin = () => {
   // State untuk data

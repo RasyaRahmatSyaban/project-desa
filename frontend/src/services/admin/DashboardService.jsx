@@ -1,7 +1,7 @@
 import BeritaServiceAdmin from "./BeritaServiceAdmin";
 import PelayananServiceAdmin from "./PelayananServiceAdmin";
 import PengumumanServiceAdmin from "./PengumumanServiceAdmin";
-import SuratService from "../services/SuratServiceAdmin";
+import SuratService from "./SuratServiceAdmin";
 import MediaServiceAdmin from "./MediaServiceAdm";
 
 const DashboardService = {

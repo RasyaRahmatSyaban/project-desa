@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import AparatServiceAdmin from "../../pages/admin/services/AparatServiceAdmin"; // Sesuaikan path
+import AparatServiceUSer from "../../services/user/AparatServiceUser"; // Sesuaikan path
 
 export default function CarouselAparatur() {
   const [aparatur, setAparatur] = useState([]);
@@ -12,16 +12,16 @@ export default function CarouselAparatur() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch data from API menggunakan AparatServiceAdmin
+  // Fetch data dari API menggunakan AparatService (user)
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const data = await AparatServiceAdmin.getAllAparat();
+        const data = await AparatServiceUSer.getAllAparat();
 
-        const formattedData = AparatServiceAdmin.formatAparatData(data);
+        const formattedData = AparatServiceUSer.formatAparatData(data);
 
         setAparatur(formattedData);
       } catch (error) {

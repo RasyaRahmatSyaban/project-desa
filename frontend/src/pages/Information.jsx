@@ -15,7 +15,7 @@ import {
   FaChevronRight,
   FaNewspaper,
 } from "react-icons/fa";
-import BeritaService from "./user/BeritaService";
+import BeritaServiceUser from "../services/user/BeritaServiceUser";
 
 const Information = () => {
   // State for slide
@@ -45,7 +45,7 @@ const Information = () => {
     setError(null);
     try {
       // Get paginated berita - only published
-      const paginatedData = await BeritaService.getPaginatedBerita(
+      const paginatedData = await BeritaServiceUser.getPaginatedBerita(
         currentPage,
         itemsPerPage,
         "Dipublikasi"
@@ -54,7 +54,7 @@ const Information = () => {
       setTotalPages(paginatedData.totalPages);
 
       // Get latest berita for featured slider - only published
-      const latest = await BeritaService.getLatestBerita(3);
+      const latest = await BeritaServiceUser.getLatestBerita(3);
       setFeaturedBerita(latest);
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -188,7 +188,7 @@ const Information = () => {
                     {berita.foto ? (
                       <img
                         src={
-                          BeritaService.getImageUrl(berita.foto) ||
+                          BeritaServiceUser.getImageUrl(berita.foto) ||
                           "/placeholder.svg"
                         }
                         alt={berita.judul}
@@ -203,7 +203,7 @@ const Information = () => {
                       <div className="flex items-center gap-2 mb-2">
                         <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
                           <FaCalendarAlt className="inline mr-1" />
-                          {BeritaService.formatDate(berita.tanggalTerbit)}
+                          {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
                         </span>
                         <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
                           <FaUser className="inline mr-1" />
@@ -214,7 +214,7 @@ const Information = () => {
                         {berita.judul}
                       </h2>
                       <p className="text-white/80 text-sm mt-1 line-clamp-2">
-                        {BeritaService.getExcerpt(berita.isi, 150)}
+                        {BeritaServiceUser.getExcerpt(berita.isi, 150)}
                       </p>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ const Information = () => {
                         <img
                           className="w-full h-52 sm:h-52 object-cover rounded-2xl cursor-pointer"
                           src={
-                            BeritaService.getImageUrl(berita.foto) ||
+                            BeritaServiceUser.getImageUrl(berita.foto) ||
                             "/placeholder.svg"
                           }
                           alt={berita.judul}
@@ -321,7 +321,7 @@ const Information = () => {
                       <div className="flex justify-between items-center mt-1">
                         <p className="text-gray-700 flex items-center text-xs">
                           <CalendarDots size={18} className="mr-1" />
-                          {BeritaService.formatDate(berita.tanggalTerbit)}
+                          {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
                         </p>
                         <p className="text-gray-700 text-xs">
                           <FaUser className="inline mr-1" />
@@ -329,7 +329,7 @@ const Information = () => {
                         </p>
                       </div>
                       <p className="text-gray-600 text-sm mt-2 line-clamp-3">
-                        {BeritaService.getExcerpt(berita.isi, 100)}
+                        {BeritaServiceUser.getExcerpt(berita.isi, 100)}
                       </p>
                       <button
                         onClick={() => navigateToDetail(berita)}

@@ -16,16 +16,16 @@ import Map from "../pages/Map";
 import DashboardAdmin from "../pages/admin/DashboardAdmin";
 
 // Halaman Admin (Children Pages)
-import BerandaAdmin from "../pages/admin/pages/BerandaAdmin";
-import BeritaAdmin from "../pages/admin/pages/BeritaAdmin";
-import PengumumanAdmin from "../pages/admin/pages/PengumumanAdmin";
-import InfografisAdmin from "../pages/admin/pages/InfografisAdmin";
-import MediaAdmin from "../pages/admin/pages/MediaAdmin";
-import SuratAdmin from "../pages/admin/pages/SuratAdmin";
-import PelayananAdmin from "../pages/admin/pages/PelayananAdmin";
-import SettingAdmin from "../pages/admin/pages/SettingAdmin";
-import AparatAdmin from "../pages/admin/pages/AparatAdmin";
-import AdminManagement from "../pages/admin/pages/AdminManagement";
+import BerandaAdmin from "../pages/admin/BerandaAdmin";
+import BeritaAdmin from "../pages/admin/BeritaAdmin";
+import PengumumanAdmin from "../pages/admin/PengumumanAdmin";
+import InfografisAdmin from "../pages/admin/InfografisAdmin";
+import MediaAdmin from "../pages/admin/MediaAdmin";
+import SuratAdmin from "../pages/admin/SuratAdmin";
+import PelayananAdmin from "../pages/admin/PelayananAdmin";
+import SettingAdmin from "../pages/admin/SettingAdmin";
+import AparatAdmin from "../pages/admin/AparatAdmin";
+import AdminManagement from "../pages/admin/AdminManagement";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {

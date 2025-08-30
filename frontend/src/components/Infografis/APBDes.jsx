@@ -12,7 +12,7 @@ import {
   Legend,
 } from "chart.js";
 import { ArrowUpRight } from "lucide-react";
-import APBDesService from "../../pages/admin/services/APBDesService";
+import APBDesServiceUser from "../../services/user/APBDesServiceUser";
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +48,7 @@ export default function APBDes() {
 
   const fetchAvailableYears = async () => {
     try {
-      const years = await APBDesService.getAvailableYears();
+      const years = await APBDesServiceUser.getAvailableYears();
       setAvailableYears(years);
 
       // Set default selected year to the most recent year or current year
@@ -68,8 +68,8 @@ export default function APBDes() {
     setError(null);
     try {
       const [summary, detail] = await Promise.all([
-        APBDesService.getAPBDesSummary(year),
-        APBDesService.getAPBDesDetail(year),
+        APBDesServiceUser.getAPBDesSummary(year),
+        APBDesServiceUser.getAPBDesDetail(year),
       ]);
       setSummaryData(summary);
       setDetailData(detail);
@@ -132,7 +132,7 @@ export default function APBDes() {
     const expenseData = months.map((month) => expenseByMonth.get(month) || 0);
 
     return {
-      labels: months.map((month) => APBDesService.getMonthName(month)),
+      labels: months.map((month) => APBDesServiceUser.getMonthName(month)),
       datasets: [
         {
           label: "Pendapatan",
@@ -246,7 +246,7 @@ export default function APBDes() {
                   Pendapatan
                 </div>
                 <div className="text-white font-bold text-2xl">
-                  {APBDesService.formatCurrency(getTotalIncome())}
+                  {APBDesServiceUSer.formatCurrency(getTotalIncome())}
                 </div>
                 <button className="flex items-center gap-1 text-white hover:underline">
                   Detail <ArrowUpRight size={16} />
@@ -284,7 +284,7 @@ export default function APBDes() {
                   Pengeluaran
                 </div>
                 <div className="text-white font-bold text-2xl">
-                  {APBDesService.formatCurrency(getTotalExpense())}
+                  {APBDesServiceUser.formatCurrency(getTotalExpense())}
                 </div>
                 <button className="flex items-center gap-1 text-white hover:underline">
                   Detail <ArrowUpRight size={16} />
@@ -322,7 +322,7 @@ export default function APBDes() {
                   Saldo
                 </div>
                 <div className="text-white font-bold text-2xl">
-                  {APBDesService.formatCurrency(getBalance())}
+                  {APBDesServiceUser.formatCurrency(getBalance())}
                 </div>
                 <button className="flex items-center gap-1 text-white hover:underline">
                   Detail <ArrowUpRight size={16} />
@@ -358,7 +358,7 @@ export default function APBDes() {
                         const value = context.raw;
                         return `${
                           context.label
-                        }: ${APBDesService.formatCurrency(value)}`;
+                        }: ${APBDesServiceUser.formatCurrency(value)}`;
                       },
                     },
                   },
@@ -393,7 +393,7 @@ export default function APBDes() {
                         const value = context.raw;
                         return `${
                           context.dataset.label
-                        }: ${APBDesService.formatCurrency(value)}`;
+                        }: ${APBDesServiceUser.formatCurrency(value)}`;
                       },
                     },
                   },
@@ -402,7 +402,7 @@ export default function APBDes() {
                   y: {
                     beginAtZero: true,
                     ticks: {
-                      callback: (value) => APBDesService.formatCurrency(value),
+                      callback: (value) => APBDesServiceUser.formatCurrency(value),
                     },
                   },
                 },
@@ -444,10 +444,10 @@ export default function APBDes() {
                     >
                       <td className="py-3 px-6 text-gray-700">{index + 1}</td>
                       <td className="py-3 px-6 text-gray-700 font-medium">
-                        {APBDesService.getMonthName(item.bulan)}
+                        {APBDesServiceUser.getMonthName(item.bulan)}
                       </td>
                       <td className="py-3 px-6 text-right font-mono font-medium text-green-600">
-                        {APBDesService.formatCurrency(item.total)}
+                        {APBDesServiceUser.formatCurrency(item.total)}
                       </td>
                     </tr>
                   ))
@@ -471,7 +471,7 @@ export default function APBDes() {
                     Total Pendapatan:
                   </td>
                   <td className="py-4 px-6 bg-[#5DE1C4]/10 text-right font-bold font-mono text-green-600 rounded-br-lg">
-                    {APBDesService.formatCurrency(getTotalIncome())}
+                    {APBDesServiceUser.formatCurrency(getTotalIncome())}
                   </td>
                 </tr>
               </tfoot>
@@ -511,10 +511,10 @@ export default function APBDes() {
                     >
                       <td className="py-3 px-6 text-gray-700">{index + 1}</td>
                       <td className="py-3 px-6 text-gray-700 font-medium">
-                        {APBDesService.getMonthName(item.bulan)}
+                        {APBDesServiceUser.getMonthName(item.bulan)}
                       </td>
                       <td className="py-3 px-6 text-right font-mono font-medium text-red-600">
-                        {APBDesService.formatCurrency(item.total)}
+                        {APBDesServiceUser.formatCurrency(item.total)}
                       </td>
                     </tr>
                   ))
@@ -538,7 +538,7 @@ export default function APBDes() {
                     Total Pengeluaran:
                   </td>
                   <td className="py-4 px-6 bg-[#FE7C66]/10 text-right font-bold font-mono text-red-600 rounded-br-lg">
-                    {APBDesService.formatCurrency(getTotalExpense())}
+                    {APBDesServiceUser.formatCurrency(getTotalExpense())}
                   </td>
                 </tr>
               </tfoot>

@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Penduduk from "../components/Infografis/Penduduk";
 import APBDes from "../components/Infografis/APBDes";
-import Fasilitas from "../components/Infografis/Fasilitas";
 import Chart1 from "../assets/chart-1.png";
 
 export default function Infografis() {

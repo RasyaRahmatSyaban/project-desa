@@ -16,7 +16,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import SuratService from "../pages/admin/services/SuratServiceAdmin";
+import SuratServiceUser from "../services/user/SuratServiceUser";
 import toast from "../components/Toast";
 
 export default function ArsipSurat() {
@@ -63,7 +63,7 @@ export default function ArsipSurat() {
   useEffect(() => {
     const fetchYears = async () => {
       try {
-        const years = await SuratService.getAvailableYears();
+        const years = await SuratServiceUser.getAvailableYears();
         setAvailableYears(years);
 
         // Set selected year to the most recent year
@@ -88,7 +88,7 @@ export default function ArsipSurat() {
       setError(null);
 
       try {
-        const data = await SuratService.getSuratByYear(selectedYear);
+        const data = await SuratServiceUser.getSuratByYear(selectedYear);
 
         // Update suratData state with the fetched data
         setSuratData((prevData) => ({
@@ -146,9 +146,9 @@ export default function ArsipSurat() {
 
     try {
       if (item.file) {
-        const fileUrl = SuratService.getFileUrl(item.file);
+        const fileUrl = SuratServiceUser.getFileUrl(item.file);
 
-        const fileExists = await SuratService.checkFileExists(item.file);
+        const fileExists = await SuratServiceUser.checkFileExists(item.file);
 
         if (fileExists) {
           setPdfUrl(fileUrl);
@@ -177,7 +177,7 @@ export default function ArsipSurat() {
     }
 
     try {
-      const success = await SuratService.downloadFile(fileName);
+      const success = await SuratServiceUser.downloadFile(fileName);
       if (!success) {
         toast.error("Terjadi kesalahan saat mengunduh file");
       }
@@ -517,7 +517,7 @@ export default function ArsipSurat() {
                       <button
                         onClick={() =>
                           window.open(
-                            SuratService.getFileUrl(currentItem?.file),
+                            SuratServiceUser.getFileUrl(currentItem?.file),
                             "_blank"
                           )
                         }

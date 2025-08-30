@@ -12,7 +12,7 @@ import {
   FaSpinner,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import PelayananServiceUser from "./user/PelayananService";
+import PelayananServiceUser from "../services/user/PelayananServiceUser";
 
 export default function Pelayanan() {
   // State untuk data

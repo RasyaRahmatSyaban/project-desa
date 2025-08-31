@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import Penduduk from "../../components/admin/Penduduk";
 import APBDes from "../../components/admin/APBDes";
+
 export default function InfografisAdmin() {
   const [activeTab, setActiveTab] = useState("penduduk");
 

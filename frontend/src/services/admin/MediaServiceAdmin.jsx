@@ -299,7 +299,7 @@ const MediaServiceAdmin = {
 
     // If there's a thumbnail field, use it
     if (item.thumbnail) {
-      const thumbnailUrl = MediaService.getMediaUrl(item.thumbnail);
+      const thumbnailUrl = MediaServiceAdmin.getMediaUrl(item.thumbnail);
       "Using thumbnail:", thumbnailUrl;
       return thumbnailUrl;
     }

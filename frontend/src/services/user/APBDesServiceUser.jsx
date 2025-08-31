@@ -57,8 +57,8 @@ const APBDesServiceUser = {
   getAvailableYears: async () => {
     try {
       const [danaMasuk, danaKeluar] = await Promise.all([
-        APBDesService.getAllDanaMasuk(),
-        APBDesService.getAllDanaKeluar(),
+        APBDesServiceUser.getAllDanaMasuk(),
+        APBDesServiceUser.getAllDanaKeluar(),
       ]);
       const years = new Set();
       danaMasuk.forEach((item) => years.add(item.tahun));

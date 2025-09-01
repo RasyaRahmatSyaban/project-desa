@@ -231,7 +231,7 @@ const AparatServiceAdmin = {
       id: item.id,
       nama: item.nama || "",
       jabatan: item.jabatan || "",
-      nip: item.nip || item.nik || "",
+      nip: item.nip || "",
       foto: item.foto ? AparatServiceAdmin.getImageUrl(item.foto) : "",
       telepon: item.telepon || "",
     }));

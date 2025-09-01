@@ -36,9 +36,6 @@ const MediaAdmin = () => {
   const [mediaLoading, setMediaLoading] = useState(false);
   const [mediaError, setMediaError] = useState(false);
 
-  // Add a new state for thumbnail loading
-  // Add this to the state declarations at the top of the component
-
   // State for thumbnail generation loading
   const [isThumbnailLoading, setIsThumbnailLoading] = useState(false);
 
@@ -152,9 +149,6 @@ const MediaAdmin = () => {
     }
   };
 
-  // Add a new function to extract the first frame from a video
-  // Add this function after the handleDownload function and before saveNewItem
-
   // Function to extract the first frame from a video
   const extractThumbnailFromVideo = (videoFile) => {
     return new Promise((resolve, reject) => {
@@ -228,9 +222,6 @@ const MediaAdmin = () => {
     });
   };
 
-  // Modify the saveNewItem function to include automatic thumbnail extraction
-  // Replace the saveNewItem function with this updated version
-
   // Perbaiki fungsi saveNewItem untuk menangani upload file dengan benar
   const saveNewItem = async () => {
     try {
@@ -297,7 +288,6 @@ const MediaAdmin = () => {
       mediaFormData.append("deskripsi", formData.deskripsi);
       mediaFormData.append("file", formData.file);
 
-      // Jika tipe media adalah video dan tidak ada thumbnail yang diupload,
       // ekstrak frame pertama dari video sebagai thumbnail
       if (formData.tipe === "video") {
         let thumbnailFile = formData.thumbnail;
@@ -337,9 +327,6 @@ const MediaAdmin = () => {
       toast.error("Terjadi kesalahan saat menyimpan media.");
     }
   };
-
-  // Modify the saveEditedItem function to include automatic thumbnail extraction
-  // Replace the saveEditedItem function with this updated version
 
   // Perbaiki fungsi saveEditedItem untuk menangani update file dengan benar
   const saveEditedItem = async () => {
@@ -408,7 +395,6 @@ const MediaAdmin = () => {
       if (formData.file) {
         mediaFormData.append("file", formData.file);
 
-        // Jika tipe media adalah video, file baru diupload, dan tidak ada thumbnail baru yang diupload,
         // ekstrak frame pertama dari video sebagai thumbnail
         if (
           formData.tipe === "video" &&
@@ -766,7 +752,7 @@ const MediaAdmin = () => {
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 rounded-tl-lg">
+                    <th className="pl-4 py-3 text-left text-sm font-medium text-gray-600 rounded-tl-lg">
                       ID
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">
@@ -787,7 +773,7 @@ const MediaAdmin = () => {
                   {filteredData.length > 0 ? (
                     filteredData.map((item) => (
                       <tr key={item.id} className="hover:bg-gray-50">
-                        <td className="px-4 py-3 text-sm text-gray-800">
+                        <td className="pl-4 py-3 text-sm text-gray-800">
                           {item.id}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
@@ -1147,8 +1133,9 @@ const MediaAdmin = () => {
                       <div className="mt-1 w-24 h-24 bg-gray-100 rounded-md overflow-hidden">
                         <img
                           src={
-                            MediaServiceAdmin.getMediaUrl(currentItem.thumbnail) ||
-                            "/placeholder.svg"
+                            MediaServiceAdmin.getMediaUrl(
+                              currentItem.thumbnail
+                            ) || "/placeholder.svg"
                           }
                           alt="Thumbnail"
                           className="w-full h-full object-cover"

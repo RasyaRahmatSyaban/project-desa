@@ -246,7 +246,7 @@ export default function APBDes() {
                   Pendapatan
                 </div>
                 <div className="text-white font-bold text-2xl">
-                  {APBDesServiceUSer.formatCurrency(getTotalIncome())}
+                  {APBDesServiceUser.formatCurrency(getTotalIncome())}
                 </div>
                 <button className="flex items-center gap-1 text-white hover:underline">
                   Detail <ArrowUpRight size={16} />
@@ -402,7 +402,8 @@ export default function APBDes() {
                   y: {
                     beginAtZero: true,
                     ticks: {
-                      callback: (value) => APBDesServiceUser.formatCurrency(value),
+                      callback: (value) =>
+                        APBDesServiceUser.formatCurrency(value),
                     },
                   },
                 },

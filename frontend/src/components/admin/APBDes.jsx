@@ -256,7 +256,7 @@ export default function APBDes() {
     const expenseData = months.map((month) => expenseByMonth.get(month) || 0);
 
     return {
-      labels: months.map((month) => APBDesService.getMonthName(month)),
+      labels: months.map((month) => APBDesServiceAdmin.getMonthName(month)),
       datasets: [
         {
           label: "Pendapatan",
@@ -290,7 +290,7 @@ export default function APBDes() {
             </div>
           </div>
           <div className="text-3xl font-bold text-gray-900 mb-1">
-            {APBDesService.formatCurrency(totalPendapatan)}
+            {APBDesServiceAdmin.formatCurrency(totalPendapatan)}
           </div>
           <p className="text-sm text-gray-600">Tahun {selectedYear}</p>
         </div>
@@ -305,7 +305,7 @@ export default function APBDes() {
             </div>
           </div>
           <div className="text-3xl font-bold text-gray-900 mb-1">
-            {APBDesService.formatCurrency(totalPengeluaran)}
+            {APBDesServiceAdmin.formatCurrency(totalPengeluaran)}
           </div>
           <p className="text-sm text-gray-600">Tahun {selectedYear}</p>
         </div>
@@ -322,7 +322,7 @@ export default function APBDes() {
               saldo >= 0 ? "text-green-600" : "text-red-600"
             }`}
           >
-            {APBDesService.formatCurrency(saldo)}
+            {APBDesServiceAdmin.formatCurrency(saldo)}
           </div>
           <p className="text-sm text-gray-600">Tahun {selectedYear}</p>
         </div>
@@ -354,7 +354,7 @@ export default function APBDes() {
                         const value = context.raw;
                         return `${
                           context.label
-                        }: ${APBDesService.formatCurrency(value)}`;
+                        }: ${APBDesServiceAdmin.formatCurrency(value)}`;
                       },
                     },
                   },
@@ -384,7 +384,7 @@ export default function APBDes() {
                         const value = context.raw;
                         return `${
                           context.dataset.label
-                        }: ${APBDesService.formatCurrency(value)}`;
+                        }: ${APBDesServiceAdmin.formatCurrency(value)}`;
                       },
                     },
                   },
@@ -393,7 +393,8 @@ export default function APBDes() {
                   y: {
                     beginAtZero: true,
                     ticks: {
-                      callback: (value) => APBDesService.formatCurrency(value),
+                      callback: (value) =>
+                        APBDesServiceAdmin.formatCurrency(value),
                     },
                   },
                 },
@@ -472,10 +473,10 @@ export default function APBDes() {
                         {item.tahun}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-                        {APBDesService.getMonthName(item.bulan)}
+                        {APBDesServiceAdmin.getMonthName(item.bulan)}
                       </td>
                       <td className="px-4 py-3 text-sm text-green-600 font-mono font-medium text-right">
-                        {APBDesService.formatCurrency(item.jumlah)}
+                        {APBDesServiceAdmin.formatCurrency(item.jumlah)}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-800">
                         {item.sumber}
@@ -523,7 +524,7 @@ export default function APBDes() {
                     Total:
                   </td>
                   <td className="px-4 py-3 font-medium text-right bg-green-50 text-green-600 font-mono">
-                    {APBDesService.formatCurrency(totalPendapatan)}
+                    {APBDesServiceAdmin.formatCurrency(totalPendapatan)}
                   </td>
                   <td
                     colSpan={3}
@@ -605,10 +606,10 @@ export default function APBDes() {
                         {item.tahun}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-                        {APBDesService.getMonthName(item.bulan)}
+                        {APBDesServiceAdmin.getMonthName(item.bulan)}
                       </td>
                       <td className="px-4 py-3 text-sm text-red-600 font-mono font-medium text-right">
-                        {APBDesService.formatCurrency(item.jumlah)}
+                        {APBDesServiceAdmin.formatCurrency(item.jumlah)}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-800">
                         <span className="px-2 py-1 bg-gray-100 rounded-full text-xs font-medium">
@@ -658,7 +659,7 @@ export default function APBDes() {
                     Total:
                   </td>
                   <td className="px-4 py-3 font-medium text-right bg-red-50 text-red-600 font-mono">
-                    {APBDesService.formatCurrency(totalPengeluaran)}
+                    {APBDesServiceAdmin.formatCurrency(totalPengeluaran)}
                   </td>
                   <td
                     colSpan={3}

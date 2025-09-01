@@ -777,14 +777,14 @@ const MediaAdmin = () => {
                           {item.id}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
-                          <div className="flex items-center gap-2">
-                            {getMediaIcon(item.tipe)}
-                            <span>{item.nama}</span>
-                          </div>
+                          <span>{item.nama}</span>
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800">
-                          {item.tipe.charAt(0).toUpperCase() +
-                            item.tipe.slice(1)}
+                          <div className="flex items-center gap-2">
+                            {getMediaIcon(item.tipe)}
+                            {item.tipe.charAt(0).toUpperCase() +
+                              item.tipe.slice(1)}
+                          </div>
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800 truncate max-w-xs">
                           {item.deskripsi}
@@ -1233,7 +1233,20 @@ const MediaAdmin = () => {
                 onClick={() => setShowPreviewModal(false)}
                 className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
               >
-                <FaTimesCircle className="text-gray-600" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
 

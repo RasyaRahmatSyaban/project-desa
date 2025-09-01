@@ -1255,7 +1255,7 @@ const BeritaAdmin = () => {
                 <p>{currentItem?.ringkasan || "Tidak ada ringkasan"}</p>
               </div>
 
-              <div className="text-gray-700">
+              <div className="text-gray-700 px-4">
                 <p className="font-medium mb-2">Konten Lengkap:</p>
                 {currentItem?.isi ? (
                   <div className="prose max-w-none">{currentItem.isi}</div>

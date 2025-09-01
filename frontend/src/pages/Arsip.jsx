@@ -388,31 +388,31 @@ export default function ArsipSurat() {
                   </button>
                 </div>
               ) : filteredData.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
+                <div className="overflow-x-auto over">
+                  <table className="w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                           Jenis
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                           Nomor & Tanggal
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                           Judul / Perihal
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                           Aksi
                         </th>
@@ -421,13 +421,13 @@ export default function ArsipSurat() {
                     <tbody className="bg-white divide-y divide-gray-200">
                       {filteredData.map((surat) => (
                         <tr key={surat.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-3 py-4 whitespace-nowrap">
                             <div className="flex items-center gap-2 text-sm font-medium">
                               {getSuratIcon(surat.jenis)}
                               {surat.jenis}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
+                          <td className="px-3 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">
                               {surat.nomor || "-"}
                             </div>
@@ -435,7 +435,7 @@ export default function ArsipSurat() {
                               {formatDate(surat.tanggal)}
                             </div>
                           </td>
-                          <td className="px-6 py-4 max-w-sm truncate">
+                          <td className="px-3 py-4 max-w-sm truncate">
                             <div className="text-sm font-medium text-gray-900">
                               {surat.judul || "-"}
                             </div>
@@ -443,7 +443,7 @@ export default function ArsipSurat() {
                               {surat.perihal || "-"}
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <td className="px-3 py-4 whitespace-nowrap text-sm font-medium">
                             <div className="flex gap-2">
                               {/* PERBAIKAN: Pass object surat, bukan surat.file */}
                               <button
@@ -488,9 +488,22 @@ export default function ArsipSurat() {
             >
               <button
                 onClick={() => setShowPreviewModal(false)}
-                className="absolute -top-3 -right-3 bg-white text-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-200 transition"
+                className="absolute top-4 right-4 rounded-full p-2 shadow-md hover:bg-gray-100 transition"
               >
-                <FaTimesCircle className="text-2xl" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
               <div className="mb-4">
                 <h3 className="text-xl font-bold text-gray-800">

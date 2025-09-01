@@ -474,7 +474,7 @@ export default function Media() {
                             <div className="flex items-center gap-1 text-xs text-gray-500">
                               <FaCalendarAlt />
                               <span>
-                                {MediaServiceUser.formatDate(media.tgl_upload)}
+                                {MediaServiceUser.formatDate(media.created_at)}
                               </span>
                             </div>
                             <div className="text-xs font-semibold text-gray-500">
@@ -486,42 +486,40 @@ export default function Media() {
 
                         {/* Media Thumbnail */}
                         <div
-                          className="relative w-full aspect-w-16 aspect-h-9 bg-gray-200 overflow-hidden cursor-pointer"
+                          className="relative w-full aspect-[16/9] bg-gray-200 overflow-hidden cursor-pointer"
                           onClick={() => handlePreview(media)}
                         >
-                          <div className="flex items-center justify-center w-full h-full">
-                            {media.tipe === "foto" ? (
+                          {media.tipe === "foto" ? (
+                            <img
+                              src={
+                                MediaServiceUser.getMediaUrl(media.file) ||
+                                "/placeholder.svg?height=400&width=600"
+                              }
+                              alt={media.nama}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          ) : media.tipe === "video" ? (
+                            <div className="relative w-full h-full">
                               <img
                                 src={
-                                  MediaServiceUser.getMediaUrl(media.file) ||
-                                  "/placeholder.svg?height=400&width=600"
+                                  getVideoThumbnail(media) ||
+                                  "/placeholder-video.svg"
                                 }
-                                alt={media.nama}
-                                className="w-full h-full object-cover"
+                                alt="Video Thumbnail"
+                                className="w-full h-full object-cover opacity-80"
                               />
-                            ) : media.tipe === "video" ? (
-                              <div className="relative w-full h-full">
-                                <img
-                                  src={
-                                    getVideoThumbnail(media) ||
-                                    "/placeholder-video.svg"
-                                  }
-                                  alt="Video Thumbnail"
-                                  className="w-full h-full object-cover opacity-80"
-                                />
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                  <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
-                                    <FaPlay className="text-[#6CABCA] text-2xl" />
-                                  </div>
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-16 h-16 bg-white bg-opacity-80 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                                  <FaPlay className="text-[#6CABCA] text-2xl" />
                                 </div>
                               </div>
-                            ) : (
-                              <div className="flex flex-col items-center justify-center w-full h-full text-gray-400">
-                                <FaFileAlt className="text-5xl mb-2" />
-                                <span className="text-sm">Dokumen</span>
-                              </div>
-                            )}
-                          </div>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center justify-center w-full h-full text-gray-400">
+                              <FaFileAlt className="text-5xl mb-2" />
+                              <span className="text-sm">Dokumen</span>
+                            </div>
+                          )}
                         </div>
 
                         {/* Media Actions */}
@@ -605,22 +603,48 @@ export default function Media() {
           onClick={() => setShowPreviewModal(false)}
         >
           <div
-            className="relative bg-white rounded-lg p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            className="relative bg-white rounded-2xl p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setShowPreviewModal(false)}
-              className="absolute -top-3 -right-3 rounded-full p-2 shadow-lg hover:bg-gray-200 transition"
+              className="absolute top-4 right-4 rounded-full p-2 shadow-md hover:bg-gray-100 transition"
             >
-              <FaTimesCircle className="text-2xl" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
-            <div className="mb-4">
-              <h3 className="text-xl font-bold text-gray-800">
+
+            <div className="mb-6 border-b pb-4">
+              <h3 className="text-2xl font-semibold text-gray-900">
                 {currentItem.nama}
               </h3>
-              <p className="text-sm text-gray-500">{currentItem.deskripsi}</p>
+              <div className="flex items-center gap-2 mt-2 text-sm text-gray-600">
+                <FaCalendarAlt className="text-gray-500" />
+                {MediaServiceUser.formatDate(currentItem.created_at)}
+              </div>
             </div>
-            {renderMediaContent()}
+            <div className="mb-6 flex justify-center">
+              <div className="w-full h-full flex items-center justify-center overflow-hidden rounded-xl bg-gray-50">
+                {renderMediaContent({
+                  className: "h-full w-auto object-contain",
+                })}
+              </div>
+            </div>
+            <div className="prose prose-sm text-gray-700 leading-relaxed">
+              <p>{currentItem.deskripsi}</p>
+            </div>
           </div>
         </div>
       )}

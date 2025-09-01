@@ -173,7 +173,7 @@ const Information = () => {
               <p className="text-gray-600">{error}</p>
             </div>
           ) : featuredBerita.length > 0 ? (
-            <div className="relative rounded-lg overflow-hidden shadow-lg w-full mx-auto">
+            <div className="relative rounded-xl border border-gray-200 overflow-hidden shadow-lg w-full mx-auto">
               <div className="relative h-56 sm:h-64 md:h-96">
                 {featuredBerita.map((berita, index) => (
                   <div
@@ -284,13 +284,17 @@ const Information = () => {
             </div>
           ) : beritaData.length > 0 ? (
             <>
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-2">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {beritaData.map((berita) => (
-                  <div key={berita.id} className="w-full h-auto rounded-xl">
+                  <div
+                    key={berita.id}
+                    className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition"
+                  >
+                    {/* Gambar */}
                     <div className="relative">
                       {berita.foto ? (
                         <img
-                          className="w-full h-52 sm:h-52 object-cover rounded-2xl cursor-pointer"
+                          className="w-full h-52 object-cover cursor-pointer"
                           src={
                             BeritaServiceUser.getImageUrl(berita.foto) ||
                             "/placeholder.svg"
@@ -300,35 +304,33 @@ const Information = () => {
                         />
                       ) : (
                         <div
-                          className="w-full h-52 sm:h-52 bg-gray-200 rounded-2xl cursor-pointer flex items-center justify-center"
+                          className="w-full h-52 bg-gray-200 cursor-pointer flex items-center justify-center"
                           onClick={() => navigateToDetail(berita)}
                         >
                           <FaNewspaper className="text-gray-400 text-5xl" />
                         </div>
                       )}
-                      <div className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-1 rounded-full">
-                        <FaTag className="inline mr-1" />
-                        {berita.kategori || "Umum"}
-                      </div>
                     </div>
-                    <div className="mt-4">
+
+                    {/* Konten */}
+                    <div className="p-4">
                       <h3
                         className="text-lg sm:text-xl font-semibold line-clamp-2 cursor-pointer hover:text-blue-600"
                         onClick={() => navigateToDetail(berita)}
                       >
                         {berita.judul}
                       </h3>
-                      <div className="flex justify-between items-center mt-1">
-                        <p className="text-gray-700 flex items-center text-xs">
-                          <CalendarDots size={18} className="mr-1" />
+                      <div className="flex justify-between items-center mt-2 text-xs text-gray-600">
+                        <p className="flex items-center">
+                          <FaCalendarAlt className="mr-1" />
                           {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
                         </p>
-                        <p className="text-gray-700 text-xs">
-                          <FaUser className="inline mr-1" />
+                        <p className="flex items-center">
+                          <FaUser className="mr-1" />
                           {berita.penulis}
                         </p>
                       </div>
-                      <p className="text-gray-600 text-sm mt-2 line-clamp-3">
+                      <p className="text-gray-600 text-sm mt-3 line-clamp-3">
                         {BeritaServiceUser.getExcerpt(berita.isi, 100)}
                       </p>
                       <button

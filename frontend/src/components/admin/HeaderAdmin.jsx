@@ -57,9 +57,6 @@ export default function HeaderAdmin() {
           <div>
             <h1 className="text-xl font-bold flex items-center">
               Dashboard Admin
-              <span className="ml-2 bg-indigo-700/50 text-indigo-200 text-xs px-2 py-0.5 rounded-full">
-                Pro
-              </span>
             </h1>
             <div className="text-sm text-indigo-200 hidden md:block">
               Selamat datang kembali di panel admin

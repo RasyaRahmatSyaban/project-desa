@@ -109,10 +109,6 @@ const BeritaDetail = () => {
                   <FaUser className="inline mr-2" />
                   {berita.penulis}
                 </span>
-                <span className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">
-                  <FaTag className="inline mr-2" />
-                  {berita.kategori || "Umum"}
-                </span>
               </div>
             </div>
 
@@ -120,7 +116,9 @@ const BeritaDetail = () => {
               {berita.foto ? (
                 <img
                   src={
-                    BeritaServiceUser.getImageUrl(berita.foto) || "/placeholder.svg"
+                    berita.foto
+                      ? BeritaServiceUser.getImageUrl(berita.foto)
+                      : "/placeholder.svg"
                   }
                   alt={berita.judul}
                   className="w-full h-64 md:h-96 object-cover rounded-xl"

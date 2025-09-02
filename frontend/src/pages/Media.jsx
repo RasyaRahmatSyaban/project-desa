@@ -220,16 +220,16 @@ export default function Media() {
       );
     } else if (currentItem.tipe === "dokumen") {
       return (
-        <div className="relative bg-gray-100 rounded-lg overflow-hidden">
+        <div className="relative w-full h-[75vh] bg-gray-100 rounded-xl shadow-inner overflow-hidden">
           {mediaLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-10">
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-40 z-10">
               <FaSpinner className="animate-spin text-4xl text-white" />
             </div>
           )}
           <iframe
             src={mediaUrl}
-            className="w-full h-[70vh]"
             title={currentItem.nama}
+            className="w-full h-full rounded-xl border border-gray-200 shadow-sm"
             onLoad={() => setMediaLoading(false)}
             onError={() => {
               setMediaLoading(false);
@@ -237,17 +237,15 @@ export default function Media() {
             }}
           />
           {mediaError && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100">
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-xl border border-gray-300">
               <FaExclamationTriangle className="text-red-500 text-5xl mb-4" />
               <p className="text-gray-700 mb-4">Dokumen tidak dapat dimuat</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => window.open(mediaUrl, "_blank")}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                >
-                  Buka di Tab Baru
-                </button>
-              </div>
+              <button
+                onClick={() => window.open(mediaUrl, "_blank")}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+              >
+                Buka di Tab Baru
+              </button>
             </div>
           )}
         </div>
@@ -599,51 +597,71 @@ export default function Media() {
       {/* Preview Modal */}
       {showPreviewModal && (
         <div
-          className="fixed inset-0 z-50 backdrop-blur-sm bg-opacity-75 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setShowPreviewModal(false)}
         >
           <div
-            className="relative bg-white rounded-2xl p-6 max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
+            className="relative bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setShowPreviewModal(false)}
-              className="absolute top-4 right-4 rounded-full p-2 shadow-md hover:bg-gray-100 transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            <div className="flex items-center justify-between px-6 py-4 border-b">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {currentItem.nama}
+                </h3>
+                <div className="flex items-center gap-2 mt-1 text-sm text-gray-600">
+                  <FaCalendarAlt className="text-gray-500" />
+                  {MediaServiceUser.formatDate(currentItem.created_at)}
+                </div>
+              </div>
 
-            <div className="mb-6 border-b pb-4">
-              <h3 className="text-2xl font-semibold text-gray-900">
-                {currentItem.nama}
-              </h3>
-              <div className="flex items-center gap-2 mt-2 text-sm text-gray-600">
-                <FaCalendarAlt className="text-gray-500" />
-                {MediaServiceUser.formatDate(currentItem.created_at)}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() =>
+                    window.open(
+                      MediaServiceUser.getMediaUrl(currentItem.file),
+                      "_blank"
+                    )
+                  }
+                  className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-600 shadow-sm transition"
+                >
+                  Buka Tab Baru
+                </button>
+                <button
+                  onClick={() => setShowPreviewModal(false)}
+                  className="rounded-full p-2 hover:bg-gray-100 transition shadow-xl"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gray-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
               </div>
             </div>
-            <div className="mb-6 flex justify-center">
-              <div className="w-full h-full flex items-center justify-center overflow-hidden rounded-xl bg-gray-50">
-                {renderMediaContent({
-                  className: "h-full w-auto object-contain",
-                })}
+            <div className="flex-1 overflow-y-auto p-6">
+              <div className="flex justify-center">
+                <div className="w-full h-[70vh] flex items-center justify-center rounded-xl bg-gray-50 overflow-hidden">
+                  {renderMediaContent({
+                    className: "h-full w-auto object-contain",
+                  })}
+                </div>
               </div>
-            </div>
-            <div className="prose prose-sm text-gray-700 leading-relaxed">
-              <p>{currentItem.deskripsi}</p>
+
+              {currentItem.deskripsi && (
+                <div className="prose prose-sm text-gray-700 leading-relaxed mt-6">
+                  <p>{currentItem.deskripsi}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

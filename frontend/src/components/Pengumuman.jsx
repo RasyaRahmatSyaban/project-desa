@@ -69,7 +69,7 @@ export default function Pengumuman() {
                  w-[96%] md:max-w-9xl flex items-center gap-3 overflow-hidden"
       style={{ fontFamily: "Poppins" }}
     >
-      {/* Icon 📢 */}
+      {/* Icon 📢 * /}
       <div className="flex-shrink-0 absolute z-10 inset-0 bg-gray-800 top-2 w-fit px-3">
         <span className="text-2xl">📢</span>
       </div>
@@ -80,25 +80,42 @@ export default function Pengumuman() {
       ) : (
         /* Teks Berjalan */
         <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            className="whitespace-nowrap z-0 ml-10"
-            initial={{ x: "100%" }}
-            animate={{ x: "-100%" }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: Math.max(12, announcementText.length / 20),
-              repeat: Number.POSITIVE_INFINITY,
-              ease: "linear",
-            }}
-          >
-            <p className="text-sm md:text-base">
-              ⚠{" "}
-              {announcements.length > 0
-                ? `${announcementTitle}${announcementText}`
-                : announcementText}
-            </p>
-          </motion.div>
+          <div className="relative overflow-hidden whitespace-nowrap z-0 ml-10">
+            <motion.div
+              className="inline-flex gap-x-96"
+              initial={{ x: "100%" }}
+              animate={{ x: "-100%" }}
+              transition={{
+                duration: 45,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {announcements.length > 0 ? (
+                announcements.map((a, idx) => (
+                  <p
+                    key={`a-${idx}`}
+                    className="text-sm md:text-base flex-shrink-0"
+                  >
+                    {a.judul ? `${a.judul}: ` : ""}
+                    {a.isi}
+                  </p>
+                ))
+              ) : (
+                <p>Saat ini belum ada pengumuman...</p>
+              )}
+              {announcements.length > 0 &&
+                announcements.map((a, idx) => (
+                  <p
+                    key={`b-${idx}`}
+                    className="text-sm md:text-base flex-shrink-0"
+                  >
+                    {a.judul ? `${a.judul}: ` : ""}
+                    {a.isi}
+                  </p>
+                ))}
+            </motion.div>
+          </div>
         </AnimatePresence>
       )}
     </div>

@@ -122,123 +122,89 @@ export default function CarouselAparatur() {
 
   return (
     <div
-      className="relative w-5xl mx-auto pt-4 px-4 md:px-0"
+      className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{ fontFamily: "poppins" }}
     >
-      <div className="relative h-[25rem] rounded-2xl overflow-hidden">
-        {/* Slides */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          {visibleSlides.map(({ index, position, key }) => {
-            const item = aparatur[index];
-            if (!item) return null;
+      <div className="relative h-[20rem] sm:h-[25rem] md:h-[28rem] flex items-center justify-center">
+        {visibleSlides.map(({ index, position, key }) => {
+          const item = aparatur[index];
+          if (!item) return null;
 
-            const isCenter = position === "center";
+          const isCenter = position === "center";
 
-            let translateX = 0;
-            let zIndex = 10;
-            let opacity = 1;
-            let scale = 1;
-            let blur = 0;
+          let translateX = 0;
+          let zIndex = 10;
+          let opacity = 1;
+          let scale = 1;
 
-            if (position === "left") {
-              translateX = -280;
-              zIndex = 5;
-              opacity = 0.7;
-              scale = 0.85;
-              blur = 3;
-            } else if (position === "right") {
-              translateX = 280;
-              zIndex = 5;
-              opacity = 0.7;
-              scale = 0.85;
-              blur = 3;
-            }
+          if (position === "left") {
+            translateX = -150;
+            if (window.innerWidth >= 640) translateX = -200; // sm
+            if (window.innerWidth >= 1024) translateX = -250; // lg
+            zIndex = 5;
+            opacity = 0.6;
+            scale = 0.85;
+          } else if (position === "right") {
+            translateX = 150;
+            if (window.innerWidth >= 640) translateX = 200;
+            if (window.innerWidth >= 1024) translateX = 250;
+            zIndex = 5;
+            opacity = 0.6;
+            scale = 0.85;
+          }
 
-            return (
+          return (
+            <div
+              key={key}
+              className="absolute transition-transform duration-700 ease-in-out cursor-pointer"
+              style={{
+                transform: `translateX(${translateX}px) scale(${scale})`,
+                zIndex,
+                opacity,
+              }}
+              onClick={() => !isCenter && goToSlide(index)}
+            >
               <div
-                key={key}
-                className="absolute cursor-pointer transition-opacity transition-filter duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                style={{
-                  transform: `translateX(${translateX}px) scale(${scale})`,
-                  zIndex,
-                  opacity,
-                  filter: `blur(${blur}px)`,
-                }}
-                onClick={() => !isCenter && goToSlide(index)}
+                className="relative 
+                  w-full max-w-[40vw]
+                  sm:w-[200px] md:w-[240px] lg:w-[260px] 
+                  aspect-[3/4] 
+                  rounded-xl overflow-hidden shadow-lg 
+                  bg-white border border-gray-200"
               >
-                <div
-                  className="relative overflow-hidden rounded-lg"
-                  style={{
-                    width: "220px",
-                    height: "300px",
-                    boxShadow: isCenter
-                      ? "0 10px 25px rgba(0, 0, 0, 0.15)"
-                      : "0 5px 15px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <img
-                    src={item.foto}
-                    alt={item.jabatan || "Aparatur"}
-                    className="w-full h-full object-cover"
-                  />
-                  {isCenter && (
-                    <div
-                      className="absolute bottom-0 left-0 right-0 p-4 text-white text-center"
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))",
-                      }}
-                    >
-                      <p className="font-semibold capitalize">
-                        {item.jabatan || "Jabatan"}
-                      </p>
-                      <p className="text-sm">{item.nama || "Nama"}</p>
-                      {item.nip && (
-                        <p className="text-xs opacity-75">NIP: {item.nip}</p>
-                      )}
-                    </div>
-                  )}
-                </div>
+                <img
+                  src={item.foto}
+                  alt={item.jabatan || "Aparatur"}
+                  className="w-full h-full object-cover object-top"
+                />
+                {isCenter && (
+                  <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 text-white text-center bg-gradient-to-t from-black/70 to-transparent">
+                    <p className="font-semibold capitalize text-sm sm:text-base">
+                      {item.jabatan || "Jabatan"}
+                    </p>
+                    <p className="text-xs sm:text-sm">{item.nama || "Nama"}</p>
+                  </div>
+                )}
               </div>
-            );
-          })}
-        </div>
-
-        {/* Navigation buttons */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft size={20} />
-        </button>
-
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-100 transition-colors"
-          aria-label="Next slide"
-        >
-          <ChevronRight size={20} />
-        </button>
-
-        {/* Indicators */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20 px-3 py-0.5">
-          {aparatur.map((_, index) => (
-            <button
-              key={`indicator-${index}`} // Key unik untuk setiap indicator
-              onClick={() => goToSlide(index)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                index === currentIndex
-                  ? "bg-blue-600"
-                  : "bg-gray-300 hover:bg-gray-400"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
+            </div>
+          );
+        })}
       </div>
+
+      {/* Navigation buttons */}
+      <button
+        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-8 sm:w-10 h-8 sm:h-10 bg-white rounded-full flex items-center justify-center shadow hover:bg-gray-100"
+        onClick={prevSlide}
+      >
+        <ChevronLeft size={18} className="sm:w-5 sm:h-5" />
+      </button>
+      <button
+        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-8 sm:w-10 h-8 sm:h-10 bg-white rounded-full flex items-center justify-center shadow hover:bg-gray-100"
+        onClick={nextSlide}
+      >
+        <ChevronRight size={18} className="sm:w-5 sm:h-5" />
+      </button>
     </div>
   );
 }

@@ -125,8 +125,15 @@ function Navbar() {
         } md:hidden`}
         style={{ fontFamily: "Poppins" }}
       >
-        <div className="flex flex-col h-full p-6 w-3/4 sm:w-1/2 bg-white/95 backdrop-blur-md">
-          <div className="flex justify-between items-center mb-8">
+        <div className="relative flex flex-col h-full p-6 w-3/4 sm:w-1/2 bg-white/95 backdrop-blur-md">
+          <button
+            onClick={toggleMenu}
+            className="absolute top-7 right-4 text-gray-700 hover:text-red-500 transition-colors"
+            aria-label="Close menu"
+          >
+            <X size={28} />
+          </button>
+          <div className="flex justify-start items-center mb-8">
             <Link
               to="/"
               className="flex items-center space-x-2"
@@ -140,6 +147,7 @@ function Navbar() {
             </Link>
           </div>
 
+          {/* Menu Link */}
           <nav className="flex flex-col space-y-6 mt-4">
             {navLinks.map((link) => (
               <Link
@@ -165,13 +173,6 @@ function Navbar() {
             </Link>
           </div>
         </div>
-        <button
-          onClick={toggleMenu}
-          className="text-gray-700 focus:outline-none absolute top-4 right-0 z-50 p-3"
-          aria-label="Close menu"
-        >
-          <X size={28} />
-        </button>
       </aside>
     </div>
   );

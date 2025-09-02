@@ -40,7 +40,7 @@ export default function ProfilDesa() {
     }, []);
 
     return (
-      <section className="relative h-[30rem] md:h-[49rem] overflow-hidden">
+      <section className="relative min-h-[20rem] sm:min-h-[30rem] md:min-h-[45rem] overflow-hidden">
         {/* Slideshow Background */}
         <AnimatePresence>
           <motion.div
@@ -55,44 +55,33 @@ export default function ProfilDesa() {
         </AnimatePresence>
 
         {/* Overlay */}
-        <div
-          className="absolute inset-0 bg-black/70 md:bg-black/30 flex flex-col justify-center text-white h-full"
-          style={{ fontFamily: "poppins" }}
-        >
-          <div className="flex flex-col justify-center md:block md:w-1/2 mx-4 sm:mx-6 md:mx-[6rem] h-full md:mt-[10rem] space-y-3 md:space-y-10">
-            <h1 className="text-[2rem] md:text-[5rem] font-bold leading-none">
+        <div className="absolute inset-0 bg-black/70 md:bg-black/30 flex flex-col justify-center text-white px-4 sm:px-8">
+          <div className="max-w-2xl md:max-w-3xl lg:max-w-4xl space-y-3 md:space-y-6">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold leading-tight">
               Informasi Wilayah
             </h1>
 
-            {/* Deskripsi dengan breakpoint yang lebih baik */}
-            <div className="text-sm sm:text-base md:text-xl space-y-2 md:space-y-4">
-              <p className="md:w-[31rem] text-justify leading-relaxed">
-                Secara Geografis Desa Bahontobungku terletak pada wilayah
-                administrasi Kecamatan Bungku Tengah, dengan perkiraan titik
-                kordinat berada pada:
+            <p className="text-sm sm:text-base md:text-lg text-justify leading-relaxed">
+              Secara Geografis Desa Bahontobungku terletak pada wilayah
+              administrasi Kecamatan Bungku Tengah, dengan perkiraan titik
+              kordinat berada pada:
+            </p>
+
+            <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-2 sm:space-y-0">
+              <p className="bg-black/30 px-3 py-1 rounded-md text-sm sm:text-base">
+                <span className="font-medium">Bujur Timur:</span> 121° 956690"
               </p>
-
-              {/* Koordinat dengan format yang lebih baik di mobile */}
-              <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-1 sm:space-y-0 md:w-[31rem]">
-                <p className="bg-black/30 px-3 py-1 rounded-md inline-block">
-                  <span className="font-medium">Bujur Timur:</span> 121° 956690"
-                </p>
-                <p className="bg-black/30 px-3 py-1 rounded-md inline-block">
-                  <span className="font-medium">Lintang Selatan:</span>{" "}
-                  -2,649603"
-                </p>
-              </div>
+              <p className="bg-black/30 px-3 py-1 rounded-md text-sm sm:text-base">
+                <span className="font-medium">Lintang Selatan:</span> -2,649603"
+              </p>
             </div>
 
-            <div className="pt-2 md:pt-0">
-              <Link
-                to="/Map"
-                className="inline-block bg-[#16BE27] text-lg md:text-2xl rounded-lg px-4 py-2 md:p-3 font-bold cursor-pointer text-gray-700 hover:bg-[#14a924] transition-colors"
-                style={{ fontFamily: "poppins" }}
-              >
-                Lihat Selengkapnya
-              </Link>
-            </div>
+            <Link
+              to="/Map"
+              className="inline-block bg-[#16BE27] text-sm sm:text-lg md:text-xl rounded-lg px-4 py-2 md:px-6 md:py-3 font-bold text-gray-700 hover:bg-[#14a924] transition-colors"
+            >
+              Lihat Selengkapnya
+            </Link>
           </div>
         </div>
       </section>

@@ -229,7 +229,7 @@ export default function Media() {
           <iframe
             src={mediaUrl}
             title={currentItem.nama}
-            className="w-full h-full rounded-xl border border-gray-200 shadow-sm"
+            className="w-full h-full rounded-xl border border-gray-200 shadow-sm mt-5"
             onLoad={() => setMediaLoading(false)}
             onError={() => {
               setMediaLoading(false);

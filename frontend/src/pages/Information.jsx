@@ -173,47 +173,52 @@ const Information = () => {
               <p className="text-gray-600">{error}</p>
             </div>
           ) : featuredBerita.length > 0 ? (
-            <div className="relative rounded-xl border border-gray-200 overflow-hidden shadow-lg w-full mx-auto">
-              <div className="relative h-56 sm:h-64 md:h-96">
+            <div className="relative rounded-xl border border-gray-200 overflow-hidden shadow-lg w-full mx-auto h-full">
+              <div className="relative h-64 sm:h-80 md:h-96 lg:h-[28rem] rounded-xl overflow-hidden shadow-2xl">
                 {featuredBerita.map((berita, index) => (
                   <div
                     key={berita.id}
-                    className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out cursor-pointer ${
+                    className={`absolute inset-0 w-full h-full transition-all duration-1000 ease-in-out cursor-pointer transform ${
                       index === currentIndex
-                        ? "opacity-100"
-                        : "opacity-0 pointer-events-none"
+                        ? "opacity-100 scale-100"
+                        : "opacity-0 scale-105 pointer-events-none"
                     }`}
                     onClick={() => navigateToDetail(berita)}
                   >
                     {berita.foto ? (
-                      <img
-                        src={
-                          BeritaServiceUser.getImageUrl(berita.foto) ||
-                          "/placeholder.svg"
-                        }
-                        alt={berita.judul}
-                        className="w-full h-full object-cover"
-                      />
+                      <div className="relative w-full h-full group">
+                        <img
+                          src={
+                            BeritaServiceUser.getImageUrl(berita.foto) ||
+                            "/placeholder.svg"
+                          }
+                          alt={berita.judul}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/20"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
+                      </div>
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <FaNewspaper className="text-gray-400 text-5xl" />
+                      <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center relative">
+                        <FaNewspaper className="text-gray-500 text-6xl md:text-8xl opacity-50" />
+                        <div className="absolute inset-0 bg-black/20"></div>
                       </div>
                     )}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4 md:p-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
-                          <FaCalendarAlt className="inline mr-1" />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4 sm:p-6 md:p-8">
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <span className="bg-white/25 text-white text-xs sm:text-sm px-3 py-1.5 rounded-full backdrop-blur-md border border-white/20 shadow-lg">
+                          <FaCalendarAlt className="inline mr-1.5" />
                           {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
                         </span>
-                        <span className="bg-white/20 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
-                          <FaUser className="inline mr-1" />
+                        <span className="bg-white/25 text-white text-xs sm:text-sm px-3 py-1.5 rounded-full backdrop-blur-md border border-white/20 shadow-lg">
+                          <FaUser className="inline mr-1.5" />
                           {berita.penulis}
                         </span>
                       </div>
-                      <h2 className="text-white text-lg md:text-2xl font-bold">
+                      <h2 className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-2 drop-shadow-lg line-clamp-2">
                         {berita.judul}
                       </h2>
-                      <p className="text-white/80 text-sm mt-1 line-clamp-2">
+                      <p className="text-white/90 text-sm sm:text-base md:text-lg mt-2 line-clamp-2 md:line-clamp-3 drop-shadow-sm leading-relaxed max-w-4xl">
                         {BeritaServiceUser.getExcerpt(berita.isi, 150)}
                       </p>
                     </div>
@@ -284,17 +289,17 @@ const Information = () => {
             </div>
           ) : beritaData.length > 0 ? (
             <>
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {beritaData.map((berita) => (
                   <div
                     key={berita.id}
-                    className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition"
+                    className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full"
                   >
                     {/* Gambar */}
-                    <div className="relative">
+                    <div className="relative flex-shrink-0">
                       {berita.foto ? (
                         <img
-                          className="w-full h-52 object-cover cursor-pointer"
+                          className="w-full h-48 sm:h-52 object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
                           src={
                             BeritaServiceUser.getImageUrl(berita.foto) ||
                             "/placeholder.svg"
@@ -304,38 +309,46 @@ const Information = () => {
                         />
                       ) : (
                         <div
-                          className="w-full h-52 bg-gray-200 cursor-pointer flex items-center justify-center"
+                          className="w-full h-48 sm:h-52 bg-gray-200 cursor-pointer flex items-center justify-center transition-colors duration-300 hover:bg-gray-300"
                           onClick={() => navigateToDetail(berita)}
                         >
-                          <FaNewspaper className="text-gray-400 text-5xl" />
+                          <FaNewspaper className="text-gray-400 text-4xl sm:text-5xl" />
                         </div>
                       )}
                     </div>
 
                     {/* Konten */}
-                    <div className="p-4">
+                    <div className="p-3 sm:p-4 flex flex-col flex-grow">
                       <h3
-                        className="text-lg sm:text-xl font-semibold line-clamp-2 cursor-pointer hover:text-blue-600"
+                        className="text-base sm:text-lg lg:text-xl font-semibold line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors duration-200 mb-2 leading-tight"
                         onClick={() => navigateToDetail(berita)}
                       >
                         {berita.judul}
                       </h3>
-                      <div className="flex justify-between items-center mt-2 text-xs text-gray-600">
-                        <p className="flex items-center">
-                          <FaCalendarAlt className="mr-1" />
-                          {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
+
+                      {/* Metadata - Stack on very small screens */}
+                      <div className="flex flex-col xs:flex-row xs:justify-between xs:items-center gap-1 xs:gap-2 mt-2 text-xs text-gray-600">
+                        <p className="flex items-center flex-shrink-0">
+                          <FaCalendarAlt className="mr-1 flex-shrink-0" />
+                          <span className="truncate">
+                            {BeritaServiceUser.formatDate(berita.tanggalTerbit)}
+                          </span>
                         </p>
-                        <p className="flex items-center">
-                          <FaUser className="mr-1" />
-                          {berita.penulis}
+                        <p className="flex items-center min-w-0">
+                          <FaUser className="mr-1 flex-shrink-0" />
+                          <span className="truncate">{berita.penulis}</span>
                         </p>
                       </div>
-                      <p className="text-gray-600 text-sm mt-3 line-clamp-3">
+
+                      {/* Content excerpt - grows to fill space */}
+                      <p className="text-gray-600 text-sm mt-3 line-clamp-3 flex-grow leading-relaxed">
                         {BeritaServiceUser.getExcerpt(berita.isi, 100)}
                       </p>
+
+                      {/* Button - stays at bottom */}
                       <button
                         onClick={() => navigateToDetail(berita)}
-                        className="inline-block mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                        className="inline-block mt-3 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors duration-200 self-start"
                       >
                         Baca selengkapnya →
                       </button>
@@ -343,7 +356,6 @@ const Information = () => {
                   </div>
                 ))}
               </div>
-
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center mt-8">

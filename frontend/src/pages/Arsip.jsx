@@ -388,83 +388,171 @@ export default function ArsipSurat() {
                   </button>
                 </div>
               ) : filteredData.length > 0 ? (
-                <div className="overflow-x-auto over">
-                  <table className="w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th
-                          scope="col"
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Jenis
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Nomor & Tanggal
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Judul / Perihal
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          Aksi
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {filteredData.map((surat) => (
-                        <tr key={surat.id}>
-                          <td className="px-3 py-4 whitespace-nowrap">
-                            <div className="flex items-center gap-2 text-sm font-medium">
-                              {getSuratIcon(surat.jenis)}
+                <>
+                  <div className="hidden sm:block">
+                    <div className="overflow-x-auto">
+                      <table className="w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th
+                              scope="col"
+                              className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Jenis
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Nomor & Tanggal
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Judul / Perihal
+                            </th>
+                            <th
+                              scope="col"
+                              className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Aksi
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {filteredData.map((surat) => (
+                            <tr key={surat.id} className="hover:bg-gray-50">
+                              <td className="px-3 py-4 whitespace-nowrap">
+                                <div className="flex items-center gap-2 text-sm font-medium">
+                                  {getSuratIcon(surat.jenis)}
+                                  <span className="hidden md:inline">
+                                    {surat.jenis}
+                                  </span>
+                                  <span className="md:hidden text-xs">
+                                    {surat.jenis}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-3 py-4 whitespace-nowrap">
+                                <div className="text-sm font-medium text-gray-900">
+                                  {surat.nomor || "-"}
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">
+                                  {formatDate(surat.tanggal)}
+                                </div>
+                              </td>
+                              <td className="px-3 py-4 min-w-0">
+                                <div className="text-sm font-medium text-gray-900 truncate max-w-xs">
+                                  {surat.judul || "-"}
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1 truncate max-w-xs">
+                                  {surat.perihal || "-"}
+                                </div>
+                              </td>
+                              <td className="px-3 py-4 whitespace-nowrap text-center">
+                                <div className="flex flex-col sm:flex-row gap-1 sm:gap-2 justify-center">
+                                  <button
+                                    onClick={() => handlePreview(surat)}
+                                    className="inline-flex items-center justify-center px-2 sm:px-3 py-1 border border-transparent text-xs font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition"
+                                  >
+                                    <FaEye className="sm:mr-1" />
+                                    <span className="hidden sm:inline ml-1">
+                                      Lihat
+                                    </span>
+                                  </button>
+                                  <button
+                                    onClick={() => handleDownload(surat.file)}
+                                    className="inline-flex items-center justify-center px-2 sm:px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-[#6CABCA] hover:bg-[#5892b1] transition"
+                                  >
+                                    <FaDownload className="sm:mr-1" />
+                                    <span className="hidden sm:inline ml-1">
+                                      Unduh
+                                    </span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div className="sm:hidden space-y-4">
+                    {filteredData.map((surat) => (
+                      <div
+                        key={surat.id}
+                        className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
+                      >
+                        {/* Header dengan Jenis dan Tanggal */}
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center gap-2">
+                            {getSuratIcon(surat.jenis)}
+                            <span className="text-sm font-medium text-gray-900">
                               {surat.jenis}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {formatDate(surat.tanggal)}
+                          </div>
+                        </div>
+
+                        {/* Nomor */}
+                        {surat.nomor && (
+                          <div className="mb-2">
+                            <span className="text-xs font-medium text-gray-500">
+                              NOMOR:
+                            </span>
+                            <div className="text-sm text-gray-900">
+                              {surat.nomor}
                             </div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap">
+                          </div>
+                        )}
+
+                        {/* Judul */}
+                        {surat.judul && (
+                          <div className="mb-2">
+                            <span className="text-xs font-medium text-gray-500">
+                              JUDUL:
+                            </span>
                             <div className="text-sm font-medium text-gray-900">
-                              {surat.nomor || "-"}
+                              {surat.judul}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              {formatDate(surat.tanggal)}
+                          </div>
+                        )}
+
+                        {/* Perihal */}
+                        {surat.perihal && (
+                          <div className="mb-3">
+                            <span className="text-xs font-medium text-gray-500">
+                              PERIHAL:
+                            </span>
+                            <div className="text-sm text-gray-500">
+                              {surat.perihal}
                             </div>
-                          </td>
-                          <td className="px-3 py-4 max-w-sm truncate">
-                            <div className="text-sm font-medium text-gray-900">
-                              {surat.judul || "-"}
-                            </div>
-                            <div className="text-xs text-gray-500 mt-1">
-                              {surat.perihal || "-"}
-                            </div>
-                          </td>
-                          <td className="px-3 py-4 whitespace-nowrap text-sm font-medium">
-                            <div className="flex gap-2">
-                              {/* PERBAIKAN: Pass object surat, bukan surat.file */}
-                              <button
-                                onClick={() => handlePreview(surat)}
-                                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition"
-                              >
-                                <FaEye className="mr-1" /> Lihat
-                              </button>
-                              <button
-                                onClick={() => handleDownload(surat.file)}
-                                className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-[#6CABCA] hover:bg-[#5892b1] transition"
-                              >
-                                <FaDownload className="mr-1" /> Unduh
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                          </div>
+                        )}
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 pt-3 border-t border-gray-100">
+                          <button
+                            onClick={() => handlePreview(surat)}
+                            className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition"
+                          >
+                            <FaEye className="mr-2" /> Lihat
+                          </button>
+                          <button
+                            onClick={() => handleDownload(surat.file)}
+                            className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#6CABCA] hover:bg-[#5892b1] transition"
+                          >
+                            <FaDownload className="mr-2" /> Unduh
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
               ) : (
                 <div className="text-center py-12">
                   <p className="text-gray-600">

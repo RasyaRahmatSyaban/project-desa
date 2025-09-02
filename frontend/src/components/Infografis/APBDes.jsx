@@ -248,9 +248,6 @@ export default function APBDes() {
                 <div className="text-white font-bold text-2xl">
                   {APBDesServiceUser.formatCurrency(getTotalIncome())}
                 </div>
-                <button className="flex items-center gap-1 text-white hover:underline">
-                  Detail <ArrowUpRight size={16} />
-                </button>
               </div>
             </div>
 
@@ -286,9 +283,6 @@ export default function APBDes() {
                 <div className="text-white font-bold text-2xl">
                   {APBDesServiceUser.formatCurrency(getTotalExpense())}
                 </div>
-                <button className="flex items-center gap-1 text-white hover:underline">
-                  Detail <ArrowUpRight size={16} />
-                </button>
               </div>
             </div>
 
@@ -324,9 +318,6 @@ export default function APBDes() {
                 <div className="text-white font-bold text-2xl">
                   {APBDesServiceUser.formatCurrency(getBalance())}
                 </div>
-                <button className="flex items-center gap-1 text-white hover:underline">
-                  Detail <ArrowUpRight size={16} />
-                </button>
               </div>
             </div>
           </div>

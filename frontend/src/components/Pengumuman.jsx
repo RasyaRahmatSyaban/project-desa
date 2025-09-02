@@ -69,16 +69,13 @@ export default function Pengumuman() {
                  w-[96%] md:max-w-9xl flex items-center gap-3 overflow-hidden"
       style={{ fontFamily: "Poppins" }}
     >
-      {/* Icon 📢 * /}
       <div className="flex-shrink-0 absolute z-10 inset-0 bg-gray-800 top-2 w-fit px-3">
         <span className="text-2xl">📢</span>
       </div>
 
-      {/* Loading State */}
       {loading ? (
         <div className="ml-10 text-sm md:text-base">Memuat pengumuman...</div>
       ) : (
-        /* Teks Berjalan */
         <AnimatePresence mode="wait">
           <div className="relative overflow-hidden whitespace-nowrap z-0 ml-10">
             <motion.div
@@ -86,7 +83,7 @@ export default function Pengumuman() {
               initial={{ x: "100%" }}
               animate={{ x: "-100%" }}
               transition={{
-                duration: 45,
+                duration: 50,
                 repeat: Infinity,
                 ease: "linear",
               }}
@@ -97,7 +94,9 @@ export default function Pengumuman() {
                     key={`a-${idx}`}
                     className="text-sm md:text-base flex-shrink-0"
                   >
-                    {a.judul ? `${a.judul}: ` : ""}
+                    {a.judul && (
+                      <span className="font-semibold">{a.judul} : </span>
+                    )}
                     {a.isi}
                   </p>
                 ))
@@ -110,7 +109,9 @@ export default function Pengumuman() {
                     key={`b-${idx}`}
                     className="text-sm md:text-base flex-shrink-0"
                   >
-                    {a.judul ? `${a.judul}: ` : ""}
+                    {a.judul && (
+                      <span className="font-semibold">{a.judul} : </span>
+                    )}
                     {a.isi}
                   </p>
                 ))}

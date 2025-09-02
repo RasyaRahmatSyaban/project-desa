@@ -79,7 +79,7 @@ const HeroSection = () => {
 
 const InfoSection = () => {
   return (
-    <div className="relative bg-white md:pt-28 px-5">
+    <div className="relative bg-white md:pt-28 px-5 pt-10">
       {" "}
       {/* Ditambah padding atas agar tidak tabrakan */}
       <div className="block md:flex w-full h-full md:h-[50rem] mx-auto text-center relative">

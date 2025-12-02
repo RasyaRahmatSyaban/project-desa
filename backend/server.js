@@ -10,39 +10,34 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const allowedOrigins = [process.env.FRONTEND_URL];
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL_WWW,
+].filter(Boolean);
 
 // Update CORS configuration to include your ngrok URLs
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
       }
+
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "ngrok-skip-browser-warning",
-    ],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-// Add middleware to handle ngrok browser warning
-app.use((req, res, next) => {
-  res.header("ngrok-skip-browser-warning", "true");
-  next();
-});
 
 app.use(express.json());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use("/", router);
+app.use("/api", router);
 
 app.listen(
   port,

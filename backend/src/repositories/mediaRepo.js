@@ -2,12 +2,10 @@ import db from "../config/database.js";
 
 const addMedia = async (nama, tipe, file, deskripsi, thumbnail) => {
   try {
-    const [result] = await db
-      .promise()
-      .query(
-        "INSERT INTO media (nama, tipe, file, deskripsi, thumbnail) VALUES (?, ?, ?, ?, ?)",
-        [nama, tipe, file, deskripsi, thumbnail]
-      );
+    const [result] = await db.query(
+      "INSERT INTO media (nama, tipe, file, deskripsi, thumbnail) VALUES (?, ?, ?, ?, ?)",
+      [nama, tipe, file, deskripsi, thumbnail]
+    );
     return { id: result.insertId, nama, tipe, file, deskripsi, thumbnail };
   } catch (error) {
     "repo", error;
@@ -15,33 +13,25 @@ const addMedia = async (nama, tipe, file, deskripsi, thumbnail) => {
 };
 
 const getAllMedia = async () => {
-  const [results] = await db
-    .promise()
-    .query("SELECT * FROM media ORDER BY id DESC");
+  const [results] = await db.query("SELECT * FROM media ORDER BY id DESC");
   return results;
 };
 
 const getMediaById = async (id) => {
-  const [result] = await db
-    .promise()
-    .query("SELECT * FROM media WHERE id = ?", [id]);
+  const [result] = await db.query("SELECT * FROM media WHERE id = ?", [id]);
   return result.length > 0 ? result[0] : null;
 };
 
 const updateMedia = async (id, nama, tipe, file, deskripsi, thumbnail) => {
-  const [result] = await db
-    .promise()
-    .query(
-      "UPDATE media SET nama = ?, tipe = ?, file = ?, deskripsi = ?, thumbnail = ? WHERE id = ?",
-      [nama, tipe, file, deskripsi, thumbnail, id]
-    );
+  const [result] = await db.query(
+    "UPDATE media SET nama = ?, tipe = ?, file = ?, deskripsi = ?, thumbnail = ? WHERE id = ?",
+    [nama, tipe, file, deskripsi, thumbnail, id]
+  );
   return result.affectedRows > 0;
 };
 
 const deleteMedia = async (id) => {
-  const [result] = await db
-    .promise()
-    .query("DELETE FROM media WHERE id = ?", [id]);
+  const [result] = await db.query("DELETE FROM media WHERE id = ?", [id]);
   return result.affectedRows > 0;
 };
 

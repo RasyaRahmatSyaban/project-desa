@@ -30,7 +30,7 @@ const addDanaKeluar = async (tahun, bulan, jumlah, kategori, keterangan) => {
 
 const getAllDanaMasuk = async () => {
     try {
-        const [result] = await db.promise().query("SELECT * FROM danamasuk order by bulan asc")
+        const [result] = await db.query("SELECT * FROM danamasuk order by bulan asc")
         return result
     } catch (error) {
         throw error        
@@ -39,7 +39,7 @@ const getAllDanaMasuk = async () => {
 
 const getAllDanaKeluar = async () => {
     try {
-        const [result] = await db.promise().query("SELECT * FROM danakeluar order by bulan asc")
+        const [result] = await db.query("SELECT * FROM danakeluar order by bulan asc")
         return result
     } catch (error) {
         throw error        
@@ -48,7 +48,7 @@ const getAllDanaKeluar = async () => {
 
 const getDanaMasukById = async (id) => {
     try {
-        const [result] = await db.promise().query("SELECT * FROM danamasuk WHERE id = ?", [id]);
+        const [result] = await db.query("SELECT * FROM danamasuk WHERE id = ?", [id]);
         return result.length > 0 ? result[0] : null;
     } catch (error) {
         throw error;
@@ -57,7 +57,7 @@ const getDanaMasukById = async (id) => {
 
 const getDanaKeluarById = async (id) => {
     try {
-        const [result] = await db.promise().query("SELECT * FROM danakeluar WHERE id = ?", [id]);
+        const [result] = await db.query("SELECT * FROM danakeluar WHERE id = ?", [id]);
         return result.length > 0 ? result[0] : null;
     } catch (error) {
         throw error;
@@ -66,7 +66,7 @@ const getDanaKeluarById = async (id) => {
 
 const getSummaryByYear = async (tahun) => {
     try {
-        const [pemasukanRows] = await db.promise().query(
+        const [pemasukanRows] = await db.query(
             `SELECT 'Pemasukan' AS tipe, tahun, COALESCE(SUM(jumlah), 0) AS total 
             FROM danamasuk 
             WHERE tahun = ? 
@@ -74,7 +74,7 @@ const getSummaryByYear = async (tahun) => {
             [tahun]
         );
 
-        const [pengeluaranRows] = await db.promise().query(
+        const [pengeluaranRows] = await db.query(
             `SELECT 'Pengeluaran' AS tipe, tahun, COALESCE(SUM(jumlah), 0) AS total 
             FROM danakeluar 
             WHERE tahun = ? 
@@ -100,12 +100,12 @@ const getSummaryByYear = async (tahun) => {
 
 const getDetailByYear = async (tahun) => {
     try {
-        const [pendapatan] = await db.promise().query(
+        const [pendapatan] = await db.query(
             "SELECT bulan, SUM(jumlah) as total FROM danamasuk WHERE tahun = ? GROUP BY bulan ORDER BY bulan",
             [tahun]
         );
 
-        const [pengeluaran] = await db.promise().query(
+        const [pengeluaran] = await db.query(
             "SELECT bulan, SUM(jumlah) as total FROM danakeluar WHERE tahun = ? GROUP BY bulan ORDER BY bulan",
             [tahun]
         );
@@ -118,7 +118,7 @@ const getDetailByYear = async (tahun) => {
 
 const updateDanaMasuk = async (id, tahun, bulan, jumlah, sumber, keterangan) => {
     try {
-        const [result] = await db.promise().query(
+        const [result] = await db.query(
             "UPDATE danamasuk set tahun = ?, bulan = ?, jumlah = ?, sumber = ?, keterangan = ? where id = ? ", 
             [tahun, bulan, jumlah, sumber, keterangan, id]);
         return result.affectedRows > 0;
@@ -129,7 +129,7 @@ const updateDanaMasuk = async (id, tahun, bulan, jumlah, sumber, keterangan) => 
 
 const updateDanaKeluar = async (id, tahun, bulan, jumlah, kategori, keterangan) => {
     try {
-        const [result] = await db.promise().query(
+        const [result] = await db.query(
             "UPDATE danakeluar set tahun = ?, bulan = ?, jumlah = ?, kategori = ?, keterangan = ? where id = ? ", 
             [tahun, bulan, jumlah, kategori, keterangan, id]);
         return result.affectedRows > 0;
@@ -140,7 +140,7 @@ const updateDanaKeluar = async (id, tahun, bulan, jumlah, kategori, keterangan) 
 
 const deleteDanaMasuk = async (id) => {
     try {
-        const [result] = await db.promise().query("DELETE FROM danamasuk WHERE id = ?", [id]);
+        const [result] = await db.query("DELETE FROM danamasuk WHERE id = ?", [id]);
         return result.affectedRows > 0;
     } catch (error) {
         throw error;
@@ -149,7 +149,7 @@ const deleteDanaMasuk = async (id) => {
 
 const deleteDanaKeluar = async (id) => {
     try {
-        const [result] = await db.promise().query("DELETE FROM danakeluar WHERE id = ?", [id]);
+        const [result] = await db.query("DELETE FROM danakeluar WHERE id = ?", [id]);
         return result.affectedRows > 0;
     } catch (error) {
         throw error;

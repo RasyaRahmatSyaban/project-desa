@@ -2,7 +2,7 @@ import db from "../config/database.js";
 
 const addSuratMasuk = async (nomorSurat, pengirim, perihal, tanggalTerima, file) => {
     try {
-        const [result] = await db.promise().query(
+        const [result] = await db.query(
             "INSERT INTO suratmasuk (nomorSurat, pengirim, perihal, tanggalTerima, file) VALUES (?, ?, ?, ?, ?)",
             [nomorSurat, pengirim, perihal, tanggalTerima, file]
         );
@@ -14,7 +14,7 @@ const addSuratMasuk = async (nomorSurat, pengirim, perihal, tanggalTerima, file)
 
 const addSuratKeluar = async (nomorSurat, penerima, perihal, tanggalKirim, file) => {
     try {
-        const [result] = await db.promise().query(
+        const [result] = await db.query(
             "INSERT INTO suratkeluar (nomorSurat, penerima, perihal, tanggalKirim, file) VALUES (?, ?, ?, ?, ?)",
             [nomorSurat, penerima, perihal, tanggalKirim, file]
         );
@@ -26,7 +26,7 @@ const addSuratKeluar = async (nomorSurat, penerima, perihal, tanggalKirim, file)
 
 const getAllSuratMasuk = async () => {
     try {
-        const [results] = await db.promise().query("SELECT * FROM suratmasuk ORDER BY tanggalTerima DESC");
+        const [results] = await db.query("SELECT * FROM suratmasuk ORDER BY tanggalTerima DESC");
         return results;
     } catch (error) {
         throw error;
@@ -35,7 +35,7 @@ const getAllSuratMasuk = async () => {
 
 const getAllSuratKeluar = async () => {
     try {
-        const [results] = await db.promise().query("SELECT * FROM suratkeluar ORDER BY tanggalKirim DESC");
+        const [results] = await db.query("SELECT * FROM suratkeluar ORDER BY tanggalKirim DESC");
         return results;
     } catch (error) {
         throw error;
@@ -43,18 +43,18 @@ const getAllSuratKeluar = async () => {
 };
 
 const getSuratMasukById = async (id) => {
-    const [result] = await db.promise().query("SELECT * FROM suratmasuk WHERE id = ?", [id]);
+    const [result] = await db.query("SELECT * FROM suratmasuk WHERE id = ?", [id]);
     return result.length > 0 ? result[0] : null;
 };
 
 const getSuratKeluarById = async (id) => {
-    const [result] = await db.promise().query("SELECT * FROM suratkeluar WHERE id = ?", [id]);
+    const [result] = await db.query("SELECT * FROM suratkeluar WHERE id = ?", [id]);
     return result.length > 0 ? result[0] : null;
 };
 
 const updateSuratMasuk = async (id, nomorSurat, pengirim, perihal, tanggalTerima, file) => {
     try {
-        const [result] = await db.promise().query(
+        const [result] = await db.query(
             "UPDATE suratmasuk SET nomorSurat = ?, pengirim = ?, perihal = ?, tanggalTerima = ?, file = ? WHERE id = ?",
             [nomorSurat, pengirim, perihal, tanggalTerima, file, id]
         );
@@ -66,7 +66,7 @@ const updateSuratMasuk = async (id, nomorSurat, pengirim, perihal, tanggalTerima
 
 const updateSuratKeluar = async (id, nomorSurat, penerima, perihal, tanggalKirim, file) => {
     try {
-        const [result] = await db.promise().query(
+        const [result] = await db.query(
             "UPDATE suratkeluar SET nomorSurat = ?, penerima = ?, perihal = ?, tanggalKirim = ?, file = ? WHERE id = ?",
             [nomorSurat, penerima, perihal, tanggalKirim, file, id]
         );
@@ -78,7 +78,7 @@ const updateSuratKeluar = async (id, nomorSurat, penerima, perihal, tanggalKirim
 
 const deleteSuratMasuk = async (id) => {
     try {
-        const [result] = await db.promise().query("DELETE FROM suratmasuk WHERE id = ?", [id]);
+        const [result] = await db.query("DELETE FROM suratmasuk WHERE id = ?", [id]);
         return result.affectedRows > 0;
     } catch (error) {
         throw error;
@@ -87,7 +87,7 @@ const deleteSuratMasuk = async (id) => {
 
 const deleteSuratKeluar = async (id) => {
     try {
-        const [result] = await db.promise().query("DELETE FROM suratkeluar WHERE id = ?", [id]);
+        const [result] = await db.query("DELETE FROM suratkeluar WHERE id = ?", [id]);
         return result.affectedRows > 0;
     } catch (error) {
         throw error;

@@ -2,7 +2,7 @@ import db from "../config/database.js";
 
 const getAllPenduduk = async () => {
   try {
-    const [results] = await db.promise().query(`
+    const [results] = await db.query(`
       SELECT 
         p.id,
         p.nama,
@@ -24,7 +24,7 @@ const getAllPenduduk = async () => {
 
 const getPendudukByNik = async (nik) => {
   try {
-    const [results] = await db.promise().query(
+    const [results] = await db.query(
       `
       SELECT 
         p.id,
@@ -49,7 +49,7 @@ const getPendudukByNik = async (nik) => {
 
 const getPendudukById = async (id) => {
   try {
-    const [results] = await db.promise().query(
+    const [results] = await db.query(
       `
       SELECT 
         p.id,
@@ -229,7 +229,7 @@ const getPendudukByAgama = async () => {
 
 const getPendudukByUmur = async () => {
   try {
-    const [results] = await db.promise().query(`
+    const [results] = await db.query(`
       SELECT 
         CASE 
           WHEN TIMESTAMPDIFF(YEAR, tanggalLahir, CURDATE()) <= 12 THEN 'Anak-anak'
@@ -250,7 +250,7 @@ const getPendudukByUmur = async () => {
 
 const getAllKepalaKeluarga = async () => {
   try {
-    const [results] = await db.promise().query(
+    const [results] = await db.query(
       `
       SELECT id, nama, nik
       FROM penduduk

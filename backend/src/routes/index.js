@@ -23,6 +23,5 @@ router.use("/media", mediaRoute);
 router.use("/pelayanan", pelayananRoute);
 router.use("/aparatur", aparaturRoute);
 router.post("/chatbot", chatbotController.chatbot);
-router.use("/pengumuman", pengumumanRoutes);
 
 export default router;

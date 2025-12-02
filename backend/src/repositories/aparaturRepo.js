@@ -2,10 +2,10 @@ import db from "../config/database.js";
 
 const getAllAparatur = async () => {
   try {
-    const [results] = await db.promise().query(`
-      SELECT * FROM aparatur 
-      ORDER BY 
-        CASE 
+    const [results] = await db.query(`
+      SELECT * FROM aparatur
+      ORDER BY
+        CASE
           WHEN JABATAN LIKE 'Kepala Desa' THEN 1
           WHEN jabatan LIKE '%Sekretaris%' THEN 2
           WHEN jabatan LIKE '%Kepala%' THEN 3
@@ -23,7 +23,6 @@ const getAllAparatur = async () => {
 const getAparaturById = async (id) => {
   try {
     const [results] = await db
-      .promise()
       .query("SELECT * FROM aparatur WHERE id = ?", [id]);
     return results.length > 0 ? results[0] : null;
   } catch (error) {
@@ -34,7 +33,6 @@ const getAparaturById = async (id) => {
 const getAparaturByNip = async (nip) => {
   try {
     const [results] = await db
-      .promise()
       .query("SELECT * FROM aparatur WHERE nip = ?", [nip]);
     return results.length > 0 ? results[0] : null;
   } catch (error) {
@@ -45,7 +43,6 @@ const getAparaturByNip = async (nip) => {
 const addAparatur = async (nama, nip, jabatan, foto) => {
   try {
     const [result] = await db
-      .promise()
       .query(
         "INSERT INTO aparatur (nama, nip, jabatan, foto) VALUES (?, ?, ?, ?)",
         [nama, nip, jabatan, foto]
@@ -72,7 +69,6 @@ const updateAparatur = async (id, nama, nip, jabatan, foto) => {
 
     // Update dengan foto yang sudah ditentukan
     await db
-      .promise()
       .query(
         "UPDATE aparatur SET nama = ?, nip = ?, jabatan = ?, foto = ? WHERE id = ?",
         [nama, nip, jabatan, finalFoto, id]
@@ -88,7 +84,6 @@ const updateAparatur = async (id, nama, nip, jabatan, foto) => {
 const deleteAparatur = async (id) => {
   try {
     const [result] = await db
-      .promise()
       .query("DELETE FROM aparatur WHERE id = ?", [id]);
     return result.affectedRows > 0;
   } catch (error) {

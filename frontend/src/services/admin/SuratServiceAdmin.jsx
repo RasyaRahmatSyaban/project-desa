@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Create axios instance with default config
 const api = axios.create({
@@ -562,7 +563,7 @@ const SuratServiceAdmin = {
 
     // For files in the berita directory (as seen in your setup)
     const fileUrl = extractFilename(fileName);
-    return `${API_URL}/uploads/${fileUrl}`;
+    return `${BASE_URL}/uploads/${fileUrl}`;
   },
 
   // Download file as blob to avoid browser blocking

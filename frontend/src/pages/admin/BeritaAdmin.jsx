@@ -48,7 +48,6 @@ const BeritaAdmin = () => {
     tanggalTerbit: "",
     penulis: "",
     status: "Draft",
-    ringkasan: "",
     isi: "",
     foto: null,
     fotoPreview: null,
@@ -109,7 +108,6 @@ const BeritaAdmin = () => {
         tanggalTerbit: item.tanggalTerbit,
         penulis: item.penulis,
         status: item.status || "Dipublikasi", // Default to "Dipublikasi" if not provided
-        ringkasan: item.ringkasan || item.isi?.substring(0, 150) || "", // Use first 150 chars of isi as ringkasan if not provided
         isi: item.isi,
         foto: item.foto,
       }));
@@ -152,7 +150,6 @@ const BeritaAdmin = () => {
       tanggalTerbit: new Date().toISOString().split("T")[0],
       penulis: "Admin",
       status: "Draft",
-      ringkasan: "",
       isi: "",
       foto: null,
       fotoPreview: null,
@@ -188,7 +185,6 @@ const BeritaAdmin = () => {
         tanggalTerbit: formattedDate,
         penulis: item.penulis || "",
         status: item.status || "Draft",
-        ringkasan: item.ringkasan || "",
         isi: item.isi || "",
         foto: null,
         fotoPreview: item.foto
@@ -272,7 +268,6 @@ const BeritaAdmin = () => {
         tanggalTerbit: formData.tanggalTerbit,
         penulis: formData.penulis,
         status: formData.status,
-        ringkasan: formData.ringkasan,
         foto: formData.foto,
       };
 
@@ -318,7 +313,6 @@ const BeritaAdmin = () => {
         tanggalTerbit: formData.tanggalTerbit,
         penulis: formData.penulis,
         status: formData.status,
-        ringkasan: formData.ringkasan,
         foto: formData.foto,
         deleteFoto: formData.deleteFoto,
       };
@@ -863,24 +857,6 @@ const BeritaAdmin = () => {
 
               <div>
                 <label
-                  htmlFor="ringkasan"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Ringkasan
-                </label>
-                <textarea
-                  id="ringkasan"
-                  value={formData.ringkasan}
-                  onChange={(e) =>
-                    setFormData({ ...formData, ringkasan: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 min-h-[80px]"
-                  placeholder="Ringkasan singkat berita"
-                ></textarea>
-              </div>
-
-              <div>
-                <label
                   htmlFor="isi"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
@@ -1080,23 +1056,6 @@ const BeritaAdmin = () => {
 
               <div>
                 <label
-                  htmlFor="edit-ringkasan"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Ringkasan
-                </label>
-                <textarea
-                  id="edit-ringkasan"
-                  value={formData.ringkasan}
-                  onChange={(e) =>
-                    setFormData({ ...formData, ringkasan: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 min-h-[80px]"
-                ></textarea>
-              </div>
-
-              <div>
-                <label
                   htmlFor="edit-isi"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
@@ -1248,11 +1207,6 @@ const BeritaAdmin = () => {
                 >
                   {currentItem?.status || "Dipublikasi"}
                 </span>
-              </div>
-
-              <div className="bg-gray-50 p-4 rounded-lg text-gray-700 mb-4">
-                <p className="font-medium">Ringkasan:</p>
-                <p>{currentItem?.ringkasan || "Tidak ada ringkasan"}</p>
               </div>
 
               <div className="text-gray-700 px-4">

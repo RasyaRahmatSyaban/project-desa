@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Axios instance without auth for public (user) access
 const api = axios.create({
@@ -173,7 +174,7 @@ const SuratServiceUser = {
       return fileName;
     }
     const fileUrl = extractFilename(fileName);
-    return `${API_URL}/uploads/${fileUrl}`;
+    return `${BASE_URL}/uploads/${fileUrl}`;
   },
 
   // Download as blob and trigger a download in browser

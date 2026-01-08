@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Buat axios instance dengan default config
 const api = axios.create({
@@ -69,7 +70,7 @@ const MediaServiceUser = {
     const filenameOnly = filename.split("/").pop();
 
     // Return the complete URL ke uploads
-    return `${API_URL}/uploads/${filenameOnly}`;
+    return `${BASE_URL}/uploads/${filenameOnly}`;
   },
 
   // Utility function untuk format tanggal

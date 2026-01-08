@@ -84,7 +84,6 @@ const addPenduduk = async (
 ) => {
   try {
     const [results] = await db
-      .promise()
       .query(
         "INSERT INTO penduduk (nama, nik, alamat, tanggalLahir, jenisKelamin, agama, id_kepalakeluarga, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [
@@ -120,7 +119,6 @@ const updateDataPenduduk = async (
 ) => {
   try {
     const [results] = await db
-      .promise()
       .query(
         "UPDATE penduduk SET nama = ?, nik = ?, alamat = ?, tanggalLahir = ?, jenisKelamin = ?, agama = ?, id_kepalakeluarga = ?, status = ? WHERE nik = ?",
         [
@@ -144,7 +142,6 @@ const updateDataPenduduk = async (
 const deleteDataPenduduk = async (nik) => {
   try {
     const [results] = await db
-      .promise()
       .query("DELETE FROM penduduk WHERE nik = ?", [nik]);
     return results.affectedRows > 0;
   } catch (error) {
@@ -155,7 +152,6 @@ const deleteDataPenduduk = async (nik) => {
 const getAnggotaKeluargaByKepalaKeluarga = async (id_kepalakeluarga) => {
   try {
     const [results] = await db
-      .promise()
       .query("SELECT id FROM penduduk WHERE id_kepalakeluarga = ?", [
         id_kepalakeluarga,
       ]);
@@ -169,7 +165,6 @@ const getAnggotaKeluargaByKepalaKeluarga = async (id_kepalakeluarga) => {
 const getTotalPenduduk = async () => {
   try {
     const [results] = await db
-      .promise()
       .query("SELECT COUNT(*) AS total FROM penduduk");
     return results[0].total;
   } catch (error) {
@@ -180,7 +175,6 @@ const getTotalPenduduk = async () => {
 const getTotalLakiLaki = async () => {
   try {
     const [results] = await db
-      .promise()
       .query(
         "SELECT COUNT(*) AS total FROM penduduk WHERE jenisKelamin = 'Laki-laki'"
       );
@@ -193,7 +187,6 @@ const getTotalLakiLaki = async () => {
 const getTotalPerempuan = async () => {
   try {
     const [results] = await db
-      .promise()
       .query(
         "SELECT COUNT(*) AS total FROM penduduk WHERE jenisKelamin = 'Perempuan'"
       );
@@ -206,7 +199,6 @@ const getTotalPerempuan = async () => {
 const getTotalKepalaKeluarga = async () => {
   try {
     const [results] = await db
-      .promise()
       .query(
         "SELECT COUNT(*) AS total FROM penduduk WHERE status = 'Kepala Keluarga'"
       );
@@ -219,7 +211,6 @@ const getTotalKepalaKeluarga = async () => {
 const getPendudukByAgama = async () => {
   try {
     const [results] = await db
-      .promise()
       .query("SELECT agama, COUNT(*) AS total FROM penduduk GROUP BY agama");
     return results;
   } catch (error) {

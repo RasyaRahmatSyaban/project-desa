@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Create axios instance with default config
 const secureApi = axios.create({
@@ -220,7 +221,7 @@ const AparatServiceAdmin = {
     if (!filename) return null;
 
     // Construct the URL to the image
-    return `${API_URL}/uploads/${filename}`;
+    return `${BASE_URL}/uploads/${filename}`;
   },
 
   // Format data dari API ke format yang digunakan component
